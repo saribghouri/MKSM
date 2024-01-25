@@ -112,7 +112,7 @@ gap: 5px;
     width: 200px !important;
   } */
   .card{
-    background-color:inherit !important;
+    /* background-color:inherit !important; */
     border: none !important;
   }
   .ant-table-thead {
@@ -145,12 +145,18 @@ gap: 5px;
    background-size: "contain";
    background-repeat: no-repeat;
    width: 534px !important;
-height: 300px !important;
+
+height: auto !important;
+background-color:inherit !important;
  
   }
+
   .ant-modal-close{
     background-color: #F24044 !important;
     color: #ffffff !important;
     border-radius: 100px !important;
     padding: 4px !important;
+  }
+  .ant-form-item{
+    margin-bottom: 10px !important;
   }

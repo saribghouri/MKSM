@@ -18,7 +18,8 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 
-const AllUsers = () => {
+
+const ActiveUsers = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -31,6 +32,7 @@ const AllUsers = () => {
   };
 
   const handleOk = () => {
+
     setIsModalVisibles(false);
   };
 
@@ -38,7 +40,7 @@ const AllUsers = () => {
     setIsModalVisibles(false);
   };
 
-  //
+
   const dataSource = [
     {
       key: "1",
@@ -77,6 +79,7 @@ const AllUsers = () => {
       render: (_, record) => (
         <>
           {record.isActives === "1" ? (
+            
             <Switch defaultChecked onChange={onChange} />
           ) : (
             <Switch defaultChecked onChange={onChange} />
@@ -90,12 +93,14 @@ const AllUsers = () => {
       key: "action",
       render: (id, record) => (
         <div>
-          <DeleteOutlined
+       
+
+          {/* <DeleteOutlined
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
             type="link"
             danger
             onClick={showModal}
-          />
+          /> */}
 
           <EyeOutlined
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
@@ -188,7 +193,7 @@ const AllUsers = () => {
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Doctors">All Users</h1>
+        <h1 className="Doctors">Active Users</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Search"
@@ -198,8 +203,12 @@ const AllUsers = () => {
         />
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
-
-      <Table columns={columns} dataSource={dataSource} />
+    
+      <Table
+        columns={columns}
+  
+        dataSource={dataSource}
+      />
       <Modal
         open={isModalVisible}
         title="Edit Doctor"
@@ -209,7 +218,7 @@ const AllUsers = () => {
       >
         <EditUserForm doctor={selectedDoctor} onSave={handleSave} />
       </Modal>
-
+ 
       <Modal
         width={300}
         open={isViewModalVisible}
@@ -276,37 +285,25 @@ const AllUsers = () => {
           width: "534px",
           height: " 369px",
         }}
+      
         open={isModalVisibles}
         onOk={handleOk}
-        footer={null}
+        footer= {null}
         onCancel={handleCancel}
       >
         <div className=" gap-2 flex justify-center items-center flex-col h-[250px]">
-          <DeleteOutlined
+           
+        <DeleteOutlined
             className=" flex justify-center items-center text-[#ffffff] w-[85px] h-[85px] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[50px]"
             type="link"
             danger
             onClick={showModal}
           />
 
-          <h1 className="font-bold text-[22px]">User Delete</h1>
-          <p className="text-black text-[16px]">
-            Are you sure you want to delete this user?
-          </p>
-          <Button
-            className="bg-[#F24044] !text-white rounded-l-[20px] w-[150px] rounded-r-[20px] h-[40px]"
-            onClick={() => {}}
-          >
-            Delete
-          </Button>
-          <Button
-            className="!text-[#F24044] rounded-l-[20px] rounded-r-[20px] w-[150px] h-[40px]"
-            onClick={() => {
-              handleCancel;
-            }}
-          >
-            Cancel
-          </Button>
+            <h1 className="font-bold text-[22px]">User Delete</h1>
+        <p className="text-black text-[16px]">Are you sure you want to delete this user?</p>
+        <Button className="bg-[#F24044] !text-white rounded-l-[20px] w-[150px] rounded-r-[20px] h-[40px]" onClick={() => {}}>Delete</Button>
+        <Button className="!text-[#F24044] rounded-l-[20px] rounded-r-[20px] w-[150px] h-[40px]" onClick={() => {handleCancel}}>Cancel</Button>
         </div>
       </Modal>
     </div>
@@ -361,6 +358,7 @@ const EditUserForm = ({ doctor, onSave }) => {
         <Button
           className="bg-[#2361dd] !text-white text-center"
           htmlType="submit"
+          // loading={loadingUpdateProfile}
         >
           Save
         </Button>
@@ -369,4 +367,4 @@ const EditUserForm = ({ doctor, onSave }) => {
   );
 };
 
-export default AllUsers;
+export default ActiveUsers;

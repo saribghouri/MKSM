@@ -31,44 +31,33 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import Cards from "../cards";
-import DoctorData from "../allUsers";
-// import DoctorData from "../DoctorData";
-// import ShowPharmacies from "../ShowPharmacies";
-// import Cookies from "js-cookie";
-// import ShowAllPharmacies from "../ShowAllPharmacies";
-// import AddAppointment from "../AddAppointment";
-// import RequestDoctor from "../RequestDoctor";
-// import RequestPharmacy from "../RequestPharmacy";
-// import ActiveDoctors from "../ActiveDoctors";
-// import PharmacyData from "../pharmacyData";
-// import ActivePharmacy from "../ActivePharmacy";
-// import Appointments from "../Appointments";
-// import AddCategories from "../AddCategories";
-// import ShowCategories from "../ShowCategories";
-// import Cards from "../cards";
-// import Users from "../users";
+
+import AllUsers from "../allUsers";
+import ActiveUsers from "../activeUsers";
+import InActiveUsers from "../inActiveUsers";
+import AddPayment from "../addPayment";
+import PaymentCard from "../paymentCard";
+import MediumPlan from "../mediumPlan";
+import BasicPlan from "../basicPlan";
+import StandardPlan from "../standardPlan";
 
 const { Header, Sider } = Layout;
 
 const App = () => {
   const router = useRouter();
 
-  const [showPharmacy, setShowPharmacy] = useState(false);
-  const [showActivePharmacy, setShowActivePharmacy] = useState(false);
-  const [ShowPharmacie, setShowPharmacies] = useState(false);
-  const [allPharmacies, setAllPharmacies] = useState(false);
-  const [requestDoctor, setRequestDoctor] = useState(false);
-  const [activeDoctor, setActiveDoctor] = useState(false);
-  const [categories, setCategories] = useState(false);
-  const [requestPharmacie, setRequestPharmacy] = useState(false);
-  const [showDoctor, setShowDoctor] = useState(false);
-  const [appointment, setAppointment] = useState(false);
-  const [showCategories, setShowCategories] = useState(false);
-  const [appointments, setAppointments] = useState(false);
+  const [showUser, setShowUser] = useState(false);
+  const [activeUser, setActiveUser] = useState(false);
+  const [inActiveUser, setInactiveUser] = useState(false);
+  const [addPayment, setAddPayment] = useState(false);
+  const [paymentCard, setPaymentCard] = useState(false);
+  const [mediumPlan, setMediumPlan] = useState(false);
+  const [basicPlan, setBasicPlan] = useState(false);
+  const [standardPlan, setStandardPlan] = useState(false);
+
   const [userDetails, setUserDetails] = useState([]);
   const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false);
-  const [cards, setCards] = useState(false);
-  const [users, setUsers] = useState(false);
+
   const [showProfileEditModal, setShowProfileEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
@@ -161,231 +150,88 @@ const App = () => {
     setShowChangePasswordModal(false);
   };
   const handleShowDoctorData = () => {
-    setShowDoctor(true);
-    // setAllPharmacies(false);
-    // setShowCategories(false);
-    // setCards(false);
-    // setUsers(false);
+    setShowUser(true);
+    setActiveUser(false);
+    setInactiveUser(false);
+    setAddPayment(false);
+    setMediumPlan(false)
+    setStandardPlan(false)
+    setBasicPlan(false)
 
-    // setShowPharmacy(false);
-    // setShowPharmacies(false);
-    // setRequestDoctor(false);
-    // setRequestPharmacy(false);
-    // setActiveDoctor(false);
-    // setActiveDoctor(false);
-    // setShowActivePharmacy(false);
-    // setCategories(false);
   };
-  // const handleShowPharmacies = () => {
-  //   setShowPharmacies(true);
-  //   setAllPharmacies(false);
-  //   setShowCategories(false);
-  //   setShowPharmacy(false);
-  //   setCards(false);
-  //   setUsers(false);
+  const handleActiveUser = () => {
+    setActiveUser(true);
+    setShowUser(false);
+    setInactiveUser(false);
+    setAddPayment(false);
+    setBasicPlan(false)
+    setStandardPlan(false)
+    setMediumPlan(false)
+  };
+  const handleInactiveUser = () => {
+    setActiveUser(false);
+    setInactiveUser(true);
+    setPaymentCard(false);
+    setShowUser(false);
+    setAddPayment(false);
+    setMediumPlan(false)
+    setStandardPlan(false)
+    setBasicPlan(false)
 
-  //   setActiveDoctor(false);
-  //   setShowDoctor(false);
-  //   setAppointments(false);
-  //   setRequestPharmacy(false);
-  //   setRequestDoctor(false);
-  //   setAppointment(false);
-  //   setShowDoctor(false);
-  //   setShowActivePharmacy(false);
-  // };
+  };
+  const handleAddPayment = () => {
+    setAddPayment(true);
+    setActiveUser(false);
+    setPaymentCard(false);
+    setInactiveUser(false);
+    setShowUser(false);
+    setMediumPlan(false)
+    setStandardPlan(false)
+    setBasicPlan(false)
 
-  // const handleShowPharmacy = () => {
-  //   setShowPharmacy(true);
-  //   setCategories(false);
-  //   setCards(false);
-  //   setUsers(false);
+  };
+  const handlePaymentCard = () => {
+    setAddPayment(false);
+    setPaymentCard(true);
+    setActiveUser(false);
+    setInactiveUser(false);
+    setShowUser(false);
+    setMediumPlan(false)
+    setBasicPlan(false)
+    setStandardPlan(false)
 
-  //   setRequestDoctor(false);
-  //   setShowPharmacies(false);
-  //   setShowCategories(false);
-  //   setAllPharmacies(false);
-  //   setShowActivePharmacy(false);
-  //   setRequestPharmacy(false);
-  //   setActiveDoctor(false);
-  //   setShowDoctor(false);
-  // };
+  };
+  const handleMediumPlan = () => {
+    setMediumPlan(true)
+    setStandardPlan(false)
+    setAddPayment(false);
+    setPaymentCard(false);
+    setActiveUser(false);
+    setInactiveUser(false);
+    setShowUser(false);
+    setBasicPlan(false)
 
-  // const handleShowDoctorData = () => {
-  //   setShowDoctor(true);
-  //   setAllPharmacies(false);
-  //   setShowCategories(false);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setRequestDoctor(false);
-  //   setRequestPharmacy(false);
-  //   setActiveDoctor(false);
-  //   setActiveDoctor(false);
-  //   setShowActivePharmacy(false);
-  //   setCategories(false);
-  // };
-  // const handleShowActiveDoctor = () => {
-  //   setActiveDoctor(true);
-  //   setShowCategories(false);
-  //   setShowDoctor(false);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setCategories(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setRequestDoctor(false);
-  //   setRequestPharmacy(false);
-  //   setShowActivePharmacy(false);
-  // };
-  // const handleShowActivePharmacy = () => {
-  //   setShowActivePharmacy(true);
-  //   setActiveDoctor(false);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setShowDoctor(false);
-  //   setShowCategories(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setRequestDoctor(false);
-  //   setCategories(false);
-  //   setRequestPharmacy(false);
-  // };
-
-  // const handleAppointment = () => {
-  //   setAppointment(true);
-  //   setShowDoctor(false);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setShowCategories(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setRequestDoctor(false);
-  //   setRequestPharmacy(false);
-  //   setCategories(false);
-  //   setActiveDoctor(false);
-  //   setAppointments(false);
-  // };
-  // const handleDocRequest = () => {
-  //   setRequestDoctor(true);
-  //   setShowCategories(false);
-  //   setAppointment(false);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setShowDoctor(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setRequestPharmacy(false);
-  //   setActiveDoctor(false);
-  //   setCategories(false);
-  //   setShowActivePharmacy(false);
-  // };
-  // const handlePharmRequest = () => {
-  //   setRequestPharmacy(true);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setRequestDoctor(false);
-  //   setShowCategories(false);
-  //   setAppointment(false);
-  //   setShowDoctor(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setCategories(false);
-  //   setActiveDoctor(false);
-  //   setShowActivePharmacy(false);
-  // };
-  // const handleCategories = () => {
-  //   setCategories(true);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setAppointments(false);
-  //   setRequestPharmacy(false);
-  //   setRequestDoctor(false);
-  //   setAppointment(false);
-  //   setShowDoctor(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setActiveDoctor(false);
-  //   setShowCategories(false);
-  //   setShowActivePharmacy(false);
-  // };
-  // const handleShowCategories = () => {
-  //   setShowCategories(true);
-  //   setAppointments(false);
-  //   setCards(false);
-  //   setUsers(false);
-  //   setCategories(false);
-  //   setRequestPharmacy(false);
-  //   setRequestDoctor(false);
-  //   setAppointment(false);
-  //   setShowDoctor(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setActiveDoctor(false);
-  //   setShowActivePharmacy(false);
-  // };
-  // const handleAppointments = () => {
-  //   setAppointments(true);
-  //   setCards(false);
-  //   setUsers(false);
-
-  //   setCategories(false);
-  //   setRequestPharmacy(false);
-  //   setRequestDoctor(false);
-  //   setAppointment(false);
-  //   setShowDoctor(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setActiveDoctor(false);
-  //   setShowActivePharmacy(false);
-  // };
-  // const handleCards = () => {
-  //   setCards(true);
-  //   setUsers(false);
-
-  //   setAppointments(false);
-  //   setCategories(false);
-  //   setRequestPharmacy(false);
-  //   setRequestDoctor(false);
-  //   setAppointment(false);
-  //   setShowDoctor(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setActiveDoctor(false);
-  //   setShowActivePharmacy(false);
-  // };
-  // const handleUsers = () => {
-  //   setUsers(true);
-  //   setCards(false);
-  //   setAppointments(false);
-  //   setCategories(false);
-  //   setRequestPharmacy(false);
-  //   setRequestDoctor(false);
-  //   setAppointment(false);
-  //   setShowCategories(false);
-  //   setShowDoctor(false);
-  //   setAllPharmacies(false);
-  //   setShowPharmacy(false);
-  //   setShowPharmacies(false);
-  //   setActiveDoctor(false);
-  //   setShowActivePharmacy(false);
-  // };
+  };
+  const handlesetBasicPlan = () => {
+    setBasicPlan(true)
+    setStandardPlan(false)
+    setMediumPlan(false)
+    setAddPayment(false);
+    setPaymentCard(false);
+    setActiveUser(false);
+    setInactiveUser(false);
+    setShowUser(false);
+  };
+  const handleStandardPlan = () => {
+    setStandardPlan(true)
+    setBasicPlan(false)
+    setMediumPlan(false)
+    setAddPayment(false);
+    setPaymentCard(false);
+    setActiveUser(false);
+    setInactiveUser(false);
+    setShowUser(false);
+  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -440,30 +286,20 @@ const App = () => {
             "",
             "sub41",
             <>
-              <button
-               onClick={handleShowDoctorData}
-              >
-             All Users
-              </button>
+              <button onClick={handleShowDoctorData}>All Users</button>
             </>
           ),
           getItem(
             "",
             "sub42",
-            <div
-              //  onClick={handleShowActiveDoctor}
-              className="w-[500px] h-[50px]"
-            >
+            <div onClick={handleActiveUser} className="w-[500px] h-[50px]">
               Active Users
             </div>
           ),
           getItem(
             "",
-            "sub42",
-            <div
-              //  onClick={handleShowActiveDoctor}
-              className="w-[500px] h-[50px]"
-            >
+            "sub43",
+            <div onClick={handleInactiveUser} className="w-[500px] h-[50px]">
               Inactive Users
             </div>
           ),
@@ -483,21 +319,14 @@ const App = () => {
             "",
             "sub41",
             <>
-              <button
-              //  onClick={handleShowDoctorData}
-              >
-                Show Doctors
-              </button>
+              <button onClick={handleAddPayment}>Add payment</button>
             </>
           ),
           getItem(
             "",
             "sub42",
-            <div
-              //  onClick={handleShowActiveDoctor}
-              className="w-[500px] h-[50px]"
-            >
-              Active Doctors
+            <div onClick={handlePaymentCard} className="w-[500px] h-[50px]">
+              Fetch Payment
             </div>
           ),
         ]
@@ -517,61 +346,35 @@ const App = () => {
             "",
             "sub43",
             <div
-              // onClick={handleShowPharmacy}
+              onClick={handlesetBasicPlan}
               className="w-[500px] h-[50px]"
             >
-              Show Pharmacy
+              Basic
             </div>
           ),
           getItem(
             "",
             "sub48",
             <div
-              // onClick={handleShowActivePharmacy}
+              onClick={handleMediumPlan}
               className="w-[500px] h-[50px]"
             >
-              Active Pharmacy
+             Medium
+            </div>
+          ),
+          getItem(
+            "",
+            "sub49",
+            <div
+              onClick={handleStandardPlan}
+              className="w-[500px] h-[50px]"
+            >
+             Premium
             </div>
           ),
         ]
       ),
     ];
-
-    // }
-    // else if (userDetails.userRole === userDetails.userRole) {
-    //   return [
-    //     getItem("Dashboard ", "1", <DashboardOutlined />),
-    //     getItem("Appointments", "sub14", <TeamOutlined />, [
-    //       getItem(
-    //         "",
-    //         "sub46",
-    //         <div onClick={handleAppointment} className="w-[500px] h-[50px]">
-    //           Add appointment
-    //         </div>
-    //       ),
-    //       getItem(
-    //         "",
-    //         "sub47",
-    //         <>
-    //           <a onClick={handleAppointments}>Show appointment</a>
-    //         </>
-    //       ),
-    //     ]),
-    //   ];
-    // } else if (userDetails.userRole === "4") {
-    //   return [
-    //     getItem("Dashboard ", "1", <DashboardOutlined />),
-    //     getItem("pharmacy", "sub2", <TeamOutlined />, [
-    //       getItem(
-    //         <>
-    //           <button onClick={handleShowPharmacies}> Show Pharmacies </button>
-    //         </>
-    //       ),
-    //     ]),
-    //   ];
-    // } else {
-    //   return [getItem("Dashboard ", "1", <DashboardOutlined />)];
-    // }
   };
 
   const handleLogout = async () => {
@@ -755,14 +558,6 @@ const App = () => {
     setShowCards(!showCards);
   };
 
-  // useEffect(() => {
-  //   // const isUserLoggedIn = Cookies.get("apiToken");
-
-  //   if (!isUserLoggedIn) {
-  //     router.push("/");
-  //   }
-  // }, [router]);
-
   return (
     <Layout
       className=""
@@ -821,8 +616,8 @@ const App = () => {
               />
             </div>
             <div>
-              <Modal
-                title="Change Password"
+              <Modal className="change-password-modal"
+                height={379}
                 open={showChangePasswordModal}
                 onCancel={handleCloseChangePasswordModal}
                 footer={null}
@@ -833,87 +628,99 @@ const App = () => {
                   onFinish={handleForgetPassword}
                   onFinishFailed={onFinishFailed}
                 >
-                  <Form.Item
-                    name="oldPassword"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your old password!",
-                      },
-                    ]}
-                  >
-                    <Input.Password placeholder="Old Password" />
-                  </Form.Item>
-
-                  <Form.Item
-                    name="newPassword"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your new password!",
-                      },
-                    ]}
-                  >
-                    <Input.Password placeholder="New Password" />
-                  </Form.Item>
-
-                  <Form.Item
-                    name="confirmPassword"
-                    dependencies={["newPassword"]}
-                    hasFeedback
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please confirm your new password!",
-                      },
-                      ({ getFieldValue }) => ({
-                        validator(_, value) {
-                          if (
-                            !value ||
-                            getFieldValue("newPassword") === value
-                          ) {
-                            return Promise.resolve();
-                          }
-                          return Promise.reject(
-                            new Error("The two passwords do not match!")
-                          );
-                        },
-                      }),
-                    ]}
-                  >
-                    <Input.Password placeholder="Confirm Password" />
-                  </Form.Item>
-
-                  <Form.Item>
-                    <Button
-                      className="bg-[#d31305] !text-white"
-                      htmlType="submit"
-                      loading={loadingUpdateProfile}
-                    >
+                  <div className="flex gap-0 flex-col w-[100%] h-[300px] justify-center items-center">
+                    <p className="text-[22px] text-[#F24044] Poppins font-[500] mb-[10px]">
                       Change Password
-                    </Button>
-                  </Form.Item>
+                    </p>
+                    <Form.Item
+                      name="oldPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your old password!",
+                        },
+                      ]}
+                    >
+                      <Input.Password
+                        className="w-[300px]  rounded-r-[20px] rounded-l-[20px]"
+                        placeholder="Old Password"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="newPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your new password!",
+                        },
+                      ]}
+                    >
+                      <Input.Password
+                        className="w-[300px]   rounded-r-[20px] rounded-l-[20px]"
+                        placeholder="New Password"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="confirmPassword"
+                      dependencies={["newPassword"]}
+                      hasFeedback
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please confirm your new password!",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (
+                              !value ||
+                              getFieldValue("newPassword") === value
+                            ) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error("The two passwords do not match!")
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password
+                        className="w-[300px]  rounded-r-[20px] rounded-l-[20px]"
+                        placeholder="Confirm Password"
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        className="bg-[#F24044] !border-none w-[200px] !text-white rounded-r-[20px] rounded-l-[20px]"
+                        htmlType="submit"
+                        loading={loadingUpdateProfile}
+                      >
+                        Update Password
+                      </Button>
+                    </Form.Item>
+                  </div>
                 </Form>
               </Modal>
               <div className="flex justify-between relative">
-
-              <div className="flex text-center items-center w-[180px] h-[45px] bg-[#F24044]">
-                <Dropdown
-                  className=" ml-[45px]"
-                  menu={{
-                    items,
-                  }}
-                  trigger={["click"]}
-                >
-                  <a onClick={(e) => e.preventDefault()}>
-                    <Space className="text-[#fff] ml-[10px]">
-                      {/* {userDetails?.userName} */}
-                      <p>sarib ghouri</p>
-                      <DownOutlined />
-                    </Space>
-                  </a>
-                </Dropdown>
-              </div>
+                <div className="flex text-center items-center w-[180px] h-[45px] bg-[#F24044]">
+                  <Dropdown
+                    className=" ml-[45px]"
+                    menu={{
+                      items,
+                    }}
+                    trigger={["click"]}
+                  >
+                    <a onClick={(e) => e.preventDefault()}>
+                      <Space className="text-[#fff] ml-[10px]">
+                        {/* {userDetails?.userName} */}
+                        <p>sarib ghouri</p>
+                        <DownOutlined />
+                      </Space>
+                    </a>
+                  </Dropdown>
+                </div>
                 <img
                   alt=""
                   className="w-[50px] h-[50px] rounded-[50%] ml-[-20px] mt-[-2px]  absolute"
@@ -1119,43 +926,15 @@ const App = () => {
         {/* <Cards /> */}
 
         <div>
-        {showDoctor && <DoctorData />}
+          {showUser && <AllUsers />}
+          {activeUser && <ActiveUsers />}
+          {inActiveUser && <InActiveUsers />}
+          {addPayment && <AddPayment />}
+          {paymentCard && <PaymentCard />}
+          {mediumPlan && <MediumPlan />}
+          {basicPlan && <BasicPlan />}
+          {standardPlan && <StandardPlan />}
         </div>
-        {/* <div>
-          {ShowPharmacie && <ShowPharmacies />}
-          {showPharmacy && <PharmacyData />}
-          {appointment && (
-            <AddAppointment handleAppointments={handleAppointments} />
-          )}
-          {showDoctor && <DoctorData />}
-          {allPharmacies && <ShowAllPharmacies />}
-          {requestDoctor && <RequestDoctor />}
-          {requestPharmacie && <RequestPharmacy />}
-          {activeDoctor && <ActiveDoctors />}
-          {showActivePharmacy && <ActivePharmacy />}
-          {appointments && <Appointments />}
-          {users && <Users />}
-          {cards && <Cards />}
-          {categories && (
-            <AddCategories handleShowCategories={handleShowCategories}  />
-          )}
-          {showCategories && <ShowCategories />}
-          {!ShowPharmacie &&
-            !showPharmacy &&
-            !appointment &&
-            !showDoctor &&
-            !allPharmacies &&
-            !requestDoctor &&
-            !requestPharmacie &&
-            !activeDoctor &&
-            !showActivePharmacy &&
-            !appointments &&
-            !categories &&
-            !showCategories &&
-            !cards &&
-            !users &&
-            userDetails.userRole == 1 && <Cards />}
-        </div> */}
       </Layout>
     </Layout>
   );
