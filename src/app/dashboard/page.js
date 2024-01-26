@@ -40,6 +40,8 @@ import PaymentCard from "../paymentCard";
 import MediumPlan from "../mediumPlan";
 import BasicPlan from "../basicPlan";
 import StandardPlan from "../standardPlan";
+import ProfileEdit from "../profileEdit";
+import ProfileView from "../profileView";
 
 const { Header, Sider } = Layout;
 
@@ -54,6 +56,8 @@ const App = () => {
   const [mediumPlan, setMediumPlan] = useState(false);
   const [basicPlan, setBasicPlan] = useState(false);
   const [standardPlan, setStandardPlan] = useState(false);
+  const [profileView, setProfileView] = useState(false);
+  const [profileEdit, setProfileEdit] = useState(false);
 
   const [userDetails, setUserDetails] = useState([]);
   const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false);
@@ -157,6 +161,9 @@ const App = () => {
     setMediumPlan(false)
     setStandardPlan(false)
     setBasicPlan(false)
+    setProfileView(false)
+    setProfileEdit(false)
+    setProfileEdit(false)
 
   };
   const handleActiveUser = () => {
@@ -167,6 +174,8 @@ const App = () => {
     setBasicPlan(false)
     setStandardPlan(false)
     setMediumPlan(false)
+    setProfileView(false)
+    setProfileEdit(false)
   };
   const handleInactiveUser = () => {
     setActiveUser(false);
@@ -177,6 +186,8 @@ const App = () => {
     setMediumPlan(false)
     setStandardPlan(false)
     setBasicPlan(false)
+    setProfileView(false)
+    setProfileEdit(false)
 
   };
   const handleAddPayment = () => {
@@ -188,6 +199,8 @@ const App = () => {
     setMediumPlan(false)
     setStandardPlan(false)
     setBasicPlan(false)
+    setProfileView(false)
+    setProfileEdit(false)
 
   };
   const handlePaymentCard = () => {
@@ -199,6 +212,8 @@ const App = () => {
     setMediumPlan(false)
     setBasicPlan(false)
     setStandardPlan(false)
+    setProfileView(false)
+    setProfileEdit(false)
 
   };
   const handleMediumPlan = () => {
@@ -210,6 +225,8 @@ const App = () => {
     setInactiveUser(false);
     setShowUser(false);
     setBasicPlan(false)
+    setProfileView(false)
+    setProfileEdit(false)
 
   };
   const handlesetBasicPlan = () => {
@@ -221,6 +238,8 @@ const App = () => {
     setActiveUser(false);
     setInactiveUser(false);
     setShowUser(false);
+    setProfileView(false)
+    setProfileEdit(false)
   };
   const handleStandardPlan = () => {
     setStandardPlan(true)
@@ -231,6 +250,21 @@ const App = () => {
     setActiveUser(false);
     setInactiveUser(false);
     setShowUser(false);
+    setProfileView(false)
+    setProfileEdit(false)
+
+  };
+  const handleProfile = () => {
+    setProfileView(true)
+    setStandardPlan(false)
+    setBasicPlan(false)
+    setMediumPlan(false)
+    setAddPayment(false);
+    setPaymentCard(false);
+    setActiveUser(false);
+    setInactiveUser(false);
+    setShowUser(false);
+    setProfileEdit(false)
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -417,7 +451,7 @@ const App = () => {
     {
       key: "1",
       label: (
-        <a className="font" onClick={handleShowProfileEditModal}>
+        <a className="font" onClick={handleProfile}>
           <UserOutlined /> Profile edit
         </a>
       ),
@@ -560,13 +594,14 @@ const App = () => {
 
   return (
     <Layout
-      className=""
+
+      className="bg-[#fff]"
       style={{
         minHeight: "100vh",
       }}
     >
       <Sider
-        className="!bg-[#F24044] min-w-[900px]  "
+        className="!bg-[#F24044] min-w-[900px]"
         collapsible
         collapsed={collapsed}
         onCollapse={handleCollapse}
@@ -594,14 +629,15 @@ const App = () => {
         />
       </Sider>
 
-      <Layout>
-        <Header
-          className="!bg-[#fff] "
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
-        >
+      <Layout className="!bg-[#fff]">
+      <Header
+  className="!bg-[#fff] "
+  style={{
+    padding: 0,
+    background: colorBgContainer,
+    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", // Adjust the values as needed
+  }}
+>
           <div className="flex items-center justify-between ">
             <div>
               <Button
@@ -925,7 +961,7 @@ const App = () => {
         </Header>
         {/* <Cards /> */}
 
-        <div>
+        <div className="bg-[#fff]">
           {showUser && <AllUsers />}
           {activeUser && <ActiveUsers />}
           {inActiveUser && <InActiveUsers />}
@@ -934,6 +970,8 @@ const App = () => {
           {mediumPlan && <MediumPlan />}
           {basicPlan && <BasicPlan />}
           {standardPlan && <StandardPlan />}
+          {profileView && <ProfileView />}
+          {/* {profileEdit && <ProfileEdit />} */}
         </div>
       </Layout>
     </Layout>

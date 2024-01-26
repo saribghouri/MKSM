@@ -10,8 +10,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html className="bg-[#fff]" lang="en">
+      <body clas className={inter.className}>{children}</body>
     </html>
   );
 }

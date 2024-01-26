@@ -17,6 +17,7 @@ import {
   Switch,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import UserProfile from "./userProfile";
 
 const AllUsers = () => {
   const [doctors, setDoctors] = useState([]);
@@ -25,6 +26,7 @@ const AllUsers = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
   const [isModalVisibles, setIsModalVisibles] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const showModal = () => {
     setIsModalVisibles(true);
@@ -97,10 +99,12 @@ const AllUsers = () => {
             onClick={showModal}
           />
 
-          <EyeOutlined
+          <EyeOutlined  onClick={() => {
+                  setIsEditing(true);
+                }}
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
             type="link"
-            onClick={() => handleView(record)}
+           
           />
         </div>
       ),
@@ -187,6 +191,12 @@ const AllUsers = () => {
   };
   return (
     <div>
+
+{isEditing ? (
+        <UserProfile onCancel={() => setIsEditing(false)} />
+      ) : (
+    <div>
+      
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
         <h1 className="Doctors">All Users</h1>
         <Input
@@ -309,6 +319,8 @@ const AllUsers = () => {
           </Button>
         </div>
       </Modal>
+    </div>
+      )}
     </div>
   );
 };

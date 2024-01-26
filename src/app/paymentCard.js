@@ -46,16 +46,15 @@ const PaymentCard = () => {
     <div className="flex flex-wrap gap-[10px] w-[100%] mx-auto justify-center mt-[20px]">
       {cardData.map((card, index) => (
         <Card
-          key={index}
-          className="card object-contain "
-          style={{
-            width: "30%",
-            height: "264px",
-            backgroundSize: "contain",
-             backgroundImage: `url('/assets/images/cardbg.png')`,
-            backgroundRepeat: "no-repeat",
-          }}
-        >
+  key={index}
+  className="card object-contain"
+  style={{
+    width: "30%",
+    backgroundSize: "cover",
+    backgroundImage: `url('/assets/images/cardbg.png')`,
+    backgroundRepeat: "no-repeat",
+  }}
+>
           <p className="text-[#ffffff] pgh text-center text-[26px]">{card.type}</p>
           <div className="flex justify-between w-[60%] mx-auto">
             <p className="text-[#ffffff] pgh font-bold text-[26px]">{card.amount}</p>
