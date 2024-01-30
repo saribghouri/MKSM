@@ -18,10 +18,13 @@ const Cards = () => {
           backgroundColor: "none",
         }}
       >
-        <p className="text-[#ffffff] pgh font-bold text-22">InActive Doctors</p>
-        <p className="text-[#ffffff]  flex justify-end mr-10 font-bold text-30">
+        <p className="text-[#ffffff] pgh font-bold text-[24px] mt-[23px] ml-[20px]"> Basic</p>
+        <p className="text-[#ffffff]  flex  mr-10 font-bold text-[24px] ml-[20px]">
           {/* {inActiveDoctors} */}
+          122
         </p>
+        <p className="mt-[60px] flex justify-end w-[90%] text-white text-[14px] font-[500]">User Receipt</p>
+
       </Card>
       <Card
         className="card object-contain bg-none"
@@ -33,10 +36,12 @@ const Cards = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <p className="text-[#ffffff] pgh font-bold text-22">InActive Doctors</p>
-        <p className="text-[#ffffff]  flex justify-end mr-10 font-bold text-30">
+        <p className="text-[#ffffff] pgh font-bold text-[24px] mt-[23px] ml-[20px]">Standard</p>
+        <p className="text-[#ffffff]  flex  mr-10 font-bold text-[24px] ml-[20px]">
           {/* {inActiveDoctors} */}
+          144
         </p>
+        <p className="mt-[60px] flex justify-end w-[90%] text-white text-[14px] font-[500]">User Receipt</p>
       </Card>
       <Card
         className=" card object-contain bg-none "
@@ -48,10 +53,13 @@ const Cards = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <p className="text-[#ffffff] pgh font-bold text-22">InActive Doctors</p>
-        <p className="text-[#ffffff]  flex justify-end mr-10 font-bold text-30">
+        <p className="text-[#ffffff] pgh font-bold text-[24px] mt-[23px] ml-[20px]">Premium</p>
+        <p className="text-[#ffffff]  flex  mr-10 font-bold text-[24px] ml-[20px]">
           {/* {inActiveDoctors} */}
+          154
         </p>
+        <p className="mt-[60px] flex justify-end w-[90%] text-white text-[14px] font-[500]">User Receipt</p>
+
       </Card>
     </div>
   );

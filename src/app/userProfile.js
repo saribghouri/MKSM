@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import ProfileEdit from "./profileEdit";
 import TextArea from "antd/es/input/TextArea";
 import UserEdit from "./useredit";
+import AllUsers from "./allUsers";
 
 const UserProfile = () => {
   const onFinish = (values) => {
@@ -17,14 +18,17 @@ const UserProfile = () => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState(true);
+  const [showAllUsers, setShowAllUsers] = useState(false);
   return (
     <div>
-      {isEditing ? (
-        <UserEdit onCancel={() => setIsEditing(false)} />
-      ) : (
+     {showAllUsers ? (
+      <AllUsers />
+    ) : isEditing ? (
+      <UserEdit onCancel={() => setIsEditing(false)} />
+    ) : (
         <div>
           <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-            <h1 className="Doctors">View Users</h1>
+            <h1 className=" text-[22px] font-sans mb-[-10px]">View Users</h1>
           </div>
 
           <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
@@ -36,11 +40,11 @@ const UserProfile = () => {
               </h1> */}
               <div className="flex flex-row gap-6  flex-wrap">
                 <div className=" flex justify-between w-full">
-                <ArrowLeftOutlined 
-            className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
-            type="link"
-            onClick={() => handleView(record)}
-          />
+                <ArrowLeftOutlined
+  className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+  type="link"
+  onClick={() => setShowAllUsers(true)}
+/>
                     <Button
                 onClick={() => {
                   setIsEditing(true);

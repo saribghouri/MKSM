@@ -164,6 +164,7 @@ const App = () => {
     setProfileView(false)
     setProfileEdit(false)
     setProfileEdit(false)
+    setPaymentCard(false)
 
   };
   const handleActiveUser = () => {
@@ -318,7 +319,7 @@ const App = () => {
         [
           getItem(
             "",
-            "sub41",
+            "sub12",
             <>
               <button onClick={handleShowDoctorData}>All Users</button>
             </>
@@ -332,7 +333,7 @@ const App = () => {
           ),
           getItem(
             "",
-            "sub43",
+            "sub14",
             <div onClick={handleInactiveUser} className="w-[500px] h-[50px]">
               Inactive Users
             </div>
@@ -358,7 +359,7 @@ const App = () => {
           ),
           getItem(
             "",
-            "sub42",
+            "sub10",
             <div onClick={handlePaymentCard} className="w-[500px] h-[50px]">
               Fetch Payment
             </div>
@@ -629,7 +630,7 @@ const App = () => {
         />
       </Sider>
 
-      <Layout className="!bg-[#fff]">
+      <Layout className="">
       <Header
   className="!bg-[#fff] "
   style={{
@@ -961,7 +962,7 @@ const App = () => {
         </Header>
         {/* <Cards /> */}
 
-        <div className="bg-[#fff]">
+        <div className="">
           {showUser && <AllUsers />}
           {activeUser && <ActiveUsers />}
           {inActiveUser && <InActiveUsers />}

@@ -54,11 +54,11 @@ const Page = () => {
             labelCol={{
               span: 8,
             }}
-            wrapperCol={{
+            wrapperCol={{  
               span: 16,
             }}
             style={{
-              maxWidth: 600,
+              maxWidth: 445,
             }}
             initialValues={{
               remember: true,
@@ -124,3 +124,9 @@ const Page = () => {
 };
 
 export default Page;
+
+
+
+
+
+

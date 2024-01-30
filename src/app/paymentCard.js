@@ -43,7 +43,15 @@ const PaymentCard = () => {
     console.log("Failed:", errorInfo);
   };
   return (
+    <div>
+
+<div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
+        <h1 className="text-[22px] mb-[-10px] font-sans">Add Payment</h1>
+      </div>
+      <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
+
     <div className="flex flex-wrap gap-[10px] w-[100%] mx-auto justify-center mt-[20px]">
+      
       {cardData.map((card, index) => (
         <Card
   key={index}
@@ -56,7 +64,7 @@ const PaymentCard = () => {
   }}
 >
           <p className="text-[#ffffff] pgh text-center text-[26px]">{card.type}</p>
-          <div className="flex justify-between w-[60%] mx-auto">
+          <div className="flex justify-between w-[60%] mx-auto mb-[20px]">
             <p className="text-[#ffffff] pgh font-bold text-[26px]">{card.amount}</p>
             <Divider className="bg-white h-[36px] w-[2%] mt-[10px] mb-[10px]" type="vertical" />
             <p className="text-[#ffffff] pgh font-bold text-[26px]">{card.month}</p>
@@ -162,6 +170,7 @@ const PaymentCard = () => {
      
       </Modal>
     </div>  
+    </div>
   );
 };
 

@@ -68,8 +68,8 @@ const InActiveUsers = () => {
     },
   ];
   const columns = [
-    { title: "Sr", dataIndex: "serialNumber", key: "serialNumber" }, // New column
-    { title: "Name", dataIndex: "userName", key: "userName" },
+    { title: "Sr", dataIndex: "name", key: "serialNumber" }, // New column
+    { title: "Name", dataIndex: "name", key: "userName" },
     { title: "Email", dataIndex: "emailAddress", key: "emailAddress" },
     { title: "Phone No:", dataIndex: "Phone No", key: "Phone" },
     {
@@ -193,7 +193,7 @@ const InActiveUsers = () => {
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Doctors">InActive Users</h1>
+        <h1 className="Doctors text-[22px]">InActive Users</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Search"

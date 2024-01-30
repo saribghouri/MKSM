@@ -36,7 +36,7 @@ const AddPayment = () => {
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Doctors">Add Payment</h1>
+        <h1 className="text-[22px] font-sans">Add Payment</h1>
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
@@ -108,7 +108,7 @@ const AddPayment = () => {
               <Form.Item>
                 <TextArea
                   placeholder="Enter Subscription"
-                  className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
+                  className="!w-[320px]  rounded-r-[20px] rounded-l-[20px]"
                   rows={4}
                 />
               </Form.Item>

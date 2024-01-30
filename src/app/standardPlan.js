@@ -193,7 +193,7 @@ const StandardPlan = () => {
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Doctors">User Subscription</h1>
+        <h1 className="Doctors text-[22px] font-sans">User Subscription</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Search"
