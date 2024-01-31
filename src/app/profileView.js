@@ -4,9 +4,12 @@ import Image from "next/image";
 import { EditFilled, EditOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import ProfileEdit from "./profileEdit";
+import { useUser } from "./UserContext";
 
 const ProfileView = () => {
   const router = useRouter();
+  const { user } = useUser();
+  console.log("user", user);
   const [isEditing, setIsEditing] = useState(false);
   return (
     <div>
@@ -33,7 +36,7 @@ const ProfileView = () => {
             />
             <div className="flex justify-between ">
               <h1 className=" mt-[50px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
-                Sarib Ghouri
+          {user.user.userName}
               </h1>
 
               <Button
@@ -63,32 +66,32 @@ const ProfileView = () => {
                   <p className="text-[14px] font-[500]">Birth Date :</p>
                   <p className="text-[14px] font-[500]">Company :</p>
                   <p className="text-[14px] font-[500]">Collage :</p>
+                  <p className="text-[14px] font-[500]">Location :</p>
                   <p className="text-[14px] font-[500]">About :</p>
                 </div>
                 <div className="flex flex-col gap-6">
                   {" "}
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                    sarib.ghour16@gmail.com
+                {  user.user.emailAddress}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                    03172296946
+                { user.user.contact}
                   </p>
-                  <p className="text-[15px] font-[500] text-[#a39d9d]">male</p>
+                  <p className="text-[15px] font-[500] text-[#a39d9d]">{user.user.gender}</p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                    18/2/2002
-                  </p>
-                  <p className="text-[15px] font-[500] text-[#a39d9d]">
-                    VLD Solutions
+                  {user.user.dob}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                    Abc Collage
+                  {user.user.company}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                    In publishing and graphic design, Lorem ipsum is a
-                    placeholder
-                    <br></br>
-                    text commonly used to demonstrate the visual <br></br> form
-                    of a document or a typeface without relying on meaningful
+                  {user.user.collage}
+                  </p>
+                  <p className="text-[15px] font-[500] text-[#a39d9d]">
+                  {user.user.location}
+                  </p>
+                  <p className="text-[15px] font-[500] text-[#a39d9d]">
+                  {user.user.about}
                   </p>
                 </div>
               </div>

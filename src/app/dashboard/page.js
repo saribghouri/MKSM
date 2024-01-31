@@ -12,26 +12,21 @@ import {
   Form,
   message,
   Upload,
-  Card,
 } from "antd";
 import Link from "antd/es/typography/Link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import {
-  BookOutlined,
   CustomerServiceOutlined,
-  DashboardOutlined,
   DownOutlined,
   LoadingOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PlusOutlined,
-  TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import Cards from "../cards";
 
 import AllUsers from "../allUsers";
 import ActiveUsers from "../activeUsers";
@@ -39,9 +34,9 @@ import InActiveUsers from "../inActiveUsers";
 import AddPayment from "../addPayment";
 import PaymentCard from "../paymentCard";
 
-import ProfileEdit from "../profileEdit";
 import ProfileView from "../profileView";
 import UserSubscription from "../userSubscription";
+import { useUser } from "../UserContext";
 
 const { Header, Sider } = Layout;
 
@@ -67,7 +62,8 @@ const App = () => {
   console.log("🚀 ~ imageUrl:", imageUrl);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-
+  const { user } = useUser();
+  console.log("user", user);
   const [forceRerender, setForceRerender] = useState(false);
   const [userProfileImage, setUserProfileImage] = useState(
     userDetails?.profileImage || null
@@ -155,7 +151,8 @@ const App = () => {
   const handleShowDoctorData = () => {
     setShowUser(true);
 
-  setUserSubscription(false);    setActiveUser(false);
+    setUserSubscription(false);
+    setActiveUser(false);
     setInactiveUser(false);
     setAddPayment(false);
 
@@ -167,7 +164,7 @@ const App = () => {
   const handleActiveUser = () => {
     setActiveUser(true);
     setShowUser(false);
-      setUserSubscription(false);
+    setUserSubscription(false);
     setInactiveUser(false);
     setAddPayment(false);
 
@@ -179,7 +176,7 @@ const App = () => {
     setInactiveUser(true);
     setPaymentCard(false);
     setShowUser(false);
-      setUserSubscription(false);
+    setUserSubscription(false);
     setAddPayment(false);
 
     setProfileView(false);
@@ -191,7 +188,7 @@ const App = () => {
     setPaymentCard(false);
     setInactiveUser(false);
     setShowUser(false);
-      setUserSubscription(false);
+    setUserSubscription(false);
 
     setProfileView(false);
     setProfileEdit(false);
@@ -202,7 +199,7 @@ const App = () => {
     setActiveUser(false);
     setInactiveUser(false);
     setShowUser(false);
-      setUserSubscription(false);
+    setUserSubscription(false);
 
     setProfileView(false);
     setProfileEdit(false);
@@ -229,8 +226,7 @@ const App = () => {
     setActiveUser(false);
     setInactiveUser(false);
     setShowUser(false);
-      setUserSubscription(false);
-  
+    setUserSubscription(false);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -357,17 +353,14 @@ const App = () => {
   const handleLogout = async () => {
     try {
       const token = Cookies.get("apiToken");
-      const response = await fetch(
-        "https://mksm.blownclouds.com/api/logout",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch("https://mksm.blownclouds.com/api/logout", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.ok) {
         Cookies.remove("apiToken");
@@ -700,7 +693,7 @@ const App = () => {
                     <a onClick={(e) => e.preventDefault()}>
                       <Space className="text-[#fff] ml-[10px]">
                         {/* {userDetails?.userName} */}
-                        <p>sarib ghouri</p>
+                        <p>{user.user.userName}</p>
                         <DownOutlined />
                       </Space>
                     </a>
@@ -710,201 +703,12 @@ const App = () => {
                   alt=""
                   className="w-[50px] h-[50px] rounded-[50%] ml-[-20px] mt-[-2px]  absolute"
                   // src={userDetails?.profileImage || null}
-                  src="assets/images/download.jfif"
+                  src={
+                    user.user.profileImage ||
+                    "assets/images/download.jfif"
+                  }
                 />
               </div>
-
-              <Modal
-                title="Edit Profile"
-                open={showProfileEditModal}
-                onCancel={() => setShowProfileEditModal(false)}
-                footer={null}
-              >
-                <Form
-                  form={form}
-                  name="editProfileForm"
-                  initialValues={{
-                    userName: userDetails.userName,
-                    affiliationNo: userDetails.affiliationNo,
-                    specialization: userDetails.specialization,
-                    gender: userDetails.gender,
-                    noOfExperience: userDetails.noOfExperience,
-                    age: userDetails.age,
-                  }}
-                  onFinish={handleProfileEdit}
-                  onFinishFailed={onFinishFailed}
-                >
-                  <Form.Item
-                    className="h-[50px] mb-[80px] w-[100%]"
-                    name="upload"
-                    valuePropName="fileList"
-                    getValueFromEvent={(e) => e.fileList}
-                    extra=" "
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please upload your doctor image!",
-                      },
-                    ]}
-                  >
-                    <Upload
-                      name="upload"
-                      listType="picture-card"
-                      className="avatar-uploader w-[100%]"
-                      showUploadList={false}
-                      action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                      beforeUpload={beforeUpload}
-                      onChange={handleChange}
-                    >
-                      {imageUrl && typeof imageUrl === "string" ? (
-                        <img
-                          alt=""
-                          className="w-[70px] h-[70px] rounded-[50%]"
-                          src={imageUrl}
-                        />
-                      ) : userProfileImage ? (
-                        <img
-                          alt=""
-                          className="w-[70px] h-[70px] rounded-[50%]"
-                          src={userProfileImage}
-                        />
-                      ) : (
-                        uploadButton
-                      )}
-                    </Upload>
-                  </Form.Item>
-                  <label className="mb-[10px] ml-[2px]">UserName</label>
-
-                  <Form.Item
-                    className="mt-[10px]"
-                    name="userName"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter userName",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="User Name" />
-                  </Form.Item>
-                  <label className="mb-[10px]  ml-[2px]">Gender</label>
-                  <Form.Item
-                    className="mt-[10px]"
-                    name="gender"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter gender",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="gender" />
-                  </Form.Item>
-                  <label className="mb-[10px]  ml-[2px]">Age</label>
-                  <Form.Item
-                    className="mt-[10px]"
-                    name="age"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter gender",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="gender" />
-                  </Form.Item>
-                  {userDetails.userRole === "3" && (
-                    <>
-                      <label className="mb-[10px]  ml-[2px]">
-                        Specialization
-                      </label>
-                      <Form.Item
-                        className="mt-[10px]"
-                        name="specialization"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter specialization",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="specialization" />
-                      </Form.Item>
-                      <label className="mb-[10px]  ml-[2px]">Experience</label>
-
-                      <Form.Item
-                        className="mt-[10px]"
-                        name="noOfExperience"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter noOfExperience",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="noOfExperience" />
-                      </Form.Item>
-                      <label className="mb-[10px]  ml-[2px]">
-                        affiliationNo
-                      </label>
-                      <Form.Item
-                        className="mt-[10px]"
-                        name="affiliationNo"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter affiliationNo",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="affiliationNo" />
-                      </Form.Item>
-                    </>
-                  )}
-                  {userDetails.userRole === "4" && (
-                    <>
-                      <label className="mb-[10px]  ml-[2px]">
-                        affiliationNo
-                      </label>
-                      <Form.Item
-                        className="mt-[10px]"
-                        name="affiliationNo"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter affiliationNo",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="affiliationNo" />
-                      </Form.Item>
-                      <label className="mb-[10px]  ml-[2px]">Age</label>
-                      <Form.Item
-                        className="mt-[10px]"
-                        name="age"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter age",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="age" />
-                      </Form.Item>
-                    </>
-                  )}
-
-                  <Form.Item>
-                    <Button
-                      className="bg-[#d31305] !text-white"
-                      htmlType="submit"
-                      loading={loadingUpdateProfile}
-                    >
-                      Update Profile
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Modal>
             </div>
           </div>
         </Header>
