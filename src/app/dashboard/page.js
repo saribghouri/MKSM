@@ -17,6 +17,7 @@ import {
 import Link from "antd/es/typography/Link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 import {
   BookOutlined,
   CustomerServiceOutlined,
@@ -37,11 +38,10 @@ import ActiveUsers from "../activeUsers";
 import InActiveUsers from "../inActiveUsers";
 import AddPayment from "../addPayment";
 import PaymentCard from "../paymentCard";
-import MediumPlan from "../mediumPlan";
-import BasicPlan from "../basicPlan";
-import StandardPlan from "../standardPlan";
+
 import ProfileEdit from "../profileEdit";
 import ProfileView from "../profileView";
+import UserSubscription from "../userSubscription";
 
 const { Header, Sider } = Layout;
 
@@ -53,9 +53,8 @@ const App = () => {
   const [inActiveUser, setInactiveUser] = useState(false);
   const [addPayment, setAddPayment] = useState(false);
   const [paymentCard, setPaymentCard] = useState(false);
-  const [mediumPlan, setMediumPlan] = useState(false);
-  const [basicPlan, setBasicPlan] = useState(false);
-  const [standardPlan, setStandardPlan] = useState(false);
+
+  const [userSubscription, setUserSubscription] = useState(false);
   const [profileView, setProfileView] = useState(false);
   const [profileEdit, setProfileEdit] = useState(false);
 
@@ -155,41 +154,36 @@ const App = () => {
   };
   const handleShowDoctorData = () => {
     setShowUser(true);
-    setActiveUser(false);
+
+  setUserSubscription(false);    setActiveUser(false);
     setInactiveUser(false);
     setAddPayment(false);
-    setMediumPlan(false)
-    setStandardPlan(false)
-    setBasicPlan(false)
-    setProfileView(false)
-    setProfileEdit(false)
-    setProfileEdit(false)
-    setPaymentCard(false)
 
+    setProfileView(false);
+    setProfileEdit(false);
+    setProfileEdit(false);
+    setPaymentCard(false);
   };
   const handleActiveUser = () => {
     setActiveUser(true);
     setShowUser(false);
+      setUserSubscription(false);
     setInactiveUser(false);
     setAddPayment(false);
-    setBasicPlan(false)
-    setStandardPlan(false)
-    setMediumPlan(false)
-    setProfileView(false)
-    setProfileEdit(false)
+
+    setProfileView(false);
+    setProfileEdit(false);
   };
   const handleInactiveUser = () => {
     setActiveUser(false);
     setInactiveUser(true);
     setPaymentCard(false);
     setShowUser(false);
+      setUserSubscription(false);
     setAddPayment(false);
-    setMediumPlan(false)
-    setStandardPlan(false)
-    setBasicPlan(false)
-    setProfileView(false)
-    setProfileEdit(false)
 
+    setProfileView(false);
+    setProfileEdit(false);
   };
   const handleAddPayment = () => {
     setAddPayment(true);
@@ -197,12 +191,10 @@ const App = () => {
     setPaymentCard(false);
     setInactiveUser(false);
     setShowUser(false);
-    setMediumPlan(false)
-    setStandardPlan(false)
-    setBasicPlan(false)
-    setProfileView(false)
-    setProfileEdit(false)
+      setUserSubscription(false);
 
+    setProfileView(false);
+    setProfileEdit(false);
   };
   const handlePaymentCard = () => {
     setAddPayment(false);
@@ -210,62 +202,35 @@ const App = () => {
     setActiveUser(false);
     setInactiveUser(false);
     setShowUser(false);
-    setMediumPlan(false)
-    setBasicPlan(false)
-    setStandardPlan(false)
-    setProfileView(false)
-    setProfileEdit(false)
+      setUserSubscription(false);
 
+    setProfileView(false);
+    setProfileEdit(false);
   };
-  const handleMediumPlan = () => {
-    setMediumPlan(true)
-    setStandardPlan(false)
+
+  const handleSubscription = () => {
+    setUserSubscription(true);
+
     setAddPayment(false);
     setPaymentCard(false);
     setActiveUser(false);
     setInactiveUser(false);
     setShowUser(false);
-    setBasicPlan(false)
-    setProfileView(false)
-    setProfileEdit(false)
 
+    setProfileView(false);
+    setProfileEdit(false);
   };
-  const handlesetBasicPlan = () => {
-    setBasicPlan(true)
-    setStandardPlan(false)
-    setMediumPlan(false)
-    setAddPayment(false);
-    setPaymentCard(false);
-    setActiveUser(false);
-    setInactiveUser(false);
-    setShowUser(false);
-    setProfileView(false)
-    setProfileEdit(false)
-  };
-  const handleStandardPlan = () => {
-    setStandardPlan(true)
-    setBasicPlan(false)
-    setMediumPlan(false)
-    setAddPayment(false);
-    setPaymentCard(false);
-    setActiveUser(false);
-    setInactiveUser(false);
-    setShowUser(false);
-    setProfileView(false)
-    setProfileEdit(false)
 
-  };
   const handleProfile = () => {
-    setProfileView(true)
-    setStandardPlan(false)
-    setBasicPlan(false)
-    setMediumPlan(false)
+    setProfileView(true);
+
     setAddPayment(false);
     setPaymentCard(false);
     setActiveUser(false);
     setInactiveUser(false);
     setShowUser(false);
-    setProfileEdit(false)
+      setUserSubscription(false);
+  
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -379,32 +344,9 @@ const App = () => {
         [
           getItem(
             "",
-            "sub43",
-            <div
-              onClick={handlesetBasicPlan}
-              className="w-[500px] h-[50px]"
-            >
-              Basic
-            </div>
-          ),
-          getItem(
-            "",
-            "sub48",
-            <div
-              onClick={handleMediumPlan}
-              className="w-[500px] h-[50px]"
-            >
-             Medium
-            </div>
-          ),
-          getItem(
-            "",
             "sub49",
-            <div
-              onClick={handleStandardPlan}
-              className="w-[500px] h-[50px]"
-            >
-             Premium
+            <div onClick={handleSubscription} className="w-[500px] h-[50px]">
+              Users Subscription
             </div>
           ),
         ]
@@ -416,7 +358,7 @@ const App = () => {
     try {
       const token = Cookies.get("apiToken");
       const response = await fetch(
-        "https://mymedjournal.blownclouds.com/api/logout",
+        "https://mksm.blownclouds.com/api/logout",
         {
           method: "GET",
           headers: {
@@ -592,10 +534,15 @@ const App = () => {
     // Toggle the state to show/hide cards
     setShowCards(!showCards);
   };
+  useEffect(() => {
+    const isUserLoggedIn = Cookies.get("apiToken");
 
+    if (!isUserLoggedIn) {
+      router.push("/");
+    }
+  }, [router]);
   return (
     <Layout
-
       className="bg-[#fff]"
       style={{
         minHeight: "100vh",
@@ -631,14 +578,14 @@ const App = () => {
       </Sider>
 
       <Layout className="">
-      <Header
-  className="!bg-[#fff] "
-  style={{
-    padding: 0,
-    background: colorBgContainer,
-    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", // Adjust the values as needed
-  }}
->
+        <Header
+          className="!bg-[#fff] "
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", // Adjust the values as needed
+          }}
+        >
           <div className="flex items-center justify-between ">
             <div>
               <Button
@@ -653,7 +600,8 @@ const App = () => {
               />
             </div>
             <div>
-              <Modal className="change-password-modal"
+              <Modal
+                className="change-password-modal"
                 height={379}
                 open={showChangePasswordModal}
                 onCancel={handleCloseChangePasswordModal}
@@ -968,11 +916,8 @@ const App = () => {
           {inActiveUser && <InActiveUsers />}
           {addPayment && <AddPayment />}
           {paymentCard && <PaymentCard />}
-          {mediumPlan && <MediumPlan />}
-          {basicPlan && <BasicPlan />}
-          {standardPlan && <StandardPlan />}
+          {userSubscription && <UserSubscription />}
           {profileView && <ProfileView />}
-          {/* {profileEdit && <ProfileEdit />} */}
         </div>
       </Layout>
     </Layout>

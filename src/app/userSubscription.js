@@ -17,19 +17,17 @@ import {
   Switch,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 
-const InActiveUsers = () => {
-  const [doctors, setDoctors] = useState([]);
-  const [inActiveUser, setInActiveUser] = useState([]);
+import Cookies from "js-cookie";
+const UserSubscription = () => {
+  const [userSubs, setUserSubs] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
   const [isModalVisibles, setIsModalVisibles] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-
+console.log(userSubs)
   const showModal = () => {
     setIsModalVisibles(true);
   };
@@ -44,26 +42,19 @@ const InActiveUsers = () => {
   };
 
 
-  
+ 
   const columns = [
-    { title: "Sr", dataIndex: "key", key: "serialNumber" },
+    { title: "Sr", dataIndex: "key", key: "serialNumber" }, 
     { title: "Name", dataIndex: "name", key: "userName" },
-    { title: "Email", dataIndex: "address", key: "emailAddress" },
-    { title: "Phone No:", dataIndex: "contact", key: "Phone" },
-    {
-      title: "Status",
-      dataIndex: "isActives",
-      key: "isActives",
-      render: (_, record) => (
-        <Switch
-          defaultunChecked={record.isActives === "1"}
-          onChange={(checked) => onChange(checked, record.id)}
-        />
-      ),
-    },
+    { title: "Email", dataIndex: "email", key: "emailAddress" },
+    { title: "subscription", dataIndex: "subscriptionDetails", key: "Phone" },
+    { title: "subscriptionPrice", dataIndex: "subscriptionPrice", key: "Phone" },
+   
+   
     {
       title: "Action",
       dataIndex: "id",
+      
       key: "action",
       render: (id, record) => (
         <div>
@@ -86,7 +77,9 @@ const InActiveUsers = () => {
     },
   ];
 
-
+  const onChange = (checked) => {
+    console.log(`switch to ${checked}`);
+  };
   const handleEdit = (doctor) => {
     setSelectedDoctor(doctor);
     setIsModalVisible(true);
@@ -163,7 +156,6 @@ const InActiveUsers = () => {
     setIsViewModalVisible(true);
   };
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -171,7 +163,7 @@ const InActiveUsers = () => {
 
         const token = Cookies.get("apiToken");
         const response = await fetch(
-          "https://mksm.blownclouds.com/api/inactive/users",
+          "https://mksm.blownclouds.com/api/users/subscription",
           {
             headers: {
               "Content-Type": "application/json",
@@ -184,8 +176,8 @@ const InActiveUsers = () => {
           const responseData = await response.json();
           console.log("Doctors fetched successfully:", responseData);
 
-          if (Array.isArray(responseData?.active_users?.data)) {
-            setInActiveUser(responseData.active_users.data);
+          if (Array.isArray(responseData?.all_subscription_users?.data)) {
+            setUserSubs(responseData.all_subscription_users.data);
           } else {
             console.error(
               "API response does not contain an array for 'doctor'"
@@ -202,52 +194,18 @@ const InActiveUsers = () => {
     fetchData();
   }, []);
 
-  const dataSource = (inActiveUser || []).map((inActiveUser, index) => ({
+  const dataSource = (userSubs || []).map((userSubs, index) => ({
     key: index.toString(),
-    name: inActiveUser.userName,
-    contact: inActiveUser.contact,
-    address: inActiveUser.emailAddress,
-    id: inActiveUser.id,
+    name: userSubs.userName,
+    subscriptionDetails: userSubs.subscriptionDetails,
+    email: userSubs.userEmail,
+    subscriptionPrice: userSubs.subscriptionPrice,
   }));
 
-  const onChange = async (checked, userId) => {
-   
-    console.log("userId",userId)
-    if (checked) {
-      try {
-        const token = Cookies.get("apiToken");
-        const response = await fetch(
-          `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`,
-          {
-            method: 'GET', // Update this as per your API
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        if (response.ok) {
-          // Remove the user from the list
-          const updatedUsers = inActiveUser.filter(user => user.id !== userId);
-          setInActiveUser(updatedUsers);
-          setSelectedUserId(userId); 
-          message.success('User set to inactive successfully');
-          console.log("Failed to reject pharmacy. Status:", updatedUsers);
-        } else {
-          // Handle errors
-          message.error('Failed to update user status');
-        }
-      } catch (error) {
-        console.error("Error updating user status: ", error);
-        message.error('An error occurred while updating user status');
-      }
-    }
-  };
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Doctors text-[22px]">InActive Users</h1>
+        <h1 className="Doctors text-[22px] font-sans">User Subscription</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Search"
@@ -263,7 +221,8 @@ const InActiveUsers = () => {
   
         dataSource={dataSource}
       />
-   
+    
+      
       <Modal
         style={{
           width: "534px",
@@ -294,61 +253,7 @@ const InActiveUsers = () => {
   );
 };
 
-const EditUserForm = ({ doctor, onSave }) => {
-  const [form] = Form.useForm();
 
-  useEffect(() => {
-    form.setFieldsValue(doctor);
-  }, [doctor, form]);
 
-  return (
-    <Form form={form} layout="vertical" onFinish={(values) => onSave(values)}>
-      <label className="mb-[5px] font-semi-bold text-[#868585] font ">
-        UserName
-      </label>
-      <Form.Item name="userName" rules={[{ required: true }]}>
-        <Input className="border" placeholder="userName" />
-      </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585] font">
-        AffiliationNo
-      </label>
-      <Form.Item name="affiliationNo" rules={[{ required: true }]}>
-        <Input className="border" placeholder="affiliationNo" />
-      </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585] font">
-        Experience
-      </label>
-      <Form.Item name="noOfExperience" rules={[{ required: true }]}>
-        <Input className="border" placeholder="noOfExperience" />
-      </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585] font">
-        Specialization
-      </label>
-      <Form.Item name="specialization" rules={[{ required: true }]}>
-        <Input className="border" placeholder="specialization" />
-      </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585] font">Age</label>
-      <Form.Item name="age" rules={[{ required: true }]}>
-        <Input className="border" placeholder="age" />
-      </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585] font">
-        Gender
-      </label>
-      <Form.Item name="gender" rules={[{ required: true }]}>
-        <Input className="border" placeholder="gender" />
-      </Form.Item>
 
-      <Form.Item>
-        <Button
-          className="bg-[#2361dd] !text-white text-center"
-          htmlType="submit"
-          // loading={loadingUpdateProfile}
-        >
-          Save
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-};
-
-export default InActiveUsers;
+export default UserSubscription;

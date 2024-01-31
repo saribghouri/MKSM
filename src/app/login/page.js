@@ -1,21 +1,83 @@
+
+
+
+
+
 "use client";
-import React from "react";
-import Image from "next/image";
-import { Button, Checkbox, Form, Input, Select } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+ import Image from "next/image";
+ import { useRouter } from "next/navigation";
+ import { Button, Checkbox, Form, Input, Select, message } from "antd";
+// ... other imports
+
 const Page = () => {
-  const router = useRouter()
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+ 
+  const onFinish = async (values) => {
+    try {
+      setLoading(true);
+
+      // Add the userRole directly here
+      const userRoleValue = 2;
+
+      const response = await fetch(
+        "https://mksm.blownclouds.com/api/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            emailAddress: values.email,
+            password: values.password,
+            userRole: userRoleValue, // use the hardcoded userRole value
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("API response:", data);
+        const cookie = Cookies.set("apiToken", data.access_token);
+        console.log(cookie);
+
+        router.push("/dashboard");
+
+       
+      } else {
+        const errorData = await response.json();
+        console.error("API request failed:", errorData);
+        message.error("Failed to login. Invalid Credentials");
+
+      }
+      // ... rest of the onFinish function
+    } catch (error) {
+      // ... error handling
+    } finally {
+      setLoading(false);
+    }
   };
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
+  // ... rest of your component
+
   return (
     <div className="flex justify-between">
-      <div className="flex min-h-screen flex-col items-center  ">
+      <div className="flex min-h-screen flex-col items-center">
         <div className=" bg-cover w-[100%]  absolute top-0 left-0" style={{}}>
           <div
             className=" min-h-screen w-[50%]    relative"
@@ -54,7 +116,7 @@ const Page = () => {
             labelCol={{
               span: 8,
             }}
-            wrapperCol={{  
+            wrapperCol={{
               span: 16,
             }}
             style={{
@@ -67,9 +129,9 @@ const Page = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Form.Item className="w-[450px]"
-    
-              name="username"
+            <Form.Item
+              className="w-[450px]"
+              name="email"
               rules={[
                 {
                   required: true,
@@ -77,11 +139,14 @@ const Page = () => {
                 },
               ]}
             >
-              <Input placeholder="Email address" className="rounded-l-[20px] rounded-r-[20px]" />
+              <Input
+                placeholder="Email address"
+                className="rounded-l-[20px] rounded-r-[20px]"
+              />
             </Form.Item>
 
-            <Form.Item className="w-[450px] "
-             
+            <Form.Item
+              className="w-[450px] "
               name="password"
               rules={[
                 {
@@ -90,10 +155,14 @@ const Page = () => {
                 },
               ]}
             >
-              <Input.Password placeholder="Password" className="rounded-l-[20px] rounded-r-[20px]" />
+              <Input.Password
+                placeholder="Password"
+                className="rounded-l-[20px] rounded-r-[20px]"
+              />
             </Form.Item>
 
-            <Form.Item className="fex justify-start w-full mt-[-15px] tex"
+            <Form.Item
+              className="fex justify-start w-full mt-[-15px] tex"
               name="remember"
               valuePropName="checked"
               // wrapperCol={{
@@ -104,15 +173,17 @@ const Page = () => {
               <Checkbox className="text-white">Remember me</Checkbox>
             </Form.Item>
 
-            <Form.Item 
+            <Form.Item
               wrapperCol={{
                 offset: 4,
                 span: 14,
               }}
             >
-              <Button onClick={()=>{
-                router.push("/dashboard")
-              }} className="bg-[#F3585E] !text-white border-none rounded-l-[20px] rounded-r-[20px] w-[150px]"  htmlType="submit">
+              <Button
+          
+                className="bg-[#F3585E] !text-white border-none rounded-l-[20px] rounded-r-[20px] w-[150px]"
+                htmlType="submit"
+              >
                 Login
               </Button>
             </Form.Item>
@@ -124,9 +195,3 @@ const Page = () => {
 };
 
 export default Page;
-
-
-
-
-
-

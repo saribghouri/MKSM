@@ -3,7 +3,7 @@ import { DeleteOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Divider, Input, Modal, Switch, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./userProfile";
-
+import Cookies from "js-cookie";
 const AllUsers = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -75,9 +75,9 @@ const AllUsers = () => {
       try {
         setLoading(true);
 
-        const token = "5|lz77PSaFDkEASPBy1alzcDA3yrfEcNGSPI8nJqCMa9f07a95";
+        const token = Cookies.get("apiToken");
         const response = await fetch(
-          "https://mksm.blownclouds.com/api/all/user?userId=1&isActives=active",
+          "https://mksm.blownclouds.com/api/all/user",
           {
             headers: {
               "Content-Type": "application/json",

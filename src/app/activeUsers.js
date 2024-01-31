@@ -17,54 +17,29 @@ import {
   Switch,
 } from "antd";
 import React, { useEffect, useState } from "react";
-
+import Cookies from "js-cookie";
 const ActiveUsers = () => {
-  const [doctors, setDoctors] = useState([]);
+  const [activeUser, setActiveUser] = useState([]);
   const [searchText, setSearchText] = useState("");
-
-  const dataSource = [
-    {
-      key: "1",
-      name: "Mike",
-      age: 32,
-      address: "10 Downing Street",
-    },
-    {
-      key: "2",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
-    {
-      key: "3",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
-    {
-      key: "4",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
-  ];
+  const [loading, setLoading] = useState("");
+   const [selectedUserId, setSelectedUserId] = useState(null);
+  console.log(selectedUserId)
+const userId = activeUser.id
+console.log(activeUser)
   const columns = [
-    { title: "Sr", dataIndex: "name", key: "serialNumber" },
+    { title: "Sr", dataIndex: "key", key: "serialNumber" },
     { title: "Name", dataIndex: "name", key: "userName" },
-    { title: "Email", dataIndex: "name", key: "emailAddress" },
-    { title: "Phone No:", dataIndex: "name", key: "Phone" },
+    { title: "Email", dataIndex: "address", key: "emailAddress" },
+    { title: "Phone No:", dataIndex: "contact", key: "Phone" },
     {
       title: "Status",
       dataIndex: "isActives",
       key: "isActives",
       render: (_, record) => (
-        <>
-          {record.isActives === "1" ? (
-            <Switch defaultChecked onChange={onChange} />
-          ) : (
-            <Switch defaultChecked onChange={onChange} />
-          )}
-        </>
+        <Switch
+        defaultChecked={record.isActives !== selectedUserId}
+        onChange={(checked) => onChange(checked, record.id)}
+      />
       ),
     },
 
@@ -91,10 +66,93 @@ const ActiveUsers = () => {
     },
   ];
 
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
-  };
+  // const onChange = (checked) => {
+  //   console.log(`switch to ${checked}`);
+  // };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const token = Cookies.get("apiToken");
+        const response = await fetch(
+          "https://mksm.blownclouds.com/api/active/users",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("Doctors fetched successfully:", responseData);
+
+          if (Array.isArray(responseData?.active_users?.data)) {
+            setActiveUser(responseData.active_users.data);
+          } else {
+            console.error(
+              "API response does not contain an array for 'doctor'"
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const dataSource = (activeUser || []).map((user, index) => ({
+    key: index.toString(),
+    name: user.userName,
+    contact: user.contact,
+    address: user.emailAddress,
+    id: user.id,
+  }));
+
+ 
+  const onChange = async (checked, userId) => {
+   
+    console.log("userId",userId)
+    if (!checked) {
+      try {
+        const token = Cookies.get("apiToken");
+        const response = await fetch(
+          `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=inactive`,
+          {
+            method: 'GET', // Update this as per your API
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        if (response.ok) {
+          // Remove the user from the list
+          const updatedUsers = activeUser.filter((user) => user.id !== userId);
+          setActiveUser(updatedUsers);
+          
+          // Save the selected user id to the state
+          setSelectedUserId(userId); 
+          message.success('User set to inactive successfully');
+          console.log("Failed to reject pharmacy. Status:", updatedUsers);
+        } else {
+          // Handle errors
+          message.error('Failed to update user status');
+        }
+      } catch (error) {
+        console.error("Error updating user status: ", error);
+        message.error('An error occurred while updating user status');
+      }
+    }
+  };
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
@@ -115,3 +173,5 @@ const ActiveUsers = () => {
 };
 
 export default ActiveUsers;
+
+
