@@ -26,8 +26,44 @@ const AddPayment = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values) => {
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+
+      formData.append("categorieName", values.name);
+
+
+      const token = Cookies.get("apiToken");
+
+      const response = await fetch(
+        "https://mksm.blownclouds.com/api/all/subscription",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        message.success("category added successfully");
+        setCategory(true);
+        setCategoryResponse(await response.json());
+        setLoading(false);
+        handleShowCategories();
+      } else {
+        message.error("category not added");
+        setCategoryResponse(await response.json());
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error during category registration:", error);
+      setLoading(false);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

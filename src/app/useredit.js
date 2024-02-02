@@ -12,11 +12,74 @@ import { useRouter } from "next/navigation";
 import ProfileEdit from "./profileEdit";
 import TextArea from "antd/es/input/TextArea";
 import UserProfile from "./userProfile";
+import Cookies from "js-cookie";
 
-const UserEdit = () => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+const UserEdit = ({ user }) => {
+  console.log("user", user);
+  const [userData, setUserData] = useState([]);
+  const onFinish = async (values) => {
+    try {
+      // setLoadingUpdateProfile(true);
+      const token = Cookies.get("apiToken");
+      const userId = user.id;
+      const formData = new FormData();
+      formData.append("userName", values.userName);
+      formData.append("contact", values.contact);
+      formData.append("dob", values.dob);
+      formData.append("gender", values.gender);
+      formData.append("about", values.about);
+      formData.append("company", values.company);
+      formData.append("collage", values.collage);
+      formData.append("location", values.location);
+      formData.append("job", values.job);
+      if (values.upload && values.upload.length > 0) {
+        formData.append("profileImage", values.upload[0].originFileObj);
+      }
+
+      const response = await fetch(
+        `https://mksm.blownclouds.com/api/users/edituser/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        // setLoadingUpdateProfile(false);
+
+        console.log("🚀 ~ data:", data);
+        const updatedUserDetails = {
+          ...userData,
+          userName: values.userName,
+          affiliationNo: values.affiliationNo,
+          profileImage: imageUrl,
+        };
+        setUserData((p) => ({ ...p, ...updatedUserDetails }));
+        // setUserProfileImage(data.profileImage || userData.profileImage);
+
+        message.success("Profile updated successfully");
+        setShowProfileEditModal(false);
+        setForceRerender((prev) => !prev);
+
+        // handleChange({
+        //   file: {
+        //     status: "done",
+        //     originFileObj: values.upload[0].originFileObj,
+        //   },
+        // });
+      } else {
+        message.error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error during profile edit:", error);
+    }
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -25,6 +88,7 @@ const UserEdit = () => {
   };
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
+  console.log("isEditing", isEditing);
   const [showAllUsers, setShowAllUsers] = useState(false);
   return (
     <div>
@@ -65,7 +129,18 @@ const UserEdit = () => {
                       span: 16,
                     }}
                     initialValues={{
-                      remember: true,
+                      // Set initial values from the user object
+                      name: user.name,
+                      gender: user.gender,
+                      address: user.address,
+                      dob: user.dob,
+                      company: user.company,
+                      collage: user.collage,
+                      contact: user.contact,
+                      about: user.about,
+                      location: user.location,
+                      job: user.job,
+                      // ... (set other fields)
                     }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
@@ -74,7 +149,7 @@ const UserEdit = () => {
                     <div className="flex flex-col gap-2">
                       <label className="text-[#727272]">Name</label>
                       <Form.Item
-                        name="username"
+                        name="name"
                         rules={[
                           {
                             required: true,
@@ -90,7 +165,7 @@ const UserEdit = () => {
 
                       <label className="text-[#727272]">Date of Birth</label>
                       <Form.Item
-                        name="birth"
+                        name="dob"
                         rules={[
                           {
                             required: true,
@@ -98,9 +173,9 @@ const UserEdit = () => {
                           },
                         ]}
                       >
-                        <DatePicker
+                        <Input
                           className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
-                          onChange={onChange}
+                          placeholder="Name"
                         />
                       </Form.Item>
 
@@ -122,7 +197,7 @@ const UserEdit = () => {
                       </Form.Item>
                       <label className="text-[#727272]">Collage</label>
                       <Form.Item
-                        name="Collage"
+                        name="collage"
                         rules={[
                           {
                             required: true,
@@ -156,7 +231,7 @@ const UserEdit = () => {
 
                       <label className="text-[#727272]">Phone</label>
                       <Form.Item
-                        name="phone"
+                        name="contact"
                         rules={[
                           {
                             required: true,
@@ -199,22 +274,14 @@ const UserEdit = () => {
                         rules={[
                           {
                             required: true,
-                            message: "Please select a user type!",
+                            message: "Please input your job!",
                           },
                         ]}
                       >
-                        <Select
-                          placeholder="job"
-                          className=" rounded-r-[20px] rounded-l-[20px] w-[300px]"
-                        >
-                          <Select.Option type="admin" value={1}>
-                            Admin
-                          </Select.Option>
-
-                          <Select.Option type="Doctor" value={3}>
-                            Doctor
-                          </Select.Option>
-                        </Select>
+                        <Input
+                          className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
+                          placeholder="Phone No"
+                        />
                       </Form.Item>
 
                       <label className="text-[#727272]">About</label>
@@ -234,16 +301,17 @@ const UserEdit = () => {
                         />
                       </Form.Item>
                     </div>
-                  </Form>
-                </div>
-                <div className="flex justify-end w-[90%]">
                   <Button
                     className="bg-[#F24044] border-none w-[100px]  rounded-r-[20px] rounded-l-[20px] !text-white"
                     onClick={() => setShowAllUsers(true)}
                     htmlType="submit"
+                    
                   >
                     update
                   </Button>
+                  </Form>
+                </div>
+                <div className="flex justify-end w-[90%]">
                 </div>
               </div>
             </Card>

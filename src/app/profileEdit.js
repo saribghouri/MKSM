@@ -15,61 +15,121 @@ import { EditFilled, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import ProfileView from "./profileView";
 import { useUser } from "./UserContext";
+import Cookies from "js-cookie";
 
 const ProfileEdit = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
-  const [userData, setUserData] = useState(null);
-  const { user } = useUser();
-console.log("userData",userData)
+  const [userData, setUserData] = useState([]);
+  const [form] = Form.useForm();
+  const [userProfileImage, setUserProfileImage] = useState(
+    userData?.profileImage || null
+  );
+
+  console.log("userData", userData);
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserDetails = async () => {
       try {
+        const token = Cookies.get("apiToken");
         const response = await fetch(
-          "https://mksm.blownclouds.com/api/users/edituser"
+          "https://mksm.blownclouds.com/api/user/details",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        const data = await response.json();
-        setUserData(data);
-        setImageUrl(data.imageUrl); // Assuming 'imageUrl' is a field in your user data
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log("🚀 ~ data:", data);
+        
+          // Update the imageUrl state based on the new data
+          setImageUrl(data?.user_details[0]?.profileImage);
+        
+          setUserData(data["user_details"][0]);
+          setForceRerender((prev) => !prev);
+        } else {
+          console.error(
+            "Failed to fetch user details:",
+            response.status,
+            response.statusText
+          );
+        }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error during fetching user details:", error.message);
       }
     };
 
-    fetchUserData();
+    fetchUserDetails();
   }, []);
 
   const onFinish = async (values) => {
-    console.log("Success:", values);
     try {
+      // setLoadingUpdateProfile(true);
+      const token = Cookies.get("apiToken");
+      const userId = userData.id;
+      const formData = new FormData();
+      formData.append("userName", values.userName);
+      formData.append("contact", values.contact);
+      formData.append("dob", values.dob);
+      formData.append("gender", values.gender);
+      formData.append("about", values.about);
+      formData.append("company", values.company);
+      formData.append("collage", values.collage);
+      formData.append("location", values.location);
+      formData.append("job", values.job);
+      if (values.upload && values.upload.length > 0) {
+        formData.append("profileImage", values.upload[0].originFileObj);
+      }
+
       const response = await fetch(
-        "https://mksm.blownclouds.com/api/users/edituser",
+        `https://mksm.blownclouds.com/api/users/edituser/${userId}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            ...values,
-            imageUrl: imageUrl,
-          }),
+          body: formData,
         }
       );
-  
-      const result = await response.json();
+
       if (response.ok) {
-        console.log("Update success:", result);
-        message.success('Profile updated successfully');
-        // Optionally update local state or redirect user
+        const data = await response.json();
+        // setLoadingUpdateProfile(false);
+
+        console.log("🚀 ~ data:", data);
+        const updatedUserDetails = {
+          ...userData,
+          userName: values.userName,
+          affiliationNo: values.affiliationNo,
+          profileImage: imageUrl,
+        };
+        setUserData((p) => ({ ...p, ...updatedUserDetails }));
+        setUserProfileImage(data.profileImage || userData.profileImage);
+
+        message.success("Profile updated successfully");
+        setShowProfileEditModal(false);
+        setForceRerender((prev) => !prev);
+
+        handleChange({
+          file: {
+            status: "done",
+            originFileObj: values.upload[0].originFileObj,
+          },
+        });
       } else {
-        throw new Error(result.message || 'Failed to update');
+        message.error("Failed to update profile");
       }
     } catch (error) {
-      console.error("Failed to update:", error);
-      message.error(error.toString());
+      console.error("Error during profile edit:", error);
     }
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -117,9 +177,6 @@ console.log("userData",userData)
     </div>
   );
 
-  if (!userData) {
-    return <div>Loading...</div>;
-  }
   return (
     <div>
       {isEditing ? (
@@ -193,7 +250,18 @@ console.log("userData",userData)
               </h1>
               <div className=" flex flex-row gap-6 ml-[50px] flex-wrap">
                 <Form
-                
+                  form={form}
+                  initialValues={{
+                    userName: userData.userName,
+                    contact: userData.contact,
+                    dob: userData.dob,
+                    about: userData.about,
+                    location: userData.location, 
+                    gender: userData.gender,
+                    company: userData.company,
+                    job: userData.job,
+                    collage: userData.collage,
+                  }}
                   className="flex gap-6"
                   name="basic"
                   labelCol={{
@@ -210,24 +278,11 @@ console.log("userData",userData)
                   // }}
                   onFinish={onFinish}
                   onFinishFailed={onFinishFailed}
-                  autoComplete="off"
-                  initialValues={{
-                    username: user.user.userName,
-                    contact: user.user.contact,
-                    dob: user.user.dob,
-                    about: user.user.about,
-                    location: user.user.location,
-                    gender: user.user.gender,
-                    company: user.user.company,
-                    job: user.user.job,
-                    collage: user.user.collage,
-                    // ... other fields
-                  }}
                 >
                   <div className="flex flex-col gap-2">
                     <label className="text-[#7f7e7e]">Name</label>
                     <Form.Item
-                      name="username"
+                      name="userName"
                       rules={[
                         {
                           required: true,
@@ -386,7 +441,6 @@ console.log("userData",userData)
                   </div>
                   <Button
                     className="bg-[#F24044] border-none w-[100px]  rounded-r-[20px] rounded-l-[20px] !text-white"
-                 
                     htmlType="submit"
                   >
                     update

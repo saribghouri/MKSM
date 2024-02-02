@@ -10,6 +10,7 @@ const AllUsers = () => {
   const [loading, setLoading] = useState(true);
   const [isModalVisibles, setIsModalVisibles] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const showModal = () => {
     setIsModalVisibles(true);
@@ -61,6 +62,7 @@ const AllUsers = () => {
 
           <EyeOutlined
             onClick={() => {
+              setSelectedUser(record);
               setIsEditing(true);
             }}
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
@@ -113,12 +115,24 @@ const AllUsers = () => {
     name: doctor.userName,
     contact: doctor.contact,
     address: doctor.emailAddress,
+    about: doctor.about,
+    dob: doctor.dob,
+    company: doctor.company,
+    gender: doctor.gender,
+    collage: doctor.collage,
+    location: doctor.location,
+    job: doctor.job,
+    id: doctor.id ,
+    
   }));
 
   return (
     <div>
       {isEditing ? (
-        <UserProfile onCancel={() => setIsEditing(false)} />
+        <UserProfile
+          user={selectedUser}
+          onCancel={() => setSelectedUser(null)}
+        />
       ) : (
         <div>
           <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
@@ -133,12 +147,7 @@ const AllUsers = () => {
           </div>
           <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-          <Table
-            columns={columns}
-            dataSource={dataSource}
-            loading={loading}
-            
-          />
+          <Table columns={columns} dataSource={dataSource} loading={loading} />
           <Modal
             style={{
               width: "534px",

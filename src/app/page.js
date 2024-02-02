@@ -20,7 +20,7 @@ const Page = () => {
     try {
        const token = Cookies.get("apiToken");
       setLoading(true);
-      // Existing login code...
+  
       const response = await fetch(
         "https://mksm.blownclouds.com/api/users/login",
         {
@@ -32,15 +32,15 @@ const Page = () => {
           body: JSON.stringify({
             emailAddress: values.email,
             password: values.password,
-            userRole: 2, // Hardcoded userRole
+            userRole: 2, 
           }),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
-        Cookies.set("apiToken", data.access_token); // Store the token in cookies
-        login(data); // Save the user details in context
+        Cookies.set("apiToken", data.access_token); 
+        login(data);
         router.push("/dashboard");
       } else {
         const errorData = await response.json();

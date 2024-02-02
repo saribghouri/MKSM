@@ -111,7 +111,7 @@ const App = () => {
       try {
         const token = Cookies.get("apiToken");
         const response = await fetch(
-          "https://mymedjournal.blownclouds.com/api/user/details",
+          "https://mksm.blownclouds.com/api/user/details",
           {
             method: "GET",
             headers: {
@@ -693,7 +693,7 @@ const App = () => {
                     <a onClick={(e) => e.preventDefault()}>
                       <Space className="text-[#fff] ml-[10px]">
                         {/* {userDetails?.userName} */}
-                        <p>{user.user.userName}</p>
+                        <p>{userDetails.userName}</p>
                         <DownOutlined />
                       </Space>
                     </a>
@@ -704,7 +704,7 @@ const App = () => {
                   className="w-[50px] h-[50px] rounded-[50%] ml-[-20px] mt-[-2px]  absolute"
                   // src={userDetails?.profileImage || null}
                   src={
-                    user.user.profileImage ||
+                    userDetails.profileImage ||
                     "assets/images/download.jfif"
                   }
                 />

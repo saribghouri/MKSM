@@ -1,14 +1,50 @@
 import { Button, Card, Divider } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { EditFilled, EditOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import ProfileEdit from "./profileEdit";
 import { useUser } from "./UserContext";
-
+import Cookies from "js-cookie";
 const ProfileView = () => {
   const router = useRouter();
+  const [userDetails, setUserDetails] = useState([]);
+  console.log("userDetails", userDetails);
   const { user } = useUser();
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const token = Cookies.get("apiToken");
+        const response = await fetch(
+          "https://mksm.blownclouds.com/api/user/details",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log("🚀 ~ data:", data);
+          // setImageUrl(data?.user_details[0]?.profileImage);
+          setUserDetails(data["user_details"][0]);
+          setForceRerender((prev) => !prev);
+        } else {
+          console.error(
+            "Failed to fetch user details:",
+            response.status,
+            response.statusText
+          );
+        }
+      } catch (error) {
+        console.error("Error during fetching user details:", error.message);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
   console.log("user", user);
   const [isEditing, setIsEditing] = useState(false);
   return (
@@ -36,7 +72,7 @@ const ProfileView = () => {
             />
             <div className="flex justify-between ">
               <h1 className=" mt-[50px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
-          {user.user.userName}
+                {userDetails.userName}
               </h1>
 
               <Button
@@ -72,26 +108,28 @@ const ProfileView = () => {
                 <div className="flex flex-col gap-6">
                   {" "}
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                {  user.user.emailAddress}
+                    {userDetails.emailAddress}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                { user.user.contact}
-                  </p>
-                  <p className="text-[15px] font-[500] text-[#a39d9d]">{user.user.gender}</p>
-                  <p className="text-[15px] font-[500] text-[#a39d9d]">
-                  {user.user.dob}
+                    {userDetails.contact}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                  {user.user.company}
+                    {userDetails.gender}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                  {user.user.collage}
+                    {userDetails.dob}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                  {user.user.location}
+                    {userDetails.company}
                   </p>
                   <p className="text-[15px] font-[500] text-[#a39d9d]">
-                  {user.user.about}
+                    {userDetails.collage}
+                  </p>
+                  <p className="text-[15px] font-[500] text-[#a39d9d]">
+                    {userDetails.location}
+                  </p>
+                  <p className="text-[15px] font-[500] text-[#a39d9d]">
+                    {userDetails.about}
                   </p>
                 </div>
               </div>
