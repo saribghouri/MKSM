@@ -190,3 +190,13 @@ background-color:inherit !important;
    
     background-color:#F24044 !important ;
   }
+  
+  .userp> .ant-upload-select{
+    width: 239px !important;
+    height: 239px !important;
+
+  }
+  .userAdmin> .ant-upload-select{
+    width: 139px !important;
+    height: 139px !important;
+  }

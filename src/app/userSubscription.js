@@ -27,13 +27,12 @@ const UserSubscription = () => {
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
   const [isModalVisibles, setIsModalVisibles] = useState(false);
   const [loading, setLoading] = useState(true);
-console.log(userSubs)
+  console.log(userSubs);
   const showModal = () => {
     setIsModalVisibles(true);
   };
 
   const handleOk = () => {
-
     setIsModalVisibles(false);
   };
 
@@ -41,25 +40,24 @@ console.log(userSubs)
     setIsModalVisibles(false);
   };
 
-
- 
   const columns = [
-    { title: "Sr", dataIndex: "key", key: "serialNumber" }, 
+    { title: "Sr", dataIndex: "key", key: "serialNumber" },
     { title: "Name", dataIndex: "name", key: "userName" },
     { title: "Email", dataIndex: "email", key: "emailAddress" },
     { title: "subscription", dataIndex: "subscriptionDetails", key: "Phone" },
-    { title: "subscriptionPrice", dataIndex: "subscriptionPrice", key: "Phone" },
-   
-   
+    {
+      title: "subscriptionPrice",
+      dataIndex: "subscriptionPrice",
+      key: "Phone",
+    },
+
     {
       title: "Action",
       dataIndex: "id",
-      
+
       key: "action",
       render: (id, record) => (
         <div>
-       
-
           {/* <DeleteOutlined
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
             type="link"
@@ -201,6 +199,14 @@ console.log(userSubs)
     email: userSubs.userEmail,
     subscriptionPrice: userSubs.subscriptionPrice,
   }));
+  const filteredData = dataSource.filter(
+    (doctor) =>
+      doctor.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      doctor.subscriptionDetails
+        .toLowerCase()
+        .includes(searchText.toLowerCase()) ||
+      doctor.email.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <div>
@@ -215,45 +221,49 @@ console.log(userSubs)
         />
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
-    
-      <Table
-        columns={columns}
-  
-        dataSource={dataSource}
-      />
-    
-      
+
+      <Table columns={columns} dataSource={filteredData} loading={loading} />
+
       <Modal
         style={{
           width: "534px",
           height: " 369px",
         }}
-      
         open={isModalVisibles}
         onOk={handleOk}
-        footer= {null}
+        footer={null}
         onCancel={handleCancel}
       >
         <div className=" gap-2 flex justify-center items-center flex-col h-[250px]">
-           
-        <DeleteOutlined
+          <DeleteOutlined
             className=" flex justify-center items-center text-[#ffffff] w-[85px] h-[85px] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[50px]"
             type="link"
             danger
             onClick={showModal}
           />
 
-            <h1 className="font-bold text-[22px]">User Delete</h1>
-        <p className="text-black text-[16px]">Are you sure you want to delete this user?</p>
-        <Button className="bg-[#F24044] !text-white rounded-l-[20px] w-[150px] rounded-r-[20px] h-[40px]" onClick={() => {}}>Delete</Button>
-        <Button className="!text-[#F24044] rounded-l-[20px] rounded-r-[20px] w-[150px] h-[40px]" onClick={() => {handleCancel}}>Cancel</Button>
+          <h1 className="font-bold text-[22px]">User Delete</h1>
+          <p className="text-black text-[16px]">
+            Are you sure you want to delete this user?
+          </p>
+          <Button
+            className="bg-[#F24044] !text-white rounded-l-[20px] w-[150px] rounded-r-[20px] h-[40px]"
+            onClick={() => {}}
+          >
+            Delete
+          </Button>
+          <Button
+            className="!text-[#F24044] rounded-l-[20px] rounded-r-[20px] w-[150px] h-[40px]"
+            onClick={() => {
+              handleCancel;
+            }}
+          >
+            Cancel
+          </Button>
         </div>
       </Modal>
     </div>
   );
 };
-
-
-
 
 export default UserSubscription;

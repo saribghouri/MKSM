@@ -9,6 +9,8 @@ import Cookies from "js-cookie";
 const ProfileView = () => {
   const router = useRouter();
   const [userDetails, setUserDetails] = useState([]);
+  const [forceRerender, setForceRerender] = useState(false);
+  console.log("profileImage",userDetails)
   console.log("userDetails", userDetails);
   const { user } = useUser();
   useEffect(() => {
@@ -67,8 +69,8 @@ const ProfileView = () => {
             <img
               alt=""
               className="w-[130px] h-[130px] rounded-[50%] top-[-100px] absolute "
-              // src={userDetails?.profileImage || null}
-              src="assets/images/download.jfif"
+              src={userDetails?.profileImage || null}
+              // src="assets/images/download.jfif"
             />
             <div className="flex justify-between ">
               <h1 className=" mt-[50px] ml-[10px] text-[#F24044] font-[700] text-[24px]">

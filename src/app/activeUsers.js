@@ -22,10 +22,10 @@ const ActiveUsers = () => {
   const [activeUser, setActiveUser] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState("");
-   const [selectedUserId, setSelectedUserId] = useState(null);
-  console.log(selectedUserId)
-const userId = activeUser.id
-console.log(activeUser)
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  console.log(selectedUserId);
+  const userId = activeUser.id;
+  console.log(activeUser);
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
     { title: "Name", dataIndex: "name", key: "userName" },
@@ -37,9 +37,9 @@ console.log(activeUser)
       key: "isActives",
       render: (_, record) => (
         <Switch
-        defaultChecked={record.isActives !== selectedUserId}
-        onChange={(checked) => onChange(checked, record.id)}
-      />
+          defaultChecked={record.isActives !== selectedUserId}
+          onChange={(checked) => onChange(checked, record.id)}
+        />
       ),
     },
 
@@ -115,41 +115,44 @@ console.log(activeUser)
     address: user.emailAddress,
     id: user.id,
   }));
+  const filteredData = dataSource.filter(
+    (doctor) =>
+      doctor.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      doctor.address.toLowerCase().includes(searchText.toLowerCase())
+  );
 
- 
   const onChange = async (checked, userId) => {
-   
-    console.log("userId",userId)
+    console.log("userId", userId);
     if (!checked) {
       try {
         const token = Cookies.get("apiToken");
         const response = await fetch(
           `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=inactive`,
           {
-            method: 'GET', // Update this as per your API
+            method: "GET", // Update this as per your API
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
           }
         );
-  
+
         if (response.ok) {
           // Remove the user from the list
           const updatedUsers = activeUser.filter((user) => user.id !== userId);
           setActiveUser(updatedUsers);
-          
+
           // Save the selected user id to the state
-          setSelectedUserId(userId); 
-          message.success('User set to inactive successfully');
+          setSelectedUserId(userId);
+          message.success("User set to inactive successfully");
           console.log("Failed to reject pharmacy. Status:", updatedUsers);
         } else {
           // Handle errors
-          message.error('Failed to update user status');
+          message.error("Failed to update user status");
         }
       } catch (error) {
         console.error("Error updating user status: ", error);
-        message.error('An error occurred while updating user status');
+        message.error("An error occurred while updating user status");
       }
     }
   };
@@ -167,11 +170,9 @@ console.log(activeUser)
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-      <Table columns={columns} dataSource={dataSource} />
+      <Table columns={columns} dataSource={filteredData} loading={loading} />
     </div>
   );
 };
 
 export default ActiveUsers;
-
-

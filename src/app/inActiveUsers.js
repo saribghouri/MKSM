@@ -209,7 +209,13 @@ const InActiveUsers = () => {
     address: inActiveUser.emailAddress,
     id: inActiveUser.id,
   }));
-
+  const filteredData = dataSource.filter(
+    (doctor) =>
+      doctor.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      doctor.address
+        .toLowerCase()
+        .includes(searchText.toLowerCase())
+  );
   const onChange = async (checked, userId) => {
    
     console.log("userId",userId)
@@ -261,7 +267,8 @@ const InActiveUsers = () => {
       <Table
         columns={columns}
   
-        dataSource={dataSource}
+        dataSource={filteredData}
+        loading={loading}
       />
    
       <Modal

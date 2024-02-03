@@ -22,11 +22,14 @@ const ProfileEdit = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const [userData, setUserData] = useState([]);
+  console.log("userData", userData.profileImage);
   const [form] = Form.useForm();
-  const [userProfileImage, setUserProfileImage] = useState(
-    userData?.profileImage || null
-  );
+  const [forceRerender, setForceRerender] = useState(false);
 
+  const [userProfileImage, setUserProfileImage] = useState(
+    userData.profileImage || null
+  );
+  console.log("userProfileImage", userProfileImage);
   console.log("userData", userData);
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -42,14 +45,14 @@ const ProfileEdit = () => {
             },
           }
         );
-        
+
         if (response.ok) {
           const data = await response.json();
           console.log("🚀 ~ data:", data);
-        
+
           // Update the imageUrl state based on the new data
           setImageUrl(data?.user_details[0]?.profileImage);
-        
+
           setUserData(data["user_details"][0]);
           setForceRerender((prev) => !prev);
         } else {
@@ -142,12 +145,14 @@ const ProfileEdit = () => {
 
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+
     if (!isJpgOrPng) {
       message.error("You can only upload JPG/PNG files!");
       return false;
     }
 
     const isLt2M = file.size / 1024 / 1024 < 2;
+
     if (!isLt2M) {
       message.error("Image must be smaller than 2MB!");
       return false;
@@ -157,26 +162,28 @@ const ProfileEdit = () => {
   };
 
   const handleChange = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      // Get this url from response in real world
-      getBase64(info.file.originFileObj, (imageUrl) => {
+    if (info.file) {
+      getBase64(info.file.originFileObj || info.file, (url) => {
         setLoading(false);
-        setImageUrl(imageUrl);
+        setImageUrl(url);
+        setForceRerender((prev) => !prev);
+        console.log("Image URL:", url);
       });
     }
   };
-
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div
+        className="w-[100%]"
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
     </div>
   );
-
   return (
     <div>
       {isEditing ? (
@@ -194,51 +201,10 @@ const ProfileEdit = () => {
             />
           </div>
           <div className="flex  flex-col relative  pl-[10px] pr-[10px] ml-[16px] mr-[16px]  mt-[20px] mb-[20px]">
-            <Form.Item
-              className="h-[50px] mb-[80px] w-[100%]"
-              name="upload"
-              valuePropName="fileList"
-              getValueFromEvent={(e) => e.fileList}
-              extra=" "
-              rules={[
-                {
-                  required: true,
-                  message: "Please upload your doctor image!",
-                },
-              ]}
-            >
-              <Upload
-                name="upload"
-                listType="picture-circle"
-                className="w-[130px] h-[130px] rounded-[50%] top-[-100px] absolute "
-                showUploadList={false}
-                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-              >
-                {/* Display default image */}
-
-                <img
-                  alt=""
-                  className="w-[130px] h-[130px] rounded-[50%]  absolute "
-                  src="assets/images/defaultImage.jpg"
-                />
-              </Upload>
-            </Form.Item>
             <div className="flex justify-between ">
               <h1 className=" mt-[50px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
                 Ghouri Sarib
               </h1>
-
-              <Button
-                onClick={() => {
-                  setIsEditing(true);
-                }}
-                htmlType="submit"
-                className=" !text-[#ffffff] bg-[#F24044] text-center flex items-center !border-none rounded-r-[20px] rounded-l-[20px] "
-              >
-                Save Changes <EditFilled />
-              </Button>
             </div>
           </div>
 
@@ -256,11 +222,12 @@ const ProfileEdit = () => {
                     contact: userData.contact,
                     dob: userData.dob,
                     about: userData.about,
-                    location: userData.location, 
+                    location: userData.location,
                     gender: userData.gender,
                     company: userData.company,
                     job: userData.job,
                     collage: userData.collage,
+                    profileImage: userData.profileImage,
                   }}
                   className="flex gap-6"
                   name="basic"
@@ -279,6 +246,42 @@ const ProfileEdit = () => {
                   onFinish={onFinish}
                   onFinishFailed={onFinishFailed}
                 >
+                  <div className="flex bottom-[280px] relative">
+                    <Form.Item
+                      className="h-[50px]  w-[100%] top-0 left-[-50px]  absolute"
+                      name="upload"
+                      valuePropName="fileList"
+                      getValueFromEvent={(e) => e.fileList}
+                      
+                     
+                    >
+                      <Upload
+                        name="upload"
+                        listType="picture-circle"
+                        className="avatar-uploader userAdmin"
+                        showUploadList={false}
+                        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                        beforeUpload={beforeUpload}
+                        onChange={handleChange}
+                      >
+                        {imageUrl && typeof imageUrl === "string" ? (
+                          <img
+                            alt=""
+                            className="!w-[139px] !h-[139px] rounded-[50%]"
+                            src={imageUrl}
+                          />
+                        ) : userData.profileImage ? (
+                          <img
+                            alt=""
+                            className="w-[70px] h-[70px] rounded-[50%]"
+                            src={userData.profileImage}
+                          />
+                        ) : (
+                          uploadButton
+                        )}
+                      </Upload>
+                    </Form.Item>
+                  </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-[#7f7e7e]">Name</label>
                     <Form.Item
@@ -439,12 +442,18 @@ const ProfileEdit = () => {
                       />
                     </Form.Item>
                   </div>
-                  <Button
-                    className="bg-[#F24044] border-none w-[100px]  rounded-r-[20px] rounded-l-[20px] !text-white"
-                    htmlType="submit"
-                  >
-                    update
-                  </Button>
+
+                  <div className="bg-[#F24044]  flex relative">
+                    <Button
+                        htmlType="submit"
+                      onClick={() => {
+                        // setIsEditing(true);
+                      }}
+                      className=" !text-[#ffffff] block bottom-[450px] right-0 absolute bg-[#F24044] text-center  items-center !border-none rounded-r-[20px] rounded-l-[20px] "
+                    >
+                      Save Changes <EditFilled />
+                    </Button>
+                  </div>
                 </Form>
               </div>
             </Card>

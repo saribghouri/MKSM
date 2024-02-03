@@ -125,6 +125,11 @@ const AllUsers = () => {
     id: doctor.id ,
     
   }));
+  const filteredData = dataSource.filter(
+    (doctor) =>
+      doctor.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      doctor.address.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <div>
@@ -147,7 +152,7 @@ const AllUsers = () => {
           </div>
           <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-          <Table columns={columns} dataSource={dataSource} loading={loading} />
+          <Table columns={columns} dataSource={filteredData} loading={loading} />
           <Modal
             style={{
               width: "534px",

@@ -704,8 +704,7 @@ const App = () => {
                   className="w-[50px] h-[50px] rounded-[50%] ml-[-20px] mt-[-2px]  absolute"
                   // src={userDetails?.profileImage || null}
                   src={
-                    userDetails.profileImage ||
-                    "assets/images/download.jfif"
+                    userDetails.profileImage 
                   }
                 />
               </div>

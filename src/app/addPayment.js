@@ -17,12 +17,14 @@ import {
   Switch,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 
 const AddPayment = () => {
   const [doctors, setDoctors] = useState([]);
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [form] = Form.useForm();
 
@@ -52,12 +54,12 @@ const AddPayment = () => {
       if (response.ok) {
         message.success("category added successfully");
         setCategory(true);
-        setCategoryResponse(await response.json());
+        setDoctors(await response.json());
         setLoading(false);
         handleShowCategories();
       } else {
         message.error("category not added");
-        setCategoryResponse(await response.json());
+        setDoctors(await response.json());
         setLoading(false);
       }
     } catch (error) {
