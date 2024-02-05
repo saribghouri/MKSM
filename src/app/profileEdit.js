@@ -214,7 +214,7 @@ const ProfileEdit = () => {
               <h1 className="text-[22px] font-[400] ml-[50px] text-[#F3585E] mb-[20px]">
                 Edit Details
               </h1>
-              <div className=" flex flex-row gap-6 ml-[50px] flex-wrap">
+              <div className=" flex flex-col gap-6 ml-[50px] flex-wrap">
                 <Form
                   form={form}
                   initialValues={{
@@ -229,7 +229,7 @@ const ProfileEdit = () => {
                     collage: userData.collage,
                     profileImage: userData.profileImage,
                   }}
-                  className="flex gap-6"
+                  className="flex  flex-col "
                   name="basic"
                   labelCol={{
                     span: 8,
@@ -252,8 +252,6 @@ const ProfileEdit = () => {
                       name="upload"
                       valuePropName="fileList"
                       getValueFromEvent={(e) => e.fileList}
-                      
-                     
                     >
                       <Upload
                         name="upload"
@@ -282,151 +280,164 @@ const ProfileEdit = () => {
                       </Upload>
                     </Form.Item>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[#7f7e7e]">Name</label>
-                    <Form.Item
-                      name="userName"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your username!",
-                        },
-                      ]}
-                    >
-                      <Input
-                        className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
-                        placeholder="Name"
-                      />
-                    </Form.Item>
-                    <label className="text-[#7f7e7e]">Gender</label>
-
-                    <Form.Item
-                      name="gender"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your gender!",
-                        },
-                      ]}
-                    >
-                      <Input
-                        className="rounded-r-[20px] rounded-l-[20px] w-[276px] "
-                        placeholder="Gender"
-                      />
-                    </Form.Item>
-                    <label className="text-[#7f7e7e]">Company</label>
-
-                    <Form.Item
-                      name="company"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your company!",
-                        },
-                      ]}
-                    >
-                      <Input
-                        className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
-                        placeholder="Company"
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[#7f7e7e]">Phone</label>
-                    <Form.Item
-                      name="contact"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your phone No!",
-                        },
-                      ]}
-                    >
-                      <Input
-                        className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
-                        placeholder="Phone No"
-                      />
-                    </Form.Item>
-                    <label className="text-[#7f7e7e]">Collage</label>
-                    <Form.Item
-                      name="collage"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your Collage!",
-                        },
-                      ]}
-                    >
-                      <Input
-                        className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
-                        placeholder="Collage"
-                      />
-                    </Form.Item>
-                    <label className="text-[#7f7e7e]">Location</label>
-                    <Form.Item
-                      name="location"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a location!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder="location"
-                        className=" rounded-r-[20px] rounded-l-[20px] w-[276px]"
+                  <div className=" flex flex-col">
+                    <div className="flex  gap-2">
+                      <Form.Item
+                        name="userName"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your username!",
+                          },
+                        ]}
                       >
-                        <Select.Option type="admin" value={1}>
-                          Admin
-                        </Select.Option>
+                        <label className="text-[#7f7e7e]">Name</label>
+                        <Input
+                          className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
+                          placeholder="Name"
+                        />
+                      </Form.Item>
 
-                        <Select.Option type="Doctor" value={3}>
-                          Doctor
-                        </Select.Option>
-                      </Select>
-                    </Form.Item>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[#7f7e7e]">Date of Birth</label>
-                    <Form.Item
-                      name="dob"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your Date of Birth!",
-                        },
-                      ]}
-                    >
-                      <Input
-                        className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
-                        placeholder=" Date of Birth"
-                      />
-                    </Form.Item>
-                    <label className="text-[#7f7e7e]">Job</label>
-                    <Form.Item
-                      name="job"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a user type!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder="job"
-                        className=" rounded-r-[20px] rounded-l-[20px] w-[276px]"
+                      <Form.Item
+                        name="gender"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your gender!",
+                          },
+                        ]}
                       >
-                        <Select.Option type="admin" value={1}>
-                          Admin
-                        </Select.Option>
+                        <label className="text-[#7f7e7e]">Gender</label>
+                        <Input
+                          className="rounded-r-[20px] rounded-l-[20px] w-[276px] "
+                          placeholder="Gender"
+                        />
+                      </Form.Item>
 
-                        <Select.Option type="Doctor" value={3}>
-                          Doctor
-                        </Select.Option>
-                      </Select>
-                    </Form.Item>
+                      <Form.Item
+                        name="company"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your company!",
+                          },
+                        ]}
+                      >
+                        <label className="text-[#7f7e7e]">Company</label>
+                        <Input
+                          className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
+                          placeholder="Company"
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="flex  gap-2">
+                      <Form.Item
+                        className="!w-[276px]"
+                        name="contact"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your phone No!",
+                          },
+                        ]}
+                      >
+                        <label className="text-[#7f7e7e]">Phone</label>
+                        <Input
+                          className="rounded-r-[20px] rounded-l-[20px] !w-[276px]"
+                          placeholder="Phone No"
+                        />
+                      </Form.Item>
+                      <Form.Item  className="w-[276px]"
+                        name="collage"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your Collage!",
+                          },
+                        ]}
+                      >
+                        <label className="text-[#7f7e7e]">Collage</label>
+                        <Input
+                          className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
+                          placeholder="Collage"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        className="!w-[206px]"
+                        name="location"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a location!",
+                          },
+                        ]}
+                      >
+                        <label className="text-[#7f7e7e]">Location</label>
+                        <Select
+                          placeholder="location"
+                          className=" rounded-r-[20px] rounded-l-[20px] !w-[276px]"
+                        >
+                          <Select.Option type="admin" value={1}>
+                            Admin
+                          </Select.Option>
+
+                          <Select.Option type="Doctor" value={3}>
+                            Doctor
+                          </Select.Option>
+                        </Select>
+                        {/* <Input
+                          className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
+                          placeholder="Collage"
+                        /> */}
+                      </Form.Item>
+                    </div>
+                    <div className="flex  gap-2">
+                      <Form.Item className="!w-[276px]"
+                        name="dob"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your Date of Birth!",
+                          },
+                        ]}
+                      >
+                        <label className="text-[#7f7e7e]">Date of Birth</label>
+                        <Input
+                          className="rounded-r-[20px] rounded-l-[20px] !w-[276px]"
+                          placeholder=" Date of Birth"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        name="job"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a user type!",
+                          },
+                        ]}
+                      >
+                        <label className="text-[#7f7e7e]">Job</label>
+                        <Select
+                          placeholder="job"
+                          className=" rounded-r-[20px] rounded-l-[20px] !w-[276px]"
+                        >
+                          <Select.Option type="admin" value={1}>
+                            Admin
+                          </Select.Option>
+
+                          <Select.Option type="Doctor" value={3}>
+                            Doctor
+                          </Select.Option>
+                        </Select>
+                      </Form.Item>
+                    </div>
+
+
+                  </div>
+                    
                     <label className="text-[#7f7e7e]">About</label>
-                    <Form.Item
+<div className="w-full">
+                    <Form.Item className="!w-[840px]"
                       name="about"
                       rules={[
                         {
@@ -437,15 +448,17 @@ const ProfileEdit = () => {
                     >
                       <TextArea
                         placeholder=" About"
-                        className="rounded-r-[20px] rounded-l-[20px] !w-[276px]"
+                        className="rounded-r-[20px] rounded-l-[20px] !w-[1000px]"
                         rows={4}
                       />
                     </Form.Item>
-                  </div>
+
+</div>
+                   
 
                   <div className="bg-[#F24044]  flex relative">
                     <Button
-                        htmlType="submit"
+                      htmlType="submit"
                       onClick={() => {
                         // setIsEditing(true);
                       }}

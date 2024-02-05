@@ -4,14 +4,16 @@ import { Button, Divider, Input, Modal, Switch, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./userProfile";
 import Cookies from "js-cookie";
+import { useUser } from "./UserContext";
 const AllUsers = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalVisibles, setIsModalVisibles] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
 
+  const { userData } = useUser();
+  console.log("UserData",userData)
   const showModal = () => {
     setIsModalVisibles(true);
   };
@@ -94,6 +96,7 @@ const AllUsers = () => {
 
           if (Array.isArray(responseData?.all_users?.data)) {
             setDoctors(responseData.all_users.data);
+            userData(responseData.all_users.data)
           } else {
             console.error(
               "API response does not contain an array for 'doctor'"
@@ -135,7 +138,7 @@ const AllUsers = () => {
     <div>
       {isEditing ? (
         <UserProfile
-          user={selectedUser}
+          user={userData}
           onCancel={() => setSelectedUser(null)}
         />
       ) : (

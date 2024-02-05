@@ -1,31 +1,11 @@
 "use client";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import {
-  Input,
-  Table,
-  Modal,
-  Form,
-  Button,
-  message,
-  Popconfirm,
-  Divider,
-  Switch,
-} from "antd";
+import { Input, Form, Button, message, Divider } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const AddPayment = () => {
-  const [doctors, setDoctors] = useState([]);
-
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
@@ -33,12 +13,16 @@ const AddPayment = () => {
 
     try {
       const formData = new FormData();
+      formData.append("Name", values.name);
+      formData.append("price", values.price);
+      formData.append("months", values.months);
+      formData.append("details", values.details);
 
-      formData.append("categorieName", values.name);
-
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
 
       const token = Cookies.get("apiToken");
-
       const response = await fetch(
         "https://mksm.blownclouds.com/api/all/subscription",
         {
@@ -52,21 +36,20 @@ const AddPayment = () => {
       );
 
       if (response.ok) {
-        message.success("category added successfully");
-        setCategory(true);
-        setDoctors(await response.json());
+        message.success("Payment added successfully");
         setLoading(false);
-        handleShowCategories();
       } else {
-        message.error("category not added");
-        setDoctors(await response.json());
+        const errorResponse = await response.json(); // To get more details from the server
+        console.error("Error Response:", errorResponse);
+        message.error("Failed to add payment");
         setLoading(false);
       }
     } catch (error) {
-      console.error("Error during category registration:", error);
+      console.error("Error during payment registration:", error);
       setLoading(false);
     }
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -99,11 +82,11 @@ const AddPayment = () => {
               </p>
               <Form.Item
                 className="mt-[10px]"
-                name="userName"
+                name="name"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter userName",
+                    message: "Please enter name",
                   },
                 ]}
               >
@@ -114,11 +97,11 @@ const AddPayment = () => {
               </Form.Item>
               <Form.Item
                 className="mt-[10px]"
-                name="userName"
+                name="price"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter userName",
+                    message: "Please enter price",
                   },
                 ]}
               >
@@ -130,11 +113,11 @@ const AddPayment = () => {
 
               <Form.Item
                 className="mt-[10px]"
-                name="userName"
+                name="months"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter userName",
+                    message: "Please enter the number of months",
                   },
                 ]}
               >
@@ -143,7 +126,16 @@ const AddPayment = () => {
                   placeholder="Enter Month"
                 />
               </Form.Item>
-              <Form.Item>
+              <Form.Item
+                className="mt-[10px]"
+                name="details"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter userName",
+                  },
+                ]}
+              >
                 <TextArea
                   placeholder="Enter Subscription"
                   className="!w-[320px]  rounded-r-[20px] rounded-l-[20px]"

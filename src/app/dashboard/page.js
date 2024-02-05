@@ -78,7 +78,7 @@ const App = () => {
       setLoadingUpdateProfile(true);
       const token = Cookies.get("apiToken");
       const response = await fetch(
-        "https://mymedjournal.blownclouds.com/api/forget/password",
+        "https://mksm.blownclouds.com/api/forget/password",
         {
           method: "POST",
           headers: {
@@ -535,10 +535,11 @@ const App = () => {
     }
   }, [router]);
   return (
-    <Layout
-      className="bg-[#fff]"
+    <div
+      className="bg-[#fff] flex"
       style={{
         minHeight: "100vh",
+        width: "auto"
       }}
     >
       <Sider
@@ -723,7 +724,7 @@ const App = () => {
           {profileView && <ProfileView />}
         </div>
       </Layout>
-    </Layout>
+    </div>
   );
 };
 export default App;

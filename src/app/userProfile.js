@@ -13,6 +13,7 @@ import ProfileEdit from "./profileEdit";
 import TextArea from "antd/es/input/TextArea";
 import UserEdit from "./useredit";
 import AllUsers from "./allUsers";
+import { useUser } from "./UserContext";
 
 const UserProfile = ({ user, onCancel }) => {
   console.log(user);
@@ -26,6 +27,11 @@ const UserProfile = ({ user, onCancel }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState(true);
   const [showAllUsers, setShowAllUsers] = useState(false);
+  
+ 
+
+  const { userp } = useUser();
+  console.log("userp",userp)
   return (
     <div>
       {showAllUsers ? (

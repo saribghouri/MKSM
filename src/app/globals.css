@@ -165,20 +165,16 @@ background-color:inherit !important;
     border-radius: 20px !important ;
   }
 
-  .ant-select{
-    width: 300px !important;
-  }
-  .ant-form-item-control-input{
-    width: 300px !important;
-  }
+ 
+ 
   .ant-form-horizontal{
     width: 100% !important;
 
   }
- 
+/*  
   .ant-input{
     width: 100% !important;
-  }
+  } */
   .ant-divider {
     margin-top: -10px !important;
     
@@ -199,4 +195,7 @@ background-color:inherit !important;
   .userAdmin> .ant-upload-select{
     width: 139px !important;
     height: 139px !important;
+  }
+  .hello> .ant-form-item-row{
+    width: 400px !important;
   }
