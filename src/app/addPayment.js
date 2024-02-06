@@ -147,7 +147,7 @@ const AddPayment = () => {
                   className="bg-[#F3585E] !border-none w-[150px] !text-white rounded-r-[20px] rounded-l-[20px]"
                   htmlType="submit"
                 >
-                  Update
+                  Updates
                 </Button>
               </Form.Item>
             </div>
