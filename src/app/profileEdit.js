@@ -238,7 +238,7 @@ const ProfileEdit = () => {
                     span: 16,
                   }}
                   style={{
-                    maxWidth: 600,
+                    maxWidth: 1280,
                   }}
                   // initialValues={{
                   //   remember: true,
@@ -282,7 +282,7 @@ const ProfileEdit = () => {
                   </div>
                   <div className=" flex flex-col">
                     <div className="flex  gap-2">
-                      <Form.Item
+                      <Form.Item className="w-[276px]"
                         name="userName"
                         rules={[
                           {
@@ -298,7 +298,7 @@ const ProfileEdit = () => {
                         />
                       </Form.Item>
 
-                      <Form.Item
+                      <Form.Item className="w-[276px]"
                         name="gender"
                         rules={[
                           {
@@ -347,7 +347,8 @@ const ProfileEdit = () => {
                           placeholder="Phone No"
                         />
                       </Form.Item>
-                      <Form.Item  className="w-[276px]"
+                      <Form.Item
+                        className="w-[276px]"
                         name="collage"
                         rules={[
                           {
@@ -392,7 +393,8 @@ const ProfileEdit = () => {
                       </Form.Item>
                     </div>
                     <div className="flex  gap-2">
-                      <Form.Item className="!w-[276px]"
+                      <Form.Item
+                        className="!w-[276px]"
                         name="dob"
                         rules={[
                           {
@@ -431,13 +433,12 @@ const ProfileEdit = () => {
                         </Select>
                       </Form.Item>
                     </div>
-
-
                   </div>
-                    
-                    <label className="text-[#7f7e7e]">About</label>
-<div className="w-full">
-                    <Form.Item className="!w-[840px]"
+
+                  <label className="text-[#7f7e7e]">About</label>
+                  <div className="w-full">
+                    <Form.Item
+                      className="!w-[840px]"
                       name="about"
                       rules={[
                         {
@@ -452,17 +453,15 @@ const ProfileEdit = () => {
                         rows={4}
                       />
                     </Form.Item>
+                  </div>
 
-</div>
-                   
-
-                  <div className="bg-[#F24044]  flex relative">
+                  <div className="bg-[#F24044] contents  relative">
                     <Button
                       htmlType="submit"
                       onClick={() => {
                         // setIsEditing(true);
                       }}
-                      className=" !text-[#ffffff] block bottom-[450px] right-0 absolute bg-[#F24044] text-center  items-center !border-none rounded-r-[20px] rounded-l-[20px] "
+                      className=" !text-[#ffffff] block bottom-[490px] right-0 absolute bg-[#F24044] text-center  items-center !border-none rounded-r-[20px] rounded-l-[20px] "
                     >
                       Save Changes <EditFilled />
                     </Button>

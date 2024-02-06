@@ -118,11 +118,19 @@ const ActiveUsers = () => {
 
   const dataSource = (activeUser || []).map((user, index) => ({
     key: index.toString(),
+
     name: user.userName,
     contact: user.contact,
     address: user.emailAddress,
-    id: user.id,
-    profileImage: user.profileImage
+    about: user.about,
+    dob: user.dob,
+    company: user.company,
+    gender: user.gender,
+    collage: user.collage,
+    location: user.location,
+    job: user.job,
+    id: user.id ,
+    profileImage: user.profileImage ,
   }));
   const filteredData = dataSource.filter(
     (doctor) =>
@@ -138,7 +146,7 @@ const ActiveUsers = () => {
         const response = await fetch(
           `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=inactive`,
           {
-            method: "GET", // Update this as per your API
+            method: "GET", 
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,

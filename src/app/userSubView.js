@@ -14,8 +14,9 @@ import TextArea from "antd/es/input/TextArea";
 import UserEdit from "./useredit";
 import AllUsers from "./allUsers";
 import { useUser } from "./UserContext";
+import UserSubscription from "./userSubscription";
 
-const UserProfile = ({ user, onCancel ,userData }) => {
+const UserSubView = ({ user, onCancel ,userData }) => {
   console.log(user);
   const onFinish = (values) => {
     console.log("Success:", user);
@@ -35,7 +36,7 @@ const UserProfile = ({ user, onCancel ,userData }) => {
   return (
     <div>
       {showAllUsers ? (
-        <AllUsers />
+        <UserSubscription />
       ) : isEditing ? (
         <UserEdit user={user} onCancel={() => setIsEditing(false)} />
       ) : (
@@ -58,14 +59,7 @@ const UserProfile = ({ user, onCancel ,userData }) => {
                     type="link"
                     onClick={() => setShowAllUsers(true)}
                   />
-                  <Button
-                    onClick={() => {
-                      setIsEditing(true);
-                    }}
-                    className="!text-[#F24044]  text-center flex items-center  rounded-r-[20px] rounded-l-[20px] "
-                  >
-                    Edit <EditFilled />
-                  </Button>
+                
                 </div>
                 <div className="flex gap-8 ml-[50px]">
                   <div className="flex flex-col w-full">
@@ -305,4 +299,4 @@ const UserProfile = ({ user, onCancel ,userData }) => {
   );
 };
 
-export default UserProfile;
+export default UserSubView;

@@ -14,7 +14,7 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState([]);
 
   const { userData } = useUser();
-  console.log("UserData",userData)
+  console.log("UserData",doctors)
   const showModal = () => {
     setIsModalVisibles(true);
   };
@@ -161,6 +161,7 @@ const AllUsers = () => {
     location: doctor.location,
     job: doctor.job,
     id: doctor.id ,
+    profileImage: doctor.profileImage ,
     
   }));
   const filteredData = dataSource.filter(

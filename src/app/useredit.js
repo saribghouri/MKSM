@@ -26,11 +26,11 @@ import UserProfile from "./userProfile";
 import Cookies from "js-cookie";
 import AllUsers from "./allUsers";
 
-const UserEdit = ({ user, }) => {
+const UserEdit = ({ user }) => {
   console.log("user", user);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("assets/images/download.jfif");
+  const [imageUrl, setImageUrl] = useState();
   const [forceRerender, setForceRerender] = useState(false);
   const [userProfileImage, setUserProfileImage] = useState(
     userData.profileImage || "assets/images/download.jfif"
@@ -79,7 +79,7 @@ const UserEdit = ({ user, }) => {
         };
         setUserData((p) => ({ ...p, ...updatedUserDetails }));
         setUserProfileImage(data.profileImage || userData.profileImage);
-        setShowAllUsers(true)
+        setShowAllUsers(true);
         message.success("Profile updated successfully");
         setShowProfileEditModal(false);
         setForceRerender((prev) => !prev);
@@ -158,7 +158,7 @@ const UserEdit = ({ user, }) => {
   return (
     <div>
       {showAllUsers ? (
-        <AllUsers  />
+        <AllUsers />
       ) : isEditing ? (
         <UserEdit onCancel={() => setIsEditing(false)} />
       ) : (
@@ -185,6 +185,9 @@ const UserEdit = ({ user, }) => {
                     wrapperCol={{
                       span: 16,
                     }}
+                     style={{
+                    maxWidth: 1280,
+                  }}
                     initialValues={{
                       name: user.name,
                       gender: user.gender,
@@ -196,6 +199,7 @@ const UserEdit = ({ user, }) => {
                       about: user.about,
                       location: user.location,
                       job: user.job,
+                      profileImage: user.profileImage,
                     }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
@@ -207,7 +211,6 @@ const UserEdit = ({ user, }) => {
                         name="upload"
                         valuePropName="fileList"
                         getValueFromEvent={(e) => e.fileList}
-                       
                       >
                         <Upload
                           name="upload"
@@ -225,12 +228,12 @@ const UserEdit = ({ user, }) => {
                               src={imageUrl}
                               // src="assets/images/download.jfif"
                             />
-                          ) : userData.profileImage ? (
+                          ) : user.profileImage ? (
                             <img
                               alt=""
                               className="!w-[239px] !h-[239px] rounded-[50%]"
                               // src="assets/images/download.jfif"
-                              src={userData.profileImage}
+                              src={user.profileImage}
                             />
                           ) : (
                             uploadButton
@@ -405,9 +408,9 @@ const UserEdit = ({ user, }) => {
                         </div>
                       </div>
                       <label className="text-[#727272]">About</label>
-                      <div className="flex gap-4 w-[950px]">
+                      <div className="flex gap-4 ">
                         <Form.Item
-                          className="w-[950px]"
+                          className=""
                           name="about"
                           rules={[
                             {
@@ -417,12 +420,13 @@ const UserEdit = ({ user, }) => {
                           ]}
                         >
                           <TextArea
-                            placeholder=" About"
+                            placeholder="About"
                             className="rounded-r-[20px] rounded-l-[20px] w-[630px]"
+                         
                           />
                         </Form.Item>
                       </div>
-                      <div className="flex justify-end w-[66%]">
+                      <div className="flex justify-end">
                         <Button
                           className="bg-[#F24044]   border-none w-[100px]  rounded-r-[20px] rounded-l-[20px] !text-white"
                           // onClick={() => setShowAllUsers(true)}

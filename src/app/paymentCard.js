@@ -180,27 +180,32 @@ const PaymentCard = () => {
               backgroundPosition: "center",
             }}
           >
+              {/* <span className="font-bold">{subscription.price}</span>
+              <Divider type="vertical" className=" w-0 h-[40px]  text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] " />
+              <span className="font-bold">{subscription.months}</span> */}
             <div className="text-center">
-              <span className="text-lg text-white bg-red-200 bg-opacity-50 rounded-full px-3 py-1 mb-4 inline-block">
+              <span className="text-lg text-white  text-[25px] font-semibold  mb-4 inline-block">
                 {subscription.Name}
               </span>
             </div>
-            <div className="flex justify-between items-center text-white text-xl mb-4">
-              <span className="font-bold">{subscription.price}</span>
-              <div className="bg-white mx-2 w-px h-8"></div>
-              <span className="font-bold">{subscription.months}</span>
-            </div>
-            <p className="text-white text-sm">{subscription.details}</p>
-            <div className="flex justify-center space-x-4 mt-4">
+            <div className="flex justify-between w-[70%] mx-auto mb-[20px]">
+            <p className="text-[#ffffff] pgh font-bold text-[26px]">{subscription.price}</p>
+            <Divider className="bg-white h-[36px] mr-[20px] w-[1.2%] mt-[10px] mb-[10px]" type="vertical" />
+            <p className="text-[#ffffff] pgh font-bold text-[26px]">{subscription.months}</p>
+          </div>
+            <Divider className="!w-[100%] h-[3px] text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] min-w-2" />
+
+            <p className="text-white text-sm text-start">{subscription.details}</p>
+            <div className="flex justify-center space-x-4 mt-4 gap-6">
               <Button
-                className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded-full"
+                className="!text-white w-[109px] bg-[#F3585E] border-none text-center items-center  font-bold  rounded-full"
           onClick={() => handleEditButtonClick(subscription.id)}
               >
                 Edit
               </Button>
               <Button
                 onClick={() => handleDelete(subscription.id)}
-                className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded-full"
+                className="!text-white bg-[#F3585E]  w-[109px] border-none font-bold rounded-full"
           >
                 Delete
               </Button>
