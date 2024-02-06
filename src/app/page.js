@@ -32,7 +32,7 @@ const Page = () => {
           body: JSON.stringify({
             emailAddress: values.email,
             password: values.password,
-            userRole: 2, 
+            // userRole: 2, 
           }),
         }
       );
