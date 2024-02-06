@@ -24,8 +24,9 @@ import ProfileEdit from "./profileEdit";
 import TextArea from "antd/es/input/TextArea";
 import UserProfile from "./userProfile";
 import Cookies from "js-cookie";
+import AllUsers from "./allUsers";
 
-const UserEdit = ({ user }) => {
+const UserEdit = ({ user, }) => {
   console.log("user", user);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -78,7 +79,7 @@ const UserEdit = ({ user }) => {
         };
         setUserData((p) => ({ ...p, ...updatedUserDetails }));
         setUserProfileImage(data.profileImage || userData.profileImage);
-
+        setShowAllUsers(true)
         message.success("Profile updated successfully");
         setShowProfileEditModal(false);
         setForceRerender((prev) => !prev);
@@ -157,7 +158,7 @@ const UserEdit = ({ user }) => {
   return (
     <div>
       {showAllUsers ? (
-        <UserProfile />
+        <AllUsers  />
       ) : isEditing ? (
         <UserEdit onCancel={() => setIsEditing(false)} />
       ) : (
@@ -206,13 +207,7 @@ const UserEdit = ({ user }) => {
                         name="upload"
                         valuePropName="fileList"
                         getValueFromEvent={(e) => e.fileList}
-                        extra=" "
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please upload your doctor image!",
-                          },
-                        ]}
+                       
                       >
                         <Upload
                           name="upload"
@@ -245,179 +240,200 @@ const UserEdit = ({ user }) => {
                     </div>
                     <div className="flex flex-col gap-2 ml-[40px]">
                       <div className="flex  gap-[80px]">
-                        <Form.Item className="!w-[250px] hello"
-                          name="name"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input your username!",
-                            },
-                          ]}
-                        >
+                        <div className="flex flex-col">
                           <label className="text-[#727272]">Name</label>
-                          <Input
-                            className="rounded-r-[20px] rounded-l-[20px] w-[300px] "
-                            placeholder="N ame"
-                          />
-                        </Form.Item>
-
-
-                        <Form.Item className="!w-[250px]"
-                          name="gender"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input your gender!",
-                            },
-                          ]}
-                        >
-                          <label className="text-[#727272]">Gender</label>
-                          <Input
-                            className="rounded-r-[20px] rounded-l-[20px] w-[300px] "
-                            placeholder="Gender"
-                          />
-                        </Form.Item>
-                      </div>
-                      <div className=" flex gap-[80px] ">
-                        <Form.Item className="!w-[250px]"
-                          name="dob"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input your Date of Birth!",
-                            },
-                          ]}
-                        >
-                          <label className="text-[#727272]">Date of Birth</label>
-                          <Input
-                            className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
-                            placeholder="Name"
-                          />
-                        </Form.Item>
-
-                        <Form.Item className="!w-[300px]"
-                          name="location"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select a location!",
-                            },
-                          ]}
-                        >
-                          <label className="text-[#727272]">Location</label>
-                          <Select
-                            placeholder="location"
-                            className=" rounded-r-[20px] rounded-l-[20px] !w-[300px]"
+                          <Form.Item
+                            className="!w-[250px] hello"
+                            name="name"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your username!",
+                              },
+                            ]}
                           >
-                            <Select.Option type="admin" value={1}>
-                              Admin
-                            </Select.Option>
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] w-[300px] "
+                              placeholder="N ame"
+                            />
+                          </Form.Item>
+                        </div>
 
-                            <Select.Option type="Doctor" value={3}>
-                              Doctor
-                            </Select.Option>
-                          </Select>
-                        </Form.Item>
+                        <div className="flex flex-col">
+                          <label className="text-[#727272]">Gender</label>
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="gender"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your gender!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] w-[300px] "
+                              placeholder="Gender"
+                            />
+                          </Form.Item>
+                        </div>
+                      </div>
+                      <div className=" flex gap-[80px] ">
+                        <div className="flex flex-col">
+                          <label className="text-[#727272]">
+                            Date of Birth
+                          </label>
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="dob"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your Date of Birth!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
+                              placeholder="Name"
+                            />
+                          </Form.Item>
+                        </div>
+                        <div className="flex flex-col">
+                          <label className="text-[#727272]">Location</label>
+                          <Form.Item
+                            className="!w-[300px]"
+                            name="location"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please select a location!",
+                              },
+                            ]}
+                          >
+                            <Select
+                              placeholder="location"
+                              className=" rounded-r-[20px] rounded-l-[20px] !w-[300px]"
+                            >
+                              <Select.Option type="admin" value={1}>
+                                Admin
+                              </Select.Option>
+
+                              <Select.Option type="Doctor" value={3}>
+                                Doctor
+                              </Select.Option>
+                            </Select>
+                          </Form.Item>
+                        </div>
                       </div>
 
                       <div className=" flex gap-[80px] ">
-
-                        <Form.Item className="!w-[250px]"
-                          name="company"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input your company!",
-                            },
-                          ]}
-                        >
+                        <div className="flex flex-col">
                           <label className="text-[#727272]">Company</label>
-                          <Input 
-                            className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
-                            placeholder="Company"
-                          />
-                        </Form.Item>
-                        <Form.Item className="!w-[250px]"
-                          name="contact"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input your phone No!",
-                            },
-                          ]}
-                        >
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="company"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your company!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
+                              placeholder="Company"
+                            />
+                          </Form.Item>
+                        </div>
+                        <div className="flex flex-col">
                           <label className="text-[#727272]">Phone</label>
-                          <Input
-                            className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
-                            placeholder="Phone No"
-                          />
-                        </Form.Item>
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="contact"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your phone No!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
+                              placeholder="Phone No"
+                            />
+                          </Form.Item>
+                        </div>
                       </div>
 
                       <div className=" flex  gap-[80px]">
-                        <Form.Item className="!w-[250px]"
-                          name="collage"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input your Collage!",
-                            },
-                          ]}
-                        >
+                        <div className="flex flex-col">
                           <label className="text-[#727272]">Collage</label>
-                          <Input
-                            className="rounded-r-[20px] rounded-l-[20px] !w-[300px]"
-                            placeholder="Collage"
-                          />
-                        </Form.Item>
-                        <Form.Item className="!w-[250px]"
-                          name="job"
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="collage"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your Collage!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] !w-[300px]"
+                              placeholder="Collage"
+                            />
+                          </Form.Item>
+                        </div>
+                        <div className="flex flex-col">
+                          <label className="text-[#727272]">Job</label>
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="job"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your job!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] !w-[300px]"
+                              placeholder="Phone No"
+                            />
+                          </Form.Item>
+                        </div>
+                      </div>
+                      <label className="text-[#727272]">About</label>
+                      <div className="flex gap-4 w-[950px]">
+                        <Form.Item
+                          className="w-[950px]"
+                          name="about"
                           rules={[
                             {
                               required: true,
-                              message: "Please input your job!",
+                              message: "Please input your Date of About!",
                             },
                           ]}
                         >
-                          <label className="text-[#727272]">Job</label>
-                          <Input
-                            className="rounded-r-[20px] rounded-l-[20px] !w-[300px]"
-                            placeholder="Phone No"
+                          <TextArea
+                            placeholder=" About"
+                            className="rounded-r-[20px] rounded-l-[20px] w-[630px]"
                           />
                         </Form.Item>
                       </div>
-                      <label className="text-[#727272]">About</label>
-                    <div className="flex gap-4 w-[950px]">
-                      <Form.Item className="w-[950px]"
-                        name="about"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your Date of About!",
-                          },
-                        ]}
-                      >
-                      
-                        <TextArea
-                          placeholder=" About"
-                          className="rounded-r-[20px] rounded-l-[20px] w-[630px]"
-                        
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="flex justify-end w-[66%]">
-                      <Button
-                        className="bg-[#F24044]   border-none w-[100px]  rounded-r-[20px] rounded-l-[20px] !text-white"
-                        onClick={() => setShowAllUsers(true)}
-                        htmlType="submit"
-                      >
-                        update
-                      </Button>
-                    </div>
+                      <div className="flex justify-end w-[66%]">
+                        <Button
+                          className="bg-[#F24044]   border-none w-[100px]  rounded-r-[20px] rounded-l-[20px] !text-white"
+                          // onClick={() => setShowAllUsers(true)}
+                          htmlType="submit"
+                        >
+                          update
+                        </Button>
+                      </div>
                     </div>
                   </Form>
                 </div>
-              
               </div>
             </Card>
           </div>

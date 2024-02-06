@@ -37,6 +37,7 @@ import PaymentCard from "../paymentCard";
 import ProfileView from "../profileView";
 import UserSubscription from "../userSubscription";
 import { useUser } from "../UserContext";
+import Cards from "../cards";
 
 const { Header, Sider } = Layout;
 
@@ -48,6 +49,7 @@ const App = () => {
   const [inActiveUser, setInactiveUser] = useState(false);
   const [addPayment, setAddPayment] = useState(false);
   const [paymentCard, setPaymentCard] = useState(false);
+  const [card, setCard] = useState(false);
 
   const [userSubscription, setUserSubscription] = useState(false);
   const [profileView, setProfileView] = useState(false);
@@ -70,9 +72,6 @@ const App = () => {
   );
   console.log("🚀 ~ userProfileImage:", userProfileImage);
   console.log(userDetails);
-  const handleShowProfileEditModal = () => {
-    setShowProfileEditModal(true);
-  };
   const handleForgetPassword = async (values) => {
     try {
       setLoadingUpdateProfile(true);
@@ -157,6 +156,7 @@ const App = () => {
     setAddPayment(false);
 
     setProfileView(false);
+    setCard(false);
     setProfileEdit(false);
     setProfileEdit(false);
     setPaymentCard(false);
@@ -169,6 +169,7 @@ const App = () => {
     setAddPayment(false);
 
     setProfileView(false);
+    setCard(false);
     setProfileEdit(false);
   };
   const handleInactiveUser = () => {
@@ -181,6 +182,7 @@ const App = () => {
 
     setProfileView(false);
     setProfileEdit(false);
+    setCard(false);
   };
   const handleAddPayment = () => {
     setAddPayment(true);
@@ -192,6 +194,7 @@ const App = () => {
 
     setProfileView(false);
     setProfileEdit(false);
+    setCard(false);
   };
   const handlePaymentCard = () => {
     setAddPayment(false);
@@ -203,10 +206,25 @@ const App = () => {
 
     setProfileView(false);
     setProfileEdit(false);
+    setCard(false);
   };
 
   const handleSubscription = () => {
     setUserSubscription(true);
+
+    setAddPayment(false);
+    setPaymentCard(false);
+    setActiveUser(false);
+    setInactiveUser(false);
+    setShowUser(false);
+
+    setProfileView(false);
+    setProfileEdit(false);
+    setCard(false);
+  };
+  const handleCard = () => {
+    setCard(true);
+    setUserSubscription(false);
 
     setAddPayment(false);
     setPaymentCard(false);
@@ -222,6 +240,7 @@ const App = () => {
     setProfileView(true);
 
     setAddPayment(false);
+    setCard(false);
     setPaymentCard(false);
     setActiveUser(false);
     setInactiveUser(false);
@@ -256,16 +275,16 @@ const App = () => {
     console.log("sabgqebew");
     return [
       getItem(
-        "Dashboard",
-        "1",
+        "Dashboard" ,
+        "1" ,
         <Image
           src={"assets/icon/bxs_dashboard.svg"}
           width={20}
           height={20}
           alt=""
         />,
-        null
-        // handleCards,
+        null,
+        handleCard,
       ),
 
       getItem(
@@ -414,119 +433,8 @@ const App = () => {
       ),
     },
   ];
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG files!");
-      return false;
-    }
-
-    const isLt2M = file.size / 1024 / 1024 < 2;
-
-    if (!isLt2M) {
-      message.error("Image must be smaller than 2MB!");
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleChange = (info) => {
-    if (info.file) {
-      getBase64(info.file.originFileObj || info.file, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-        setForceRerender((prev) => !prev);
-        console.log("Image URL:", url);
-      });
-    }
-  };
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        className="w-[100%]"
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </div>
-  );
-
-  const handleProfileEdit = async (values) => {
-    try {
-      setLoadingUpdateProfile(true);
-      // const token = Cookies.get("apiToken");
-      const userId = userDetails.id;
-      const formData = new FormData();
-      formData.append("userName", values.userName);
-      formData.append("affiliationNo", values.affiliationNo);
-      formData.append("noOfExperience", values.noOfExperience);
-      formData.append("gender", values.gender);
-      formData.append("specialization", values.specialization);
-      formData.append("age", values.age);
-
-      if (values.upload && values.upload.length > 0) {
-        formData.append("profileImage", values.upload[0].originFileObj);
-      }
-
-      const response = await fetch(
-        `https://mymedjournal.blownclouds.com/api/users/edituser/${userId}`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setLoadingUpdateProfile(false);
-
-        console.log("🚀 ~ data:", data);
-        const updatedUserDetails = {
-          ...userDetails,
-          userName: values.userName,
-          affiliationNo: values.affiliationNo,
-          profileImage: imageUrl,
-        };
-        setUserDetails((p) => ({ ...p, ...updatedUserDetails }));
-        setUserProfileImage(data.profileImage || userDetails.profileImage);
-
-        message.success("Profile updated successfully");
-        setShowProfileEditModal(false);
-        setForceRerender((prev) => !prev);
-
-        handleChange({
-          file: {
-            status: "done",
-            originFileObj: values.upload[0].originFileObj,
-          },
-        });
-      } else {
-        message.error("Failed to update profile");
-      }
-    } catch (error) {
-      console.error("Error during profile edit:", error);
-    }
-  };
-
-  const handleLogoClick = () => {
-    // Toggle the state to show/hide cards
-    setShowCards(!showCards);
-  };
+ 
+ 
   useEffect(() => {
     const isUserLoggedIn = Cookies.get("apiToken");
 
@@ -539,7 +447,7 @@ const App = () => {
       className="bg-[#fff] flex"
       style={{
         minHeight: "100vh",
-        width: "auto"
+        width: "auto",
       }}
     >
       <Sider
@@ -548,7 +456,7 @@ const App = () => {
         collapsed={collapsed}
         onCollapse={handleCollapse}
       >
-        <div className="p-[30px] text-[22px]" onClick={handleLogoClick}>
+        <div className="p-[30px] text-[22px]" >
           <h1 className="text-white text-center">
             <Image
               width={1000}
@@ -704,15 +612,12 @@ const App = () => {
                   alt=""
                   className="w-[50px] h-[50px] rounded-[50%] ml-[-20px] mt-[-2px]  absolute"
                   // src={userDetails?.profileImage || null}
-                  src={
-                    userDetails.profileImage 
-                  }
+                  src={userDetails.profileImage}
                 />
               </div>
             </div>
           </div>
         </Header>
-        {/* <Cards /> */}
 
         <div className="">
           {showUser && <AllUsers />}
@@ -722,6 +627,8 @@ const App = () => {
           {paymentCard && <PaymentCard />}
           {userSubscription && <UserSubscription />}
           {profileView && <ProfileView />}
+          {card && <Cards />}
+   
         </div>
       </Layout>
     </div>

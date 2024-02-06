@@ -15,7 +15,7 @@ import UserEdit from "./useredit";
 import AllUsers from "./allUsers";
 import { useUser } from "./UserContext";
 
-const UserProfile = ({ user, onCancel }) => {
+const UserProfile = ({ user, onCancel ,userData }) => {
   console.log(user);
   const onFinish = (values) => {
     console.log("Success:", user);
@@ -72,8 +72,8 @@ const UserProfile = ({ user, onCancel }) => {
                     <img
                       alt=""
                       className="w-[227px] h-[227px] rounded-[50%] top-[-100px]  "
-                      // src={userDetails?.profileImage || null}
-                      src="assets/images/download.jfif"
+                      src={user.profileImage || null}
+                      // src="assets/images/download.jfif"
                     />
                   </div>
                   <Form
@@ -97,6 +97,7 @@ const UserProfile = ({ user, onCancel }) => {
                       about: user.about,
                       location: user.location,
                       job: user.job,
+                      profileImage: user.profileImage
                       // ... (set other fields)
                     }}
                     onFinish={onFinish}

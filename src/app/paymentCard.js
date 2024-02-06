@@ -170,6 +170,7 @@ const PaymentCard = () => {
           //   </div>
           // </Card>
           <Card
+          key={index}
             className="max-w-sm rounded overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
             bordered={false}
             hoverable

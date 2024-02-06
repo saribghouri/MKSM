@@ -18,16 +18,21 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import UserProfile from "./userProfile";
 const ActiveUsers = () => {
   const [activeUser, setActiveUser] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUser, setSelectedUser] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+
   console.log(selectedUserId);
   const userId = activeUser.id;
   console.log(activeUser);
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
+   
     { title: "Name", dataIndex: "name", key: "userName" },
     { title: "Email", dataIndex: "address", key: "emailAddress" },
     { title: "Phone No:", dataIndex: "contact", key: "Phone" },
@@ -59,7 +64,10 @@ const ActiveUsers = () => {
           <EyeOutlined
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
             type="link"
-            onClick={() => handleView(record)}
+            onClick={() => {
+              setSelectedUser(record);
+              setIsEditing(true);
+            }}
           />
         </div>
       ),
@@ -114,6 +122,7 @@ const ActiveUsers = () => {
     contact: user.contact,
     address: user.emailAddress,
     id: user.id,
+    profileImage: user.profileImage
   }));
   const filteredData = dataSource.filter(
     (doctor) =>
@@ -158,19 +167,32 @@ const ActiveUsers = () => {
   };
   return (
     <div>
-      <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Doctors text-[22px] font-sans">Active Users</h1>
-        <Input
-          className="w-[300px] rounded-[40px]"
-          placeholder="Search"
-          suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+      {isEditing ? (
+        <UserProfile
+          user={selectedUser}
+          onCancel={() => setSelectedUser(null)}
         />
-      </div>
-      <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
+      ) : (
+        <div>
+          <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
+            <h1 className="Doctors text-[22px] font-sans">Active Users</h1>
+            <Input
+              className="w-[300px] rounded-[40px]"
+              placeholder="Search"
+              suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          </div>
+          <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-      <Table columns={columns} dataSource={filteredData} loading={loading} />
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            loading={loading}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 import { DeleteOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Divider, Input, Modal, Switch, Table } from "antd";
+import { Button, Divider, Input, Modal, Switch, Table, message } from "antd";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./userProfile";
 import Cookies from "js-cookie";
@@ -11,6 +11,7 @@ const AllUsers = () => {
   const [loading, setLoading] = useState(true);
   const [isModalVisibles, setIsModalVisibles] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedUser, setSelectedUser] = useState([]);
 
   const { userData } = useUser();
   console.log("UserData",userData)
@@ -27,6 +28,36 @@ const AllUsers = () => {
   };
   const onChange = (checked) => {
     console.log(`switch to ${checked}`);
+  };
+  const handleDelete = async () => {
+    try {
+      const token = Cookies.get("apiToken");
+      const userIdToDelete = selectedUser.id; 
+
+      const response = await fetch(
+        `https://mksm.blownclouds.com/api/delete-user/${userIdToDelete}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          }, 
+        }
+      );
+
+      if (response.ok) {
+        message.success("User deleted successfully");
+        // Refresh the user list or perform any necessary actions after deletion
+        // For example, you can refetch the data by calling the fetchData function
+        // fetchData();
+        // handleCancel(); // Close the modal after successful deletion
+      } else {
+        message.error("Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Error deleting user: ", error);
+      message.error("Error deleting user");
+    }
   };
 
   const columns = [
@@ -59,7 +90,11 @@ const AllUsers = () => {
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
             type="link"
             danger
-            onClick={showModal}
+            onClick={() => {
+              setSelectedUser(record);
+              showModal();
+            }}
+          
           />
 
           <EyeOutlined
@@ -138,7 +173,7 @@ const AllUsers = () => {
     <div>
       {isEditing ? (
         <UserProfile
-          user={userData}
+          user={selectedUser}
           onCancel={() => setSelectedUser(null)}
         />
       ) : (
@@ -180,7 +215,7 @@ const AllUsers = () => {
               </p>
               <Button
                 className="bg-[#F24044] !text-white rounded-l-[20px] w-[150px] rounded-r-[20px] h-[40px]"
-                onClick={() => {}}
+                onClick={handleDelete}
               >
                 Delete
               </Button>
