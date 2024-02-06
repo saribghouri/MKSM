@@ -275,8 +275,8 @@ const App = () => {
     console.log("sabgqebew");
     return [
       getItem(
-        "Dashboard" ,
-        "1" ,
+        "Dashboard",
+        "1",
         <Image
           src={"assets/icon/bxs_dashboard.svg"}
           width={20}
@@ -284,7 +284,7 @@ const App = () => {
           alt=""
         />,
         null,
-        handleCard,
+        handleCard
       ),
 
       getItem(
@@ -433,8 +433,7 @@ const App = () => {
       ),
     },
   ];
- 
- 
+
   useEffect(() => {
     const isUserLoggedIn = Cookies.get("apiToken");
 
@@ -456,7 +455,7 @@ const App = () => {
         collapsed={collapsed}
         onCollapse={handleCollapse}
       >
-        <div className="p-[30px] text-[22px]" >
+        <div className="p-[30px] text-[22px]">
           <h1 className="text-white text-center">
             <Image
               width={1000}
@@ -485,7 +484,7 @@ const App = () => {
           style={{
             padding: 0,
             background: colorBgContainer,
-            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", // Adjust the values as needed
+            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
           }}
         >
           <div className="flex items-center justify-between ">
@@ -618,8 +617,7 @@ const App = () => {
             </div>
           </div>
         </Header>
-
-        <div className="">
+        <div>
           {showUser && <AllUsers />}
           {activeUser && <ActiveUsers />}
           {inActiveUser && <InActiveUsers />}
@@ -628,8 +626,27 @@ const App = () => {
           {userSubscription && <UserSubscription />}
           {profileView && <ProfileView />}
           {card && <Cards />}
-   
+          {!showUser &&
+            !activeUser &&
+            !inActiveUser &&
+            !addPayment &&
+            !paymentCard &&
+            !userSubscription &&
+            !profileView &&
+            !card &&
+            userDetails.userRole == 1 && <Cards />}
         </div>
+        {/* <div className="">
+          {showUser && <AllUsers />}
+          {activeUser && <ActiveUsers />}
+          {inActiveUser && <InActiveUsers />}
+          {addPayment && <AddPayment />}
+          {paymentCard && <PaymentCard />}
+          {userSubscription && <UserSubscription />}
+          {profileView && <ProfileView  />}
+          {card && <Cards />}
+   
+        </div> */}
       </Layout>
     </div>
   );

@@ -10,9 +10,10 @@ const ProfileView = () => {
   const router = useRouter();
   const [userDetails, setUserDetails] = useState([]);
   const [forceRerender, setForceRerender] = useState(false);
-  console.log("profileImage",userDetails)
+
   console.log("userDetails", userDetails);
   const { user } = useUser();
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
@@ -52,7 +53,7 @@ const ProfileView = () => {
   return (
     <div>
       {isEditing ? (
-        <ProfileEdit onCancel={() => setIsEditing(false)} />
+        <ProfileEdit user={userDetails} onCancel={() => setIsEditing(false)} />
       ) : (
         <div>
           <div>

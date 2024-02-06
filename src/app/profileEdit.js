@@ -17,7 +17,7 @@ import ProfileView from "./profileView";
 import { useUser } from "./UserContext";
 import Cookies from "js-cookie";
 
-const ProfileEdit = () => {
+const ProfileEdit = ({user}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
@@ -104,7 +104,7 @@ const ProfileEdit = () => {
       if (response.ok) {
         const data = await response.json();
         // setLoadingUpdateProfile(false);
-
+        setIsEditing(true)
         console.log("🚀 ~ data:", data);
         const updatedUserDetails = {
           ...userData,
@@ -215,37 +215,37 @@ const ProfileEdit = () => {
                 Edit Details
               </h1>
               <div className=" flex flex-col gap-6 ml-[50px] flex-wrap">
-                <Form
-                  form={form}
-                  initialValues={{
-                    userName: userData.userName,
-                    contact: userData.contact,
-                    dob: userData.dob,
-                    about: userData.about,
-                    location: userData.location,
-                    gender: userData.gender,
-                    company: userData.company,
-                    job: userData.job,
-                    collage: userData.collage,
-                    profileImage: userData.profileImage,
-                  }}
-                  className="flex  flex-col "
-                  name="basic"
-                  labelCol={{
-                    span: 8,
-                  }}
-                  wrapperCol={{
-                    span: 16,
-                  }}
-                  style={{
+              <Form
+                    className="flex gap-[150px]  "
+                    name="basic"
+                    labelCol={{
+                      span: 8,
+                    }}
+                    wrapperCol={{
+                      span: 16,
+                    }}
+                     style={{
                     maxWidth: 1280,
                   }}
-                  // initialValues={{
-                  //   remember: true,
-                  // }}
-                  onFinish={onFinish}
-                  onFinishFailed={onFinishFailed}
-                >
+                    initialValues={{
+                      userName: user.userName,
+                      gender: user.gender,
+                      emailAddress: user.emailAddress,
+                      dob: user.dob,
+                      company: user.company,
+                      collage: user.collage,
+                      contact: user.contact,
+                      about: user.about,
+                      location: user.location,
+                      job: user.job,
+                      profileImage: user.profileImage,
+                    }}
+
+
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                  >
                   <div className="flex bottom-[280px] relative">
                     <Form.Item
                       className="h-[50px]  w-[100%] top-0 left-[-50px]  absolute"
@@ -282,7 +282,10 @@ const ProfileEdit = () => {
                   </div>
                   <div className=" flex flex-col">
                     <div className="flex  gap-2">
-                      <Form.Item className="w-[276px]"
+                    <div className="flex flex-col">
+
+                      <label className="text-[#7f7e7e]">Name</label>
+                      <Form.Item className=""
                         name="userName"
                         rules={[
                           {
@@ -291,14 +294,16 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Name</label>
                         <Input
                           className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
                           placeholder="Name"
                         />
                       </Form.Item>
+                    </div>
+                    <div className="flex flex-col">
 
-                      <Form.Item className="w-[276px]"
+                    <label className="text-[#7f7e7e]">Gender</label>
+                      <Form.Item
                         name="gender"
                         rules={[
                           {
@@ -307,13 +312,14 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Gender</label>
                         <Input
                           className="rounded-r-[20px] rounded-l-[20px] w-[276px] "
                           placeholder="Gender"
                         />
                       </Form.Item>
-
+                    </div>
+                    <div className="flex flex-col">
+                    <label className="text-[#7f7e7e]">Company</label>
                       <Form.Item
                         name="company"
                         rules={[
@@ -323,14 +329,19 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Company</label>
+                        
                         <Input
                           className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
                           placeholder="Company"
                         />
                       </Form.Item>
                     </div>
+                    </div>
+
                     <div className="flex  gap-2">
+                    <div className="flex flex-col">
+                    <label className="text-[#7f7e7e]">Phone</label>
+
                       <Form.Item
                         className="!w-[276px]"
                         name="contact"
@@ -341,12 +352,15 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Phone</label>
                         <Input
                           className="rounded-r-[20px] rounded-l-[20px] !w-[276px]"
                           placeholder="Phone No"
                         />
                       </Form.Item>
+                    </div>
+                    <div className="flex flex-col">
+
+                      <label className="text-[#7f7e7e]">Collage</label>
                       <Form.Item
                         className="w-[276px]"
                         name="collage"
@@ -357,12 +371,15 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Collage</label>
                         <Input
                           className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
                           placeholder="Collage"
                         />
                       </Form.Item>
+                    </div>
+                    <div className="flex flex-col">
+
+                      <label className="text-[#7f7e7e]">Location</label>
                       <Form.Item
                         className="!w-[206px]"
                         name="location"
@@ -373,7 +390,6 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Location</label>
                         <Select
                           placeholder="location"
                           className=" rounded-r-[20px] rounded-l-[20px] !w-[276px]"
@@ -392,7 +408,11 @@ const ProfileEdit = () => {
                         /> */}
                       </Form.Item>
                     </div>
+                    </div>
                     <div className="flex  gap-2">
+                    <div className="flex flex-col">
+                      <label className="text-[#7f7e7e]">Date of Birth</label>
+
                       <Form.Item
                         className="!w-[276px]"
                         name="dob"
@@ -403,12 +423,14 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Date of Birth</label>
                         <Input
                           className="rounded-r-[20px] rounded-l-[20px] !w-[276px]"
                           placeholder=" Date of Birth"
                         />
                       </Form.Item>
+                    </div>
+                    <div className="flex flex-col">
+                    <label className="text-[#7f7e7e]">Job</label>
                       <Form.Item
                         name="job"
                         rules={[
@@ -418,7 +440,7 @@ const ProfileEdit = () => {
                           },
                         ]}
                       >
-                        <label className="text-[#7f7e7e]">Job</label>
+                    
                         <Select
                           placeholder="job"
                           className=" rounded-r-[20px] rounded-l-[20px] !w-[276px]"
@@ -432,11 +454,13 @@ const ProfileEdit = () => {
                           </Select.Option>
                         </Select>
                       </Form.Item>
+
                     </div>
-                  </div>
+                    </div>
+                  <div className="w-full">
+                  <div className="flex flex-col">
 
                   <label className="text-[#7f7e7e]">About</label>
-                  <div className="w-full">
                     <Form.Item
                       className="!w-[840px]"
                       name="about"
@@ -454,13 +478,14 @@ const ProfileEdit = () => {
                       />
                     </Form.Item>
                   </div>
+                  </div>
+                  </div>
+
 
                   <div className="bg-[#F24044] contents  relative">
                     <Button
                       htmlType="submit"
-                      onClick={() => {
-                        // setIsEditing(true);
-                      }}
+                    
                       className=" !text-[#ffffff] block bottom-[490px] right-0 absolute bg-[#F24044] text-center  items-center !border-none rounded-r-[20px] rounded-l-[20px] "
                     >
                       Save Changes <EditFilled />
