@@ -147,7 +147,7 @@ const Page = () => {
 
             <Form.Item
               className="fex justify-start w-full mt-[-15px] tex"
-              name="remember"
+              name="rem ember"
               valuePropName="checked"
               // wrapperCol={{
               //   offset: 8,

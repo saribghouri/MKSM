@@ -3,54 +3,34 @@ import TextArea from "antd/es/input/TextArea";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 
-const cardData = [
-  {
-    type: "Basic",
-    amount: "$400",
-    month: "Feb",
-    description:
-      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used READ MORE...",
-  },
-  {
-    type: "Standard",
-    amount: "$400",
-    month: "Feb",
-    description:
-      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used READ MORE...",
-  },
-  {
-    type: "Premium",
-    amount: "$400",
-    month: "Feb",
-    description:
-      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used READ MORE...",
-  },
-];
-
 const PaymentCard = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [subscriptions, setSubscriptions] = useState([]);
-  console.log(subscriptions);
-  const userId = subscriptions?.id;
-  console.log(userId);
+
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
-  const handleEditButtonClick = () => {
+  const [editingSubscriptionId, setEditingSubscriptionId] = useState(null); // Add state to track which subscription is being edited
+
+  const handleEditButtonClick = (subscriptionId) => {
     setIsModalVisible(true);
+    setEditingSubscriptionId(subscriptionId);
+    // Fetch the details of the subscription to be edited
+    const subscriptionToEdit = subscriptions.find(
+      (sub) => sub.id === subscriptionId
+    );
+    form.setFieldsValue({
+      Name: subscriptionToEdit.Name,
+      price: subscriptionToEdit.price,
+      months: subscriptionToEdit.months,
+      details: subscriptionToEdit.details,
+    });
   };
 
   const handleModalCancel = () => {
     setIsModalVisible(false);
+    setEditingSubscriptionId(null);
+    form.resetFields(); // Reset form fields when the modal is closed
   };
-
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,6 +68,49 @@ const PaymentCard = () => {
 
     fetchData();
   }, []);
+  const onFinish = async (values) => {
+    try {
+      setLoading(true);
+      const token = Cookies.get("apiToken");
+      const url = editingSubscriptionId
+        ? `https://mksm.blownclouds.com/api/all/subscription/${editingSubscriptionId}`
+        : "https://mksm.blownclouds.com/api/all/subscription";
+      const method = editingSubscriptionId ? "PUT" : "POST";
+  
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(values),
+      });
+  
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Subscription saved successfully:", responseData);
+        // Update the subscriptions state with the new values
+        const updatedSubscriptions = subscriptions.map(subscription =>
+          subscription.id === editingSubscriptionId ? { ...subscription, ...values } : subscription
+        );
+        setSubscriptions(updatedSubscriptions);
+        // Close the modal after saving
+        handleModalCancel();
+      } else {
+        console.error("Failed to save subscription. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error saving subscription:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+
   const handleDelete = async (subscriptionId) => {
     try {
       setLoading(true);
@@ -104,7 +127,6 @@ const PaymentCard = () => {
       );
 
       if (response.ok) {
-        // If the delete was successful, filter out the deleted subscription
         setSubscriptions(
           subscriptions.filter(
             (subscription) => subscription.id !== subscriptionId
@@ -114,7 +136,6 @@ const PaymentCard = () => {
           `Subscription with id ${subscriptionId} deleted successfully.`
         );
       } else {
-        // Handle non-successful response (e.g., display an error message)
         console.error(
           `Failed to delete subscription with id ${subscriptionId}. Status: ${response.status}`
         );
@@ -135,54 +156,19 @@ const PaymentCard = () => {
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-      <div className="flex flex-wrap gap-5 justify-center mt-8">
+      <div className="flex flex-wrap  justify-center mt-8">
         {" "}
         {subscriptions.map((subscription, index) => (
-          // <Card
-          //   key={index}
-          //   className="w-[30%] rounded-xl overflow-hidden shadow-lg bg-cover bg-no-repeat"
-          //   style={{
-          //     backgroundImage: `url('/assets/images/cardbg.png')`,
-          //   }}
-          //   bodyStyle={{ padding: "1rem" }}
-          // >
-          //   <div className="text-center">
-          //     <span className="text-lg text-white bg-red-200 bg-opacity-50 rounded-full px-3 py-1 mb-4 inline-block">
-          //       {subscription.Name}
-          //     </span>
-          //   </div>
-          //   <div className="flex justify-between items-center text-white text-xl mb-4">
-          //     <span className="font-bold">{subscription.price}</span>
-          //     <div className="bg-white mx-2 w-px h-8"></div>
-          //     <span className="font-bold">{subscription.months}</span>
-          //   </div>
-          //   <p className="text-white text-sm">{subscription.details}</p>
-          //   <div className="flex justify-center space-x-4 mt-4">
-          //     <button
-          //       className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded-full"
-          //       onClick={() => handleEditButtonClick(subscription.id)}
-          //     >
-          //       Edit
-          //     </button>
-          //     <button className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded-full">
-          //       Delete
-          //     </button>
-          //   </div>
-          // </Card>
           <Card
             key={index}
-            className="max-w-sm rounded overflow-hidden shadow-lg text-center m-2 w-[35%] rounded-[20px]"
+            className="max-w-sm rounded overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
             bordered={false}
             hoverable
             style={{
               backgroundImage: `url('/assets/images/cardbg.png')`,
               backgroundSize: "cover",
-           
             }}
           >
-            {/* <span className="font-bold">{subscription.price}</span>
-              <Divider type="vertical" className=" w-0 h-[40px]  text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] " />
-              <span className="font-bold">{subscription.months}</span> */}
             <div className="text-center">
               <span className="text-lg text-white  text-[25px] font-semibold  mb-4 inline-block">
                 {subscription.Name}
@@ -201,7 +187,6 @@ const PaymentCard = () => {
               </p>
             </div>
             <Divider className="!w-[100%] h-[3px] text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] min-w-2" />
-
 
             <p className="text-white  text-start">
               {subscription.details.length > 100 ? (
@@ -237,6 +222,12 @@ const PaymentCard = () => {
             name="changePasswordForm"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
+            initialValues={{
+              userName: subscriptions.userName,
+              price: subscriptions.price,
+              month: subscriptions.month,
+              details: subscriptions.details,
+            }}
           >
             <div className="flex gap-0 flex-col  rounded-[10px] w-[100%]  justify-center items-center">
               <p className="text-[22px] text-[#F3585E] Poppins font-[500] mb-[10px]">
@@ -244,7 +235,7 @@ const PaymentCard = () => {
               </p>
               <Form.Item
                 className="mt-[10px]"
-                name="userName"
+                name="Name"
                 rules={[
                   {
                     required: true,
@@ -259,11 +250,11 @@ const PaymentCard = () => {
               </Form.Item>
               <Form.Item
                 className="mt-[10px]"
-                name="userName"
+                name="price"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter userName",
+                    message: "Please enter price",
                   },
                 ]}
               >
@@ -275,11 +266,11 @@ const PaymentCard = () => {
 
               <Form.Item
                 className="mt-[10px]"
-                name="userName"
+                name="months"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter userName",
+                    message: "Please enter month",
                   },
                 ]}
               >
@@ -288,7 +279,16 @@ const PaymentCard = () => {
                   placeholder="Enter Month"
                 />
               </Form.Item>
-              <Form.Item>
+              <Form.Item
+                className="mt-[10px]"
+                name="details"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please details",
+                  },
+                ]}
+              >
                 <TextArea
                   placeholder="Enter Subscription"
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
