@@ -200,10 +200,10 @@ const ProfileEdit = ({user}) => {
               alt=""
             />
           </div>
-          <div className="flex  flex-col relative  pl-[10px] pr-[10px] ml-[16px] mr-[16px]  mt-[20px] mb-[20px]">
-            <div className="flex justify-between ">
+          <div className="flex  flex-col relative top-4 bottom-[10px]  pl-[10px] pr-[10px] ml-[16px] mr-[16px]  mt-[20px] mb-[20px]">
+            <div className="flex justify-start ml-[40px]  ">
               <h1 className=" mt-[50px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
-                Ghouri Sarib
+             {userData.userName}
               </h1>
             </div>
           </div>

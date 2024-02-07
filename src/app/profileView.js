@@ -97,7 +97,7 @@ const ProfileView = () => {
                 Details
               </h1>
               <div className=" flex gap-6 ml-[50px]">
-                <div className="flex flex-col gap-6 text-[#F3585E] w-[10%] ">
+                <div className="flex flex-col gap-6 text-[#F3585E] w-[20%] ">
                   {" "}
                   <p className="text-[14px] font-[500]">Email :</p>
                   <p className="text-[14px] font-[500]">Phone :</p>

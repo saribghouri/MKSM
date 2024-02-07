@@ -32,7 +32,7 @@ const Page = () => {
           body: JSON.stringify({
             emailAddress: values.email,
             password: values.password,
-            // userRole: 2, 
+            userRole: 2, 
           }),
         }
       );
@@ -85,7 +85,7 @@ const Page = () => {
       <div className="flex min-h-screen flex-col items-center  ">
         <div className=" bg-cover w-[50%]  absolute top-0 right-0" style={{}}>
           <div
-            className=" min-h-screen w-[100%]    relative"
+            className=" min-h-screen w-[100%] relative"
             style={{
               backgroundImage: `url("/assets/images/login.png")`,
               backgroundSize: "cover",
