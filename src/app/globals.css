@@ -200,3 +200,6 @@ background-color:inherit !important;
     width: 400px !important;
   }
   
+  .ant-card-body{
+    width: 100% !important;
+  }

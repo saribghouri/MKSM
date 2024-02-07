@@ -69,15 +69,11 @@ const AllUsers = () => {
       title: "Status",
       dataIndex: "isActives",
       key: "isActives",
-      render: (_, record) => (
-        <>
-          {record.isActives === "1" ? (
-            // <Switch defaultChecked onChange={onChange} />
-            <p></p>
-          ) : (
-            <Switch defaultChecked onChange={onChange} />
-          )}
-        </>
+      render: (isActives, record) => (
+        <Switch
+          checked={isActives === "1"} 
+          onChange={(checked) => handleChangeStatus(record, checked)} 
+        />
       ),
     },
     {
@@ -162,6 +158,7 @@ const AllUsers = () => {
     job: doctor.job,
     id: doctor.id ,
     profileImage: doctor.profileImage ,
+    isActives: doctor.isActives ,
     
   }));
   const filteredData = dataSource.filter(

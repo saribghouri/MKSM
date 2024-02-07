@@ -30,9 +30,9 @@ const cardData = [
 const PaymentCard = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [subscriptions, setSubscriptions] = useState([]);
-  console.log(subscriptions)
-  const userId = subscriptions?.id
-  console.log(userId)
+  console.log(subscriptions);
+  const userId = subscriptions?.id;
+  console.log(userId);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const handleEditButtonClick = () => {
@@ -102,7 +102,7 @@ const PaymentCard = () => {
           },
         }
       );
-  
+
       if (response.ok) {
         // If the delete was successful, filter out the deleted subscription
         setSubscriptions(
@@ -170,17 +170,17 @@ const PaymentCard = () => {
           //   </div>
           // </Card>
           <Card
-          key={index}
-            className="max-w-sm rounded overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
+            key={index}
+            className="max-w-sm rounded overflow-hidden shadow-lg text-center m-2 w-[35%] rounded-[20px]"
             bordered={false}
             hoverable
             style={{
               backgroundImage: `url('/assets/images/cardbg.png')`,
               backgroundSize: "cover",
-              backgroundPosition: "center",
+           
             }}
           >
-              {/* <span className="font-bold">{subscription.price}</span>
+            {/* <span className="font-bold">{subscription.price}</span>
               <Divider type="vertical" className=" w-0 h-[40px]  text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] " />
               <span className="font-bold">{subscription.months}</span> */}
             <div className="text-center">
@@ -189,24 +189,43 @@ const PaymentCard = () => {
               </span>
             </div>
             <div className="flex justify-between w-[70%] mx-auto mb-[20px]">
-            <p className="text-[#ffffff] pgh font-bold text-[26px]">{subscription.price}</p>
-            <Divider className="bg-white h-[36px] mr-[20px] w-[1.2%] mt-[10px] mb-[10px]" type="vertical" />
-            <p className="text-[#ffffff] pgh font-bold text-[26px]">{subscription.months}</p>
-          </div>
+              <p className="text-[#ffffff] pgh font-bold text-[26px]">
+                {subscription.price}
+              </p>
+              <Divider
+                className="bg-white h-[36px] mr-[20px] w-[1.2%] mt-[10px] mb-[10px]"
+                type="vertical"
+              />
+              <p className="text-[#ffffff] pgh font-bold text-[26px]">
+                {subscription.months}
+              </p>
+            </div>
             <Divider className="!w-[100%] h-[3px] text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] min-w-2" />
 
-            <p className="text-white text-sm text-start">{subscription.details}</p>
+
+            <p className="text-white  text-start">
+              {subscription.details.length > 100 ? (
+                <>
+                  {subscription.details.slice(0, 100)}...
+                  <br />
+                  {subscription.details.slice(100)}
+                </>
+              ) : (
+                subscription.details
+              )}
+            </p>
+
             <div className="flex justify-center space-x-4 mt-4 gap-6">
               <Button
                 className="!text-white w-[109px] bg-[#F3585E] border-none text-center items-center  font-bold  rounded-full"
-          onClick={() => handleEditButtonClick(subscription.id)}
+                onClick={() => handleEditButtonClick(subscription.id)}
               >
                 Edit
               </Button>
               <Button
                 onClick={() => handleDelete(subscription.id)}
                 className="!text-white bg-[#F3585E]  w-[109px] border-none font-bold rounded-full"
-          >
+              >
                 Delete
               </Button>
             </div>
