@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 
@@ -8,19 +7,18 @@ import { Button, Checkbox, Form, Input, message } from "antd";
 import { useUser } from "./UserContext";
 import { useRouter } from "next/navigation";
 
-
 const Page = () => {
   const router = useRouter();
   const { user } = useUser();
-  console.log("user",user)
+  console.log("user", user);
   const [loading, setLoading] = useState(true);
   const { login } = useUser();
 
   const onFinish = async (values) => {
     try {
-       const token = Cookies.get("apiToken");
+      const token = Cookies.get("apiToken");
       setLoading(true);
-  
+
       const response = await fetch(
         "https://mksm.blownclouds.com/api/users/login",
         {
@@ -32,14 +30,14 @@ const Page = () => {
           body: JSON.stringify({
             emailAddress: values.email,
             password: values.password,
-            userRole: 2, 
+            userRole: 2,
           }),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
-        Cookies.set("apiToken", data.access_token); 
+        Cookies.set("apiToken", data.access_token);
         login(data);
         router.push("/dashboard");
       } else {
@@ -119,7 +117,11 @@ const Page = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: (
+                    <span style={{ color: "white" }}>
+                      Please input your email!
+                    </span>
+                  ),
                 },
               ]}
             >
@@ -131,11 +133,18 @@ const Page = () => {
 
             <Form.Item
               className="w-[450px] "
+
+              
               name="password"
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: (
+                    <span style={{ color: "white" }}>
+                Please input your password!
+                    </span>
+                  ),
+                 
                 },
               ]}
             >
@@ -163,7 +172,8 @@ const Page = () => {
                 span: 14,
               }}
             >
-              <Button 
+              <Button
+                type="enter"
                 className="bg-[#F3585E] !text-white border-none rounded-l-[20px] rounded-r-[20px] w-[150px]"
                 htmlType="submit"
               >
