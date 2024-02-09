@@ -66,6 +66,44 @@ const AllUsers = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  //   useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+
+  //       const token = Cookies.get("apiToken");
+  //       const response = await fetch(
+  //         "https://mksm.blownclouds.com/api/all/user",
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (response.ok) {
+  //         const responseData = await response.json();
+  //         console.log("Doctors fetched successfully:", responseData);
+
+  //         if (Array.isArray(responseData?.all_users?.data)) {
+  //           setDoctors(responseData.all_users.data);
+  //           userData(responseData.all_users.data)
+  //         } else {
+  //           console.error(
+  //             "API response does not contain an array for 'doctor'"
+  //           );
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
  
   const handleDelete = async () => {
     try {

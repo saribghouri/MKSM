@@ -76,7 +76,7 @@ const PaymentCard = () => {
         ? `https://mksm.blownclouds.com/api/all/subscription/${editingSubscriptionId}`
         : "https://mksm.blownclouds.com/api/all/subscription";
       const method = editingSubscriptionId ? "PUT" : "POST";
-  
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -85,13 +85,15 @@ const PaymentCard = () => {
         },
         body: JSON.stringify(values),
       });
-  
+
       if (response.ok) {
         const responseData = await response.json();
         console.log("Subscription saved successfully:", responseData);
         // Update the subscriptions state with the new values
-        const updatedSubscriptions = subscriptions.map(subscription =>
-          subscription.id === editingSubscriptionId ? { ...subscription, ...values } : subscription
+        const updatedSubscriptions = subscriptions.map((subscription) =>
+          subscription.id === editingSubscriptionId
+            ? { ...subscription, ...values }
+            : subscription
         );
         setSubscriptions(updatedSubscriptions);
         // Close the modal after saving
@@ -109,7 +111,6 @@ const PaymentCard = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
 
   const handleDelete = async (subscriptionId) => {
     try {
@@ -161,7 +162,7 @@ const PaymentCard = () => {
         {subscriptions.map((subscription, index) => (
           <Card
             key={index}
-            className="max-w-sm  overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
+            className="max-w-sm   overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
             bordered={false}
             hoverable
             style={{

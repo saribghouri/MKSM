@@ -35,16 +35,16 @@ const cardData = [
 ];
 const Cards = () => {
   return (
-    <div className="flex flex-wrap  w-[100%]  mt-[20px]">
+    <div className="flex flex-wrap justify-center  w-[100%]  mt-[20px]">
       {cardData.map((card, index) => (
         <div
           key={index}
-          className={`bg-${card.backgroundColor} card`}
+          className="max-w-xs overflow-hidden  m-2 w-[30%] rounded-[20px]"
           style={{
-            width: "32%",
+            width: "62%",
             height: "234px",
             backgroundImage: `url('${card.backgroundImage}')`,
-            backgroundSize: "contain",
+            backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
         >
