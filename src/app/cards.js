@@ -9,6 +9,7 @@ const cardData = [
     backgroundColor: "#ffffff",
     textBackgroundColor: "#e1edff",
     textColor: "#fcfffc",
+    textName: "Basic",
     count: 615,
     label: "User Receipt",
   },
@@ -17,6 +18,7 @@ const cardData = [
     backgroundColor: "#e1edff",
     textBackgroundColor: "#ffffff",
     textColor: "#fcfffc",
+    textName: "Standard",
     count: 615,
     label: "User Receipt",
   },
@@ -24,7 +26,9 @@ const cardData = [
     backgroundImage: "/assets/images/gray.png",
     backgroundColor: "none",
     textBackgroundColor: "#ffffff",
+ 
     textColor: "#fcfffc",
+    textName: "Premium",
     count: 615,
     label: "User Receipt",
   },
@@ -48,7 +52,7 @@ const Cards = () => {
             <p
               className={`text-${card.textColor} text-white pgh font-bold text-[24px]`}
             >
-              Basic
+              {card.textName}
             </p>
             <p
               className={`text-${card.textColor} flex text-white  text-[24px] font-bold text-30`}
