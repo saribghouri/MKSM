@@ -58,7 +58,7 @@ const AddPayment = ({handlePaymentCard}) => {
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="text-[22px] font-sans">Add Payment</h1>
+        <h1 className="text-[22px] font-sans">Add Subscription</h1>
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
@@ -79,7 +79,7 @@ const AddPayment = ({handlePaymentCard}) => {
               }}
             >
               <p className="text-[22px] text-[#ffffff] Poppins font-[500] mb-[10px]">
-                Add payment
+                Add Subscription
               </p>
               <Form.Item
                 className="mt-[10px]"
@@ -148,7 +148,7 @@ const AddPayment = ({handlePaymentCard}) => {
                   className="bg-[#F3585E] !border-none w-[150px] !text-white rounded-r-[20px] rounded-l-[20px]"
                   htmlType="submit"
                 >
-                  Add Payment
+                  Add Subscription
                 </Button>
               </Form.Item>
             </div>

@@ -332,7 +332,7 @@ const App = () => {
         />,
         [
           getItem(
-            "  Add payment",
+            "  Add Subscription",
             "sub15",
             <Image src={""} alt="" />,
             null,
@@ -340,7 +340,7 @@ const App = () => {
           ),
 
           getItem(
-            "Fetch Payment",
+            "Fetch Subscription",
             "sub16",
             <Image src={""} alt="" />,
             null,

@@ -29,10 +29,86 @@ const AllUsers = () => {
   const onChange = (checked) => {
     console.log(`switch to ${checked}`);
   };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        "https://mksm.blownclouds.com/api/all/user",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Doctors fetched successfully:", responseData);
+
+        if (Array.isArray(responseData?.all_users?.data)) {
+          setDoctors(responseData.all_users.data);
+          userData(responseData.all_users.data);
+        } else {
+          console.error(
+            "API response does not contain an array for 'doctor'"
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  //   useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+
+  //       const token = Cookies.get("apiToken");
+  //       const response = await fetch(
+  //         "https://mksm.blownclouds.com/api/all/user",
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (response.ok) {
+  //         const responseData = await response.json();
+  //         console.log("Doctors fetched successfully:", responseData);
+
+  //         if (Array.isArray(responseData?.all_users?.data)) {
+  //           setDoctors(responseData.all_users.data);
+  //           userData(responseData.all_users.data)
+  //         } else {
+  //           console.error(
+  //             "API response does not contain an array for 'doctor'"
+  //           );
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+ 
   const handleDelete = async () => {
     try {
       const token = Cookies.get("apiToken");
-      const userIdToDelete = selectedUser.id; 
+      const userIdToDelete = selectedUser.id;
 
       const response = await fetch(
         `https://mksm.blownclouds.com/api/delete-user/${userIdToDelete}`,
@@ -41,16 +117,16 @@ const AllUsers = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-          }, 
+          },
         }
       );
 
       if (response.ok) {
         message.success("User deleted successfully");
-        // Refresh the user list or perform any necessary actions after deletion
-        // For example, you can refetch the data by calling the fetchData function
-        // fetchData();
-        // handleCancel(); // Close the modal after successful deletion
+        setDoctors(prevDoctors =>
+          prevDoctors.filter(doctor => doctor.id !== selectedUser.id)
+        );
+        handleCancel();
       } else {
         message.error("Failed to delete user");
       }
@@ -59,6 +135,7 @@ const AllUsers = () => {
       message.error("Error deleting user");
     }
   };
+
 
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
@@ -105,44 +182,7 @@ const AllUsers = () => {
       ),
     },
   ];
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
 
-        const token = Cookies.get("apiToken");
-        const response = await fetch(
-          "https://mksm.blownclouds.com/api/all/user",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Doctors fetched successfully:", responseData);
-
-          if (Array.isArray(responseData?.all_users?.data)) {
-            setDoctors(responseData.all_users.data);
-            userData(responseData.all_users.data)
-          } else {
-            console.error(
-              "API response does not contain an array for 'doctor'"
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const dataSource = (doctors || []).map((doctor, index) => ({
     key: index.toString(),
@@ -220,7 +260,7 @@ const AllUsers = () => {
               <Button
                 className="!text-[#F24044] rounded-l-[20px] rounded-r-[20px] w-[150px] h-[40px]"
                 onClick={() => {
-                  handleCancel;
+                  handleCancel();
                 }}
               >
                 Cancel
