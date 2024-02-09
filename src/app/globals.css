@@ -28,6 +28,7 @@
   .ant-menu-item {
     margin-left: -1px !important;
    font-family: sans-serif;
+   padding-left: 30px !important;
    border-bottom-left-radius: none !important;
    border-top-left-radius: none !important;
    border-top-right-radius: 20px !important;
@@ -207,4 +208,36 @@ background-color:inherit !important;
   #hello> .ant-form-item-explain-error{
     color: #ffffff !important;
   }
+
+  .ant-dropdown-menu{
+
+    width:200px !important;
+
+  }
+
+  @media only screen and (min-width: 2560px) {
+    /* Increase the width of the table columns */
+    .ant-table .ant-table-cell {
+      padding: 16px 24px; /* Adjust padding according to your preference */
+    }
   
+    /* Increase the font size of table headers */
+    .ant-table-thead th {
+      font-size: 24px; /* Adjust font size according to your preference */
+    }
+  
+    /* Increase the font size of table data */
+    .ant-table-tbody td {
+      font-size: 28px; /* Adjust font size according to your preference */
+    }
+  
+    /* Increase the width of the modal */
+    .ant-modal {
+      width: 800px; /* Adjust width according to your preference */
+    }
+  
+    /* Increase the height of the modal */
+    .ant-modal-content {
+      height: 500px; /* Adjust height according to your preference */
+    }
+  }

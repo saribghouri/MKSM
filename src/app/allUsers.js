@@ -188,7 +188,7 @@ const AllUsers = () => {
           </div>
           <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-          <Table columns={columns} dataSource={filteredData} loading={loading} />
+          <Table  columns={columns} dataSource={filteredData} loading={loading} />
           <Modal
             style={{
               width: "534px",

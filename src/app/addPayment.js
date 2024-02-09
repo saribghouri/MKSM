@@ -4,7 +4,7 @@ import TextArea from "antd/es/input/TextArea";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
 
-const AddPayment = () => {
+const AddPayment = ({handlePaymentCard}) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -38,6 +38,7 @@ const AddPayment = () => {
       if (response.ok) {
         message.success("Payment added successfully");
         setLoading(false);
+        handlePaymentCard()
       } else {
         const errorResponse = await response.json(); // To get more details from the server
         console.error("Error Response:", errorResponse);
@@ -147,7 +148,7 @@ const AddPayment = () => {
                   className="bg-[#F3585E] !border-none w-[150px] !text-white rounded-r-[20px] rounded-l-[20px]"
                   htmlType="submit"
                 >
-                  Updates
+                  Add Payment
                 </Button>
               </Form.Item>
             </div>

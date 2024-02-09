@@ -40,6 +40,7 @@ const InActiveUsers = () => {
       render: (_, record) => (
         <Switch
           defaultunChecked={record.isActives === "1"}
+          
           onChange={(checked) => onChange(checked, record.id)}
         />
       ),
@@ -131,37 +132,31 @@ const InActiveUsers = () => {
   );
   const onChange = async (checked, userId) => {
     console.log("userId", userId);
-    if (checked) {
-      try {
+    try {
         const token = Cookies.get("apiToken");
         const response = await fetch(
-          `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
+            `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
         );
 
         if (response.ok) {
-          const updatedUsers = inActiveUser.filter(
-            (user) => user.id !== userId
-          );
-          setInActiveUser(updatedUsers);
-          setSelectedUserId(userId);
-          message.success("User set to inactive successfully");
-          console.log("Failed to reject pharmacy. Status:", updatedUsers);
+            // Remove the user from the list
+            const updatedUsers = inActiveUser.filter(user => user.id !== userId);
+            setInActiveUser(updatedUsers);
+            message.success(`User set to 'active' successfully`);
         } else {
-          message.error("Failed to update user status");
+            message.error("Failed to update user status");
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Error updating user status: ", error);
         message.error("An error occurred while updating user status");
-      }
     }
-  };
+};
   return (
     <div>
       {isEditing ? (

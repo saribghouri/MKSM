@@ -167,7 +167,7 @@ const App = () => {
     setUserSubscription(false);
     setInactiveUser(false);
     setAddPayment(false);
-
+    setPaymentCard(false);
     setProfileView(false);
     setCard(false);
     setProfileEdit(false);
@@ -298,25 +298,26 @@ const App = () => {
         />,
         [
           getItem(
-            "",
+            "All Users",
             "sub12",
-            <>
-              <button onClick={handleShowDoctorData}>All Users</button>
-            </>
+            <Image src={""} alt="" />,
+            null,
+            handleShowDoctorData
           ),
           getItem(
-            "",
-            "sub42",
-            <div onClick={handleActiveUser} className="w-[500px] h-[50px]">
-              Active Users
-            </div>
+            "Active Users",
+            "sub13",
+            <Image src={""} alt="" />,
+            null,
+            handleActiveUser
           ),
+
           getItem(
-            "",
+            "Inactive Users",
             "sub14",
-            <div onClick={handleInactiveUser} className="w-[500px] h-[50px]">
-              Inactive Users
-            </div>
+            <Image src={""} alt="" />,
+            null,
+            handleInactiveUser
           ),
         ]
       ),
@@ -331,18 +332,19 @@ const App = () => {
         />,
         [
           getItem(
-            "",
-            "sub41",
-            <>
-              <button onClick={handleAddPayment}>Add payment</button>
-            </>
+            "  Add payment",
+            "sub15",
+            <Image src={""} alt="" />,
+            null,
+            handleAddPayment
           ),
+
           getItem(
-            "",
-            "sub10",
-            <div onClick={handlePaymentCard} className="w-[500px] h-[50px]">
-              Fetch Payment
-            </div>
+            "Fetch Payment",
+            "sub16",
+            <Image src={""} alt="" />,
+            null,
+            handlePaymentCard
           ),
         ]
       ),
@@ -358,11 +360,11 @@ const App = () => {
         />,
         [
           getItem(
-            "",
-            "sub49",
-            <div onClick={handleSubscription} className="w-[500px] h-[50px]">
-              Users Subscription
-            </div>
+            "Users Subscription",
+            "sub16",
+            <Image src={""} alt="" />,
+            null,
+            handleSubscription
           ),
         ]
       ),
@@ -406,27 +408,29 @@ const App = () => {
     {
       key: "1",
       label: (
-        <a className="font" onClick={handleProfile}>
+        <a className="font !text-[#F24044] hover:none" onClick={handleProfile}>
           <UserOutlined /> Profile edit
         </a>
       ),
     },
-
     {
       key: "2",
       label: (
-        <Link to="/account">
-          <CustomerServiceOutlined />{" "}
-          <a className="font !text-[#000]">Change Password</a>
-        </Link>
+        <a
+          className="font !text-[#F24044]"
+          onClick={handleShowChangePasswordModal}
+        >
+          <UserOutlined /> Change Password
+        </a>
       ),
-      onClick: handleShowChangePasswordModal,
     },
     {
       key: "3",
-
       label: (
-        <a className="font" onClick={handleLogout}>
+        <a
+          className="flex justify-center text-center rounded-l-[20px] pt-[5px] pb-[5px] rounded-r-[20px]  bg-[#F24044] !text-white"
+          onClick={handleLogout}
+        >
           <LogoutOutlined />
           Logout
         </a>
@@ -443,7 +447,7 @@ const App = () => {
   }, [router]);
   return (
     <div
-      className="bg-[#fff] flex"
+      className="!bg-[#fff] flex"
       style={{
         minHeight: "100vh",
         width: "auto",
@@ -478,7 +482,7 @@ const App = () => {
         />
       </Sider>
 
-      <Layout className="">
+      <Layout className="!bg-[#fff]">
         <Header
           className="!bg-[#fff] "
           style={{
@@ -592,7 +596,7 @@ const App = () => {
               <div className="flex justify-between relative">
                 <div className="flex text-center items-center w-[180px] h-[45px] bg-[#F24044]">
                   <Dropdown
-                    className=" ml-[45px]"
+                    className=" ml-[45px] w-[100px] "
                     menu={{
                       items,
                     }}
@@ -621,7 +625,7 @@ const App = () => {
           {showUser && <AllUsers />}
           {activeUser && <ActiveUsers />}
           {inActiveUser && <InActiveUsers />}
-          {addPayment && <AddPayment />}
+          {addPayment && <AddPayment handlePaymentCard={handlePaymentCard} />}
           {paymentCard && <PaymentCard />}
           {userSubscription && <UserSubscription />}
           {profileView && <ProfileView />}

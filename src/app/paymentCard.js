@@ -161,7 +161,7 @@ const PaymentCard = () => {
         {subscriptions.map((subscription, index) => (
           <Card
             key={index}
-            className="max-w-sm rounded overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
+            className="max-w-sm  overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
             bordered={false}
             hoverable
             style={{
