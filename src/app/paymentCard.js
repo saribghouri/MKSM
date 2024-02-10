@@ -162,10 +162,12 @@ const PaymentCard = () => {
         {subscriptions.map((subscription, index) => (
           <Card
             key={index}
-            className="max-w-sm   overflow-hidden shadow-lg text-center m-2 w-[30%] rounded-[20px]"
+            className="max-w-xs overflow-hidden  m-2 w-[30%] rounded-[20px]"
             bordered={false}
             hoverable
             style={{
+              width: "62%",
+              height: "234px",
               backgroundImage: `url('/assets/images/cardbg.png')`,
               backgroundSize: "cover",
             }}
@@ -192,7 +194,7 @@ const PaymentCard = () => {
             <p className="text-white  text-start">
               {subscription.details.length > 100 ? (
                 <>
-                  {subscription.details.slice(0, 100)}...
+                  {subscription.details.slice(4, 100)}...
                   <br />
                   {subscription.details.slice(100)}
                 </>

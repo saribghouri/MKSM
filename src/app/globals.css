@@ -226,3 +226,15 @@ flex-direction: column; */
     height: 500px;
   }
 }
+
+.count{
+  border: 1px solid red;
+  border-radius: 20%;
+  width: 40px;
+  color: #f24044;
+  font-size: 20px;
+  padding: 2px;
+  font-weight: 700;
+  text-align: center;
+  margin-left: 10px;
+}

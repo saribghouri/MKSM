@@ -1,10 +1,12 @@
 "use client";
-import { DeleteOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined, DeleteOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Divider, Input, Modal, Switch, Table, message } from "antd";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./userProfile";
 import Cookies from "js-cookie";
 import { useUser } from "./UserContext";
+
+import axios from "axios";
 const AllUsers = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -12,9 +14,13 @@ const AllUsers = () => {
   const [isModalVisibles, setIsModalVisibles] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedUser, setSelectedUser] = useState([]);
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { userData } = useUser();
-  console.log("UserData",doctors)
+  console.log("UserData", items);
   const showModal = () => {
     setIsModalVisibles(true);
   };
@@ -29,43 +35,41 @@ const AllUsers = () => {
   const onChange = (checked) => {
     console.log(`switch to ${checked}`);
   };
-  const fetchData = async () => {
-    try {
-      setLoading(true);
+  // const fetchData = async () => {
+  //   try {
+  //     setLoading(true);
 
-      const token = Cookies.get("apiToken");
-      const response = await fetch(
-        "https://mksm.blownclouds.com/api/all/user",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  //     const token = Cookies.get("apiToken");
+  //     const response = await fetch(
+  //       "https://mksm.blownclouds.com/api/all/user",
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
 
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("Doctors fetched successfully:", responseData);
+  //     if (response.ok) {
+  //       const responseData = await response.json();
+  //       console.log("Doctors fetched successfully:", responseData);
 
-        if (Array.isArray(responseData?.all_users?.data)) {
-          setDoctors(responseData.all_users.data);
-          userData(responseData.all_users.data);
-        } else {
-          console.error(
-            "API response does not contain an array for 'doctor'"
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  //       if (Array.isArray(responseData?.all_users?.data)) {
+  //         setDoctors(responseData.all_users.data);
+  //         userData(responseData.all_users.data);
+  //       } else {
+  //         console.error("API response does not contain an array for 'doctor'");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data: ", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   //   useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -104,7 +108,7 @@ const AllUsers = () => {
 
   //   fetchData();
   // }, []);
- 
+
   const handleDelete = async () => {
     try {
       const token = Cookies.get("apiToken");
@@ -123,8 +127,8 @@ const AllUsers = () => {
 
       if (response.ok) {
         message.success("User deleted successfully");
-        setDoctors(prevDoctors =>
-          prevDoctors.filter(doctor => doctor.id !== selectedUser.id)
+        setDoctors((prevDoctors) =>
+          prevDoctors.filter((doctor) => doctor.id !== selectedUser.id)
         );
         handleCancel();
       } else {
@@ -136,6 +140,31 @@ const AllUsers = () => {
     }
   };
 
+  const fetchItems = async (page) => {
+    setIsLoading(true);
+    try {
+      const token = Cookies.get("apiToken"); 
+      const response = await axios.get(
+        `https://mksm.blownclouds.com/api/all/user?page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setItems(response.data.all_users.data );
+      setCurrentPage(page);
+      setTotalPages(Math.ceil(response.data.total / response.data.per_page));
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchItems(currentPage);
+  }, [currentPage]);
 
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
@@ -148,8 +177,8 @@ const AllUsers = () => {
       key: "isActives",
       render: (isActives, record) => (
         <Switch
-          checked={isActives === "1"} 
-          onChange={(checked) => handleChangeStatus(record, checked)} 
+          checked={isActives === "1"}
+          onChange={(checked) => handleChangeStatus(record, checked)}
         />
       ),
     },
@@ -167,7 +196,6 @@ const AllUsers = () => {
               setSelectedUser(record);
               showModal();
             }}
-          
           />
 
           <EyeOutlined
@@ -183,9 +211,8 @@ const AllUsers = () => {
     },
   ];
 
-
-  const dataSource = (doctors || []).map((doctor, index) => ({
-    key: index.toString(),
+  const dataSource = (items || []).map((doctor, index) => ({
+    key: (index + 1).toString(), 
     name: doctor.userName,
     contact: doctor.contact,
     address: doctor.emailAddress,
@@ -196,10 +223,9 @@ const AllUsers = () => {
     collage: doctor.collage,
     location: doctor.location,
     job: doctor.job,
-    id: doctor.id ,
-    profileImage: doctor.profileImage ,
-    isActives: doctor.isActives ,
-    
+    id: doctor.id,
+    profileImage: doctor.profileImage,
+    isActives: doctor.isActives,
   }));
   const filteredData = dataSource.filter(
     (doctor) =>
@@ -228,7 +254,44 @@ const AllUsers = () => {
           </div>
           <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-          <Table  columns={columns} dataSource={filteredData} loading={loading} />
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+       
+            pagination={false}
+          />
+          <div className="flex justify-end mb-[50px] mt-[20px] mr-[10px]">
+        
+            
+        
+              <ul>
+                {items.map((item) => (
+                  <li key={item.id}>{item.name}</li>
+                ))}
+              </ul>
+        
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+            >
+             <ArrowLeftOutlined
+                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                    type="link"
+          
+                  />
+            </button>
+            <span className="count">{currentPage}</span>
+            <button
+              onClick={() => setCurrentPage((p) => p + 1)}
+              disabled={currentPage === totalPages}
+            >
+               <ArrowRightOutlined
+                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                    type="link"
+                 
+                  />
+            </button>
+          </div>
           <Modal
             style={{
               width: "534px",

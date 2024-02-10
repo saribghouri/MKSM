@@ -1,5 +1,7 @@
 "use client";
 import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
@@ -19,6 +21,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import UserProfile from "./userProfile";
+import axios from "axios";
 const ActiveUsers = () => {
   const [activeUser, setActiveUser] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -26,13 +29,17 @@ const ActiveUsers = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUser, setSelectedUser] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log(selectedUserId);
   const userId = activeUser.id;
   console.log(activeUser);
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
-   
+
     { title: "Name", dataIndex: "name", key: "userName" },
     { title: "Email", dataIndex: "address", key: "emailAddress" },
     { title: "Phone No:", dataIndex: "contact", key: "Phone" },
@@ -78,45 +85,71 @@ const ActiveUsers = () => {
   //   console.log(`switch to ${checked}`);
   // };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
 
-        const token = Cookies.get("apiToken");
-        const response = await fetch(
-          "https://mksm.blownclouds.com/api/active/users",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  //       const token = Cookies.get("apiToken");
+  //       const response = await fetch(
+  //         "https://mksm.blownclouds.com/api/active/users",
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
 
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Doctors fetched successfully:", responseData);
+  //       if (response.ok) {
+  //         const responseData = await response.json();
+  //         console.log("Doctors fetched successfully:", responseData);
 
-          if (Array.isArray(responseData?.active_users?.data)) {
-            setActiveUser(responseData.active_users.data);
-          } else {
-            console.error(
-              "API response does not contain an array for 'doctor'"
-            );
-          }
+  //         if (Array.isArray(responseData?.active_users?.data)) {
+  //           setActiveUser(responseData.active_users.data);
+  //         } else {
+  //           console.error(
+  //             "API response does not contain an array for 'doctor'"
+  //           );
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  const fetchItems = async (page) => {
+    setIsLoading(true);
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await axios.get(
+        `https://mksm.blownclouds.com/api/active/users?page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
-    fetchData();
-  }, []);
+      setItems(response.data.active_users.data);
+      setCurrentPage(page);
+      setTotalPages(Math.ceil(response.data.total / response.data.per_page));
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchItems(currentPage);
+  }, [currentPage]);
 
-  const dataSource = (activeUser || []).map((user, index) => ({
+  const dataSource = (items || []).map((user, index) => ({
     key: index.toString(),
 
     name: user.userName,
@@ -129,8 +162,8 @@ const ActiveUsers = () => {
     collage: user.collage,
     location: user.location,
     job: user.job,
-    id: user.id ,
-    profileImage: user.profileImage ,
+    id: user.id,
+    profileImage: user.profileImage,
   }));
   const filteredData = dataSource.filter(
     (doctor) =>
@@ -146,7 +179,7 @@ const ActiveUsers = () => {
         const response = await fetch(
           `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=inactive`,
           {
-            method: "GET", 
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
@@ -197,8 +230,41 @@ const ActiveUsers = () => {
           <Table
             columns={columns}
             dataSource={filteredData}
-            loading={loading}
+       
+            pagination={false}
           />
+          <div className="flex justify-end mb-[50px] mt-[20px] mr-[10px]">
+        
+            
+        
+              <ul>
+                {items.map((item) => (
+                  <li key={item.id}>{item.name}</li>
+                ))}
+              </ul>
+        
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+            >
+             <ArrowLeftOutlined
+                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                    type="link"
+          
+                  />
+            </button>
+            <span className="count">{currentPage}</span>
+            <button
+              onClick={() => setCurrentPage((p) => p + 1)}
+              disabled={currentPage === totalPages}
+            >
+               <ArrowRightOutlined
+                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                    type="link"
+                 
+                  />
+            </button>
+          </div>
         </div>
       )}
     </div>

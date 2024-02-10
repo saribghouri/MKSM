@@ -1,8 +1,8 @@
 "use client";
 
-import Card from "antd/es/card/Card";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
-import Image from "next/image";
 const cardData = [
   {
     backgroundImage: "/assets/images/Group.png",
@@ -18,7 +18,7 @@ const cardData = [
     backgroundColor: "#e1edff",
     textBackgroundColor: "#ffffff",
     textColor: "#fcfffc",
-    textName: "Standard",
+    textName: "Standard", 
     count: 615,
     label: "User Receipt",
   },
@@ -26,14 +26,57 @@ const cardData = [
     backgroundImage: "/assets/images/gray.png",
     backgroundColor: "none",
     textBackgroundColor: "#ffffff",
- 
+
     textColor: "#fcfffc",
     textName: "Premium",
     count: 615,
     label: "User Receipt",
   },
 ];
+
 const Cards = () => {
+  const [cardData, setCardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  console.log("cardData", cardData);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const token = Cookies.get("apiToken");
+        const response = await fetch(
+          "https://mksm.blownclouds.com/api/dashboard/cards",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("Doctors fetched successfully:", responseData);
+
+          if (Array.isArray(responseData?.data)) {
+            setCardData(responseData.data);
+          } else {
+            console.error(
+              "API response does not contain an array for 'doctor'"
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="flex flex-wrap justify-center  w-[100%]  mt-[20px]">
       {cardData.map((card, index) => (
@@ -43,7 +86,7 @@ const Cards = () => {
           style={{
             width: "62%",
             height: "234px",
-            backgroundImage: `url('${card.backgroundImage}')`,
+            backgroundImage: `url('/assets/images/Group.png')`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -52,18 +95,13 @@ const Cards = () => {
             <p
               className={`text-${card.textColor} text-white pgh font-bold text-[24px]`}
             >
-              {card.textName}
+              {card.type}
             </p>
             <p
               className={`text-${card.textColor} flex text-white  text-[24px] font-bold text-30`}
             >
               {card.count}
             </p>
-            {/* <p
-              className={`text-${card.textBackgroundColor} text-white  flex font-bold text-30`}
-            >
-              {card.label}
-            </p> */}
           </div>
         </div>
       ))}
