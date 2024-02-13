@@ -1,5 +1,11 @@
 "use client";
-import { ArrowLeftOutlined, ArrowRightOutlined, DeleteOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { Button, Divider, Input, Modal, Switch, Table, message } from "antd";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./userProfile";
@@ -16,7 +22,9 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(true);
+  const [afterPages, setAfterPages] = useState(true);
+  console.log(totalPages);
   const [isLoading, setIsLoading] = useState(false);
 
   const { userData } = useUser();
@@ -143,7 +151,7 @@ const AllUsers = () => {
   const fetchItems = async (page) => {
     setIsLoading(true);
     try {
-      const token = Cookies.get("apiToken"); 
+      const token = Cookies.get("apiToken");
       const response = await axios.get(
         `https://mksm.blownclouds.com/api/all/user?page=${page}`,
         {
@@ -153,9 +161,11 @@ const AllUsers = () => {
         }
       );
 
-      setItems(response.data.all_users.data );
+      setItems(response.data.all_users.data);
       setCurrentPage(page);
-      setTotalPages(Math.ceil(response.data.total / response.data.per_page));
+      setTotalPages(
+        Math.ceil(response.data.all_users.total / response.data.per_page)
+      );
     } catch (error) {
       console.error("Error fetching items:", error);
     } finally {
@@ -212,7 +222,7 @@ const AllUsers = () => {
   ];
 
   const dataSource = (items || []).map((doctor, index) => ({
-    key: (index + 1).toString(), 
+    key: (index + 1).toString(),
     name: doctor.userName,
     contact: doctor.contact,
     address: doctor.emailAddress,
@@ -257,40 +267,36 @@ const AllUsers = () => {
           <Table
             columns={columns}
             dataSource={filteredData}
-       
+            loading={isLoading}
             pagination={false}
           />
           <div className="flex justify-end mb-[50px] mt-[20px] mr-[10px]">
-        
-            
-        
-              <ul>
-                {items.map((item) => (
-                  <li key={item.id}>{item.name}</li>
-                ))}
-              </ul>
-        
+            <ul>
+              {items.map((item) => (
+                <li key={item.id}>{item.name}</li>
+              ))}
+            </ul>
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
             >
-             <ArrowLeftOutlined
-                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
-                    type="link"
-          
-                  />
+              <ArrowLeftOutlined
+                className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                type="link"
+              />
             </button>
             <span className="count">{currentPage}</span>
-            <button
-              onClick={() => setCurrentPage((p) => p + 1)}
-              disabled={currentPage === totalPages}
-            >
-               <ArrowRightOutlined
-                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
-                    type="link"
-                 
-                  />
-            </button>
+            {items ? (
+              <button
+                onClick={() => setCurrentPage((p) => p + 1)}
+                disabled={currentPage === totalPages}
+              >
+                <ArrowRightOutlined
+                  className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                  type="link"
+                />
+              </button>
+            ) : null}
           </div>
           <Modal
             style={{

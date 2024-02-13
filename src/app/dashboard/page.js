@@ -491,7 +491,7 @@ const App = () => {
             boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div className="flex items-center justify-between ">
+          <div className="flex items-center justify-between">
             <div>
               <Button
                 type="text"
@@ -506,12 +506,13 @@ const App = () => {
             </div>
             <div>
               <Modal
-                className="change-password-modal"
+                className="change-password-modal relative"
                 height={379}
                 open={showChangePasswordModal}
                 onCancel={handleCloseChangePasswordModal}
                 footer={null}
               >
+                      <img className=" absolute" src="/assets/images/GroupCircle.png" alt="Modal Image" />
                 <Form
                   form={form}
                   name="changePasswordForm"
@@ -603,10 +604,10 @@ const App = () => {
                     trigger={["click"]}
                   >
                     <a onClick={(e) => e.preventDefault()}>
-                      <Space className="text-[#fff] ml-[10px]">
+                      <Space className="text-[#fff] flex justify-between">
                         {/* {userDetails?.userName} */}
-                        <p>{userDetails.userName}</p>
-                        <DownOutlined />
+                        <p className="">{userDetails.userName}</p>
+                        <DownOutlined  className="" />
                       </Space>
                     </a>
                   </Dropdown>

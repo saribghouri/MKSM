@@ -56,20 +56,11 @@ const ProfileView = () => {
         <ProfileEdit user={userDetails} onCancel={() => setIsEditing(false)} />
       ) : (
         <div>
-          <div>
-            <Image
-              width={1000}
-              height={100}
-              className="w-full"
-              src={"/assets/images/Rectangle.png"}
-              srcSet={"/assets/images/Rectangle@2x.png 2x"}
-              alt=""
-            />
-          </div>
-          <div className="flex  flex-col relative  pl-[10px] pr-[10px] ml-[16px] mr-[16px]  mt-[20px] mb-[20px]">
+        
+          <div className="flex  flex-col   pl-[10px] pr-[10px] ml-[16px] mr-[56px]  mt-[20px] mb-[20px]">
             <img
               alt=""
-              className="w-[130px] h-[130px] rounded-[50%] top-[-100px] absolute "
+              className="w-[130px] h-[130px] rounded-[50%] top-[-100px]  "
               src={userDetails?.profileImage || null}
               // src="assets/images/download.jfif"
             />

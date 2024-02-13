@@ -2,22 +2,10 @@
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
-  DeleteOutlined,
-  EditOutlined,
   EyeOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import {
-  Input,
-  Table,
-  Modal,
-  Form,
-  Button,
-  message,
-  Popconfirm,
-  Divider,
-  Switch,
-} from "antd";
+import { Input, Table, message, Divider, Switch } from "antd";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import UserProfile from "./userProfile";
@@ -34,9 +22,6 @@ const ActiveUsers = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(selectedUserId);
-  const userId = activeUser.id;
-  console.log(activeUser);
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
 
@@ -61,13 +46,6 @@ const ActiveUsers = () => {
       key: "action",
       render: (id, record) => (
         <div>
-          {/* <DeleteOutlined
-            className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
-            type="link"
-            danger
-            onClick={showModal}
-          /> */}
-
           <EyeOutlined
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
             type="link"
@@ -188,16 +166,13 @@ const ActiveUsers = () => {
         );
 
         if (response.ok) {
-          // Remove the user from the list
           const updatedUsers = activeUser.filter((user) => user.id !== userId);
           setActiveUser(updatedUsers);
 
-          // Save the selected user id to the state
           setSelectedUserId(userId);
           message.success("User set to inactive successfully");
           console.log("Failed to reject pharmacy. Status:", updatedUsers);
         } else {
-          // Handle errors
           message.error("Failed to update user status");
         }
       } catch (error) {
@@ -230,39 +205,34 @@ const ActiveUsers = () => {
           <Table
             columns={columns}
             dataSource={filteredData}
-       
             pagination={false}
+            loading={isLoading}
           />
           <div className="flex justify-end mb-[50px] mt-[20px] mr-[10px]">
-        
-            
-        
-              <ul>
-                {items.map((item) => (
-                  <li key={item.id}>{item.name}</li>
-                ))}
-              </ul>
-        
+            <ul>
+              {items.map((item) => (
+                <li key={item.id}>{item.name}</li>
+              ))}
+            </ul>
+
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
             >
-             <ArrowLeftOutlined
-                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
-                    type="link"
-          
-                  />
+              <ArrowLeftOutlined
+                className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                type="link"
+              />
             </button>
             <span className="count">{currentPage}</span>
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
               disabled={currentPage === totalPages}
             >
-               <ArrowRightOutlined
-                    className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
-                    type="link"
-                 
-                  />
+              <ArrowRightOutlined
+                className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                type="link"
+              />
             </button>
           </div>
         </div>

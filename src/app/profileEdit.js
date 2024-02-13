@@ -190,19 +190,10 @@ const ProfileEdit = ({user}) => {
         <ProfileView onCancel={() => setIsEditing(false)} />
       ) : (
         <div>
-          <div>
-            <Image
-              width={1000}
-              height={100}
-              className="w-full"
-              src={"/assets/images/Rectangle.png"}
-              srcSet={"/assets/images/Rectangle@2x.png 2x"}
-              alt=""
-            />
-          </div>
-          <div className="flex  flex-col relative top-4 bottom-[10px]  pl-[10px] pr-[10px] ml-[16px] mr-[16px]  mt-[20px] mb-[20px]">
-            <div className="flex justify-start ml-[40px]  ">
-              <h1 className=" mt-[50px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
+          
+          <div className="flex  flex-col   pl-[10px] pr-[10px] ml-[16px] mr-[56px]  mt-[170px] mb-[20px]">
+            <div className="flex justify-start ml-[18px]  ">
+              <h1 className=" mt-[0px] mb-[20px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
              {userData.userName}
               </h1>
             </div>
@@ -246,7 +237,7 @@ const ProfileEdit = ({user}) => {
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                   >
-                  <div className="flex bottom-[280px] relative">
+                  <div className="flex bottom-[320px] relative">
                     <Form.Item
                       className="h-[50px]  w-[100%] top-0 left-[-50px]  absolute"
                       name="upload"

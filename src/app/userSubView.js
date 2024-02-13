@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Form, Input, Select } from "antd";
+import { Button, Card, DatePicker, Divider, Form, Input, Select } from "antd";
 import React, { useState } from "react";
 import Image from "next/image";
 import {
@@ -16,7 +16,7 @@ import AllUsers from "./allUsers";
 import { useUser } from "./UserContext";
 import UserSubscription from "./userSubscription";
 
-const UserSubView = ({ user, onCancel ,userData }) => {
+const UserSubView = ({ user, onCancel, userData }) => {
   console.log(user);
   const onFinish = (values) => {
     console.log("Success:", user);
@@ -28,11 +28,9 @@ const UserSubView = ({ user, onCancel ,userData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState(true);
   const [showAllUsers, setShowAllUsers] = useState(false);
-  
- 
 
   const { userp } = useUser();
-  console.log("userp",userp)
+  console.log("userp", userp);
   return (
     <div>
       {showAllUsers ? (
@@ -59,7 +57,6 @@ const UserSubView = ({ user, onCancel ,userData }) => {
                     type="link"
                     onClick={() => setShowAllUsers(true)}
                   />
-                
                 </div>
                 <div className="flex gap-8 ml-[50px]">
                   <div className="flex flex-col w-full">
@@ -79,9 +76,9 @@ const UserSubView = ({ user, onCancel ,userData }) => {
                     wrapperCol={{
                       span: 16,
                     }}
-                     style={{
-                    maxWidth: 1280,
-                  }}
+                    style={{
+                      maxWidth: 1280,
+                    }}
                     initialValues={{
                       name: user.name,
                       gender: user.gender,
@@ -94,13 +91,14 @@ const UserSubView = ({ user, onCancel ,userData }) => {
                       location: user.location,
                       job: user.job,
                       profileImage: user.profileImage,
+                      subscriptionDetails: user.subscriptionDetails,
+                      subscriptionPrice: user.subscriptionPrice,
                     }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                     disabled={componentDisabled}
                   >
-                   
                     <div className="flex flex-col gap-2 ml-[40px]">
                       <div className="flex  gap-[80px]">
                         <div className="flex flex-col">
@@ -146,20 +144,19 @@ const UserSubView = ({ user, onCancel ,userData }) => {
                           <label className="text-[#727272]">
                             Date of Birth
                           </label>
+
                           <Form.Item
                             className="!w-[250px]"
+                            label="DatePicker"
                             name="dob"
                             rules={[
                               {
                                 required: true,
-                                message: "Please input your Date of Birth!",
+                                message: "Please input!",
                               },
                             ]}
                           >
-                            <Input
-                              className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
-                              placeholder="Name"
-                            />
+                            <DatePicker className="rounded-r-[20px] rounded-l-[20px]" />
                           </Form.Item>
                         </div>
                         <div className="flex flex-col">
@@ -267,6 +264,49 @@ const UserSubView = ({ user, onCancel ,userData }) => {
                           </Form.Item>
                         </div>
                       </div>
+
+                      {/* //sbewbewbewb */}
+
+                      <div className=" flex  gap-[80px]">
+                        <div className="flex flex-col">
+                          <label className="text-[#727272]">Details</label>
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="subscriptionDetails"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your Details!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] !w-[300px]"
+                              placeholder="Details"
+                            />
+                          </Form.Item>
+                        </div>
+                        <div className="flex flex-col">
+                          <label className="text-[#727272]">Price</label>
+                          <Form.Item
+                            className="!w-[250px]"
+                            name="subscriptionPrice"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your Price!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] !w-[300px]"
+                              placeholder="Price"
+                            />
+                          </Form.Item>
+                        </div>
+                      </div>
+
+                      {/* //sbewbewbewb */}
                       <label className="text-[#727272]">About</label>
                       <div className="flex gap-4 ">
                         <Form.Item
@@ -282,11 +322,9 @@ const UserSubView = ({ user, onCancel ,userData }) => {
                           <TextArea
                             placeholder="About"
                             className="rounded-r-[20px] rounded-l-[20px] w-[630px]"
-                         
                           />
                         </Form.Item>
                       </div>
-                      
                     </div>
                   </Form>
                 </div>

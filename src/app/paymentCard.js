@@ -1,3 +1,4 @@
+import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Card, Divider, Form, Input, Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Cookies from "js-cookie";
@@ -5,6 +6,7 @@ import React, { useEffect, useState } from "react";
 
 const PaymentCard = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [subscriptions, setSubscriptions] = useState([]);
 
   const [form] = Form.useForm();
@@ -14,7 +16,6 @@ const PaymentCard = () => {
   const handleEditButtonClick = (subscriptionId) => {
     setIsModalVisible(true);
     setEditingSubscriptionId(subscriptionId);
-    // Fetch the details of the subscription to be edited
     const subscriptionToEdit = subscriptions.find(
       (sub) => sub.id === subscriptionId
     );
@@ -25,11 +26,15 @@ const PaymentCard = () => {
       details: subscriptionToEdit.details,
     });
   };
-
+  const handleDelete = async (subscriptionId) => {
+    setIsDeleteModalVisible(true);
+    setEditingSubscriptionId(subscriptionId);
+  };
   const handleModalCancel = () => {
     setIsModalVisible(false);
+    setIsDeleteModalVisible(false);
     setEditingSubscriptionId(null);
-    form.resetFields(); // Reset form fields when the modal is closed
+    form.resetFields();
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -112,12 +117,12 @@ const PaymentCard = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const handleDelete = async (subscriptionId) => {
+  const onDeleteConfirmed = async () => {
     try {
       setLoading(true);
       const token = Cookies.get("apiToken");
       const response = await fetch(
-        `https://mksm.blownclouds.com/api/all/subscription/${subscriptionId}`,
+        `https://mksm.blownclouds.com/api/all/subscription/${editingSubscriptionId}`,
         {
           method: "DELETE",
           headers: {
@@ -130,26 +135,30 @@ const PaymentCard = () => {
       if (response.ok) {
         setSubscriptions(
           subscriptions.filter(
-            (subscription) => subscription.id !== subscriptionId
+            (subscription) => subscription.id !== editingSubscriptionId
           )
         );
+        handleModalCancel();
         console.log(
-          `Subscription with id ${subscriptionId} deleted successfully.`
+          `Subscription with id ${editingSubscriptionId} deleted successfully.`
         );
       } else {
         console.error(
-          `Failed to delete subscription with id ${subscriptionId}. Status: ${response.status}`
+          `Failed to delete subscription with id ${editingSubscriptionId}. Status: ${response.status}`
         );
       }
     } catch (error) {
       console.error(
-        `Error deleting subscription with id ${subscriptionId}: `,
+        `Error deleting subscription with id ${editingSubscriptionId}: `,
         error
       );
     } finally {
       setLoading(false);
+      setIsModalVisible(false); // Close the modal after deletion
+      setEditingSubscriptionId(null);
     }
   };
+
   return (
     <div>
       <div className="flex justify-between  pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
@@ -157,37 +166,42 @@ const PaymentCard = () => {
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-      <div className="flex flex-wrap  justify-center mt-8">
+      <div className=" flex relative flex-wrap W-[100%]  justify-center mt-8">
         {" "}
         {subscriptions.map((subscription, index) => (
           <Card
             key={index}
-            className="max-w-xs overflow-hidden  m-2 w-[30%] rounded-[20px]"
+            className="max-w-xs overflow-hidden  justify-center  m-2 rounded-[20px] bg-[#F24044]"
             bordered={false}
-            hoverable
-            style={{
-              width: "62%",
-              height: "234px",
-              backgroundImage: `url('/assets/images/cardbg.png')`,
-              backgroundSize: "cover",
-            }}
           >
+            <img
+              className="absolute w-[40%]"
+              src="/assets/images/Group 20 (1).png"
+              alt="Modal Image"
+            />
+
             <div className="text-center">
               <span className="text-lg text-white  text-[25px] font-semibold  mb-4 inline-block">
                 {subscription.Name}
               </span>
             </div>
-            <div className="flex justify-between w-[70%] mx-auto mb-[20px]">
-              <p className="text-[#ffffff] pgh font-bold text-[26px]">
-                {subscription.price}
-              </p>
-              <Divider
-                className="bg-white h-[36px] mr-[20px] w-[1.2%] mt-[10px] mb-[10px]"
-                type="vertical"
-              />
-              <p className="text-[#ffffff] pgh font-bold text-[26px]">
-                {subscription.months}
-              </p>
+            <div className="flex justify-between w-[100%] mx-auto mb-[20px]">
+              <div className="w-[100%] text-center">
+                <p className="text-[#ffffff] font-bold text-[26px] break-words">
+                  ${subscription.price}
+                </p>
+              </div>    
+              <div>
+                <Divider
+                  className="bg-white h-[36px]  mt-[10px] mb-[1   0px]"
+                  type="vertical"
+                />
+              </div>
+              <div className="w-[100%] text-center">
+                <p className="text-[#ffffff]  font-bold text-[26px] break-words">
+                  {subscription.months}
+                </p>
+              </div>
             </div>
             <Divider className="!w-[100%] h-[3px] text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] min-w-2" />
 
@@ -219,7 +233,17 @@ const PaymentCard = () => {
             </div>
           </Card>
         ))}
-        <Modal open={isModalVisible} onCancel={handleModalCancel} footer={null}>
+        <Modal
+          className=" relative"
+          open={isModalVisible}
+          onCancel={handleModalCancel}
+          footer={null}
+        >
+          <img
+            className=" absolute"
+            src="/assets/images/GroupCircle.png"
+            alt="Modal Image"
+          />
           <Form
             form={form}
             name="changePasswordForm"
@@ -232,7 +256,7 @@ const PaymentCard = () => {
               details: subscriptions.details,
             }}
           >
-            <div className="flex gap-0 flex-col  rounded-[10px] w-[100%]  justify-center items-center">
+            <div className="flex gap-0 flex-col  rounded-[10px]   w-[100%]  items-center">
               <p className="text-[22px] text-[#F3585E] Poppins font-[500] mb-[10px]">
                 Add payment
               </p>
@@ -308,6 +332,42 @@ const PaymentCard = () => {
               </Form.Item>
             </div>
           </Form>
+        </Modal>
+        <Modal
+          style={{
+            width: "534px",
+            height: " 369px",
+          }}
+          open={isDeleteModalVisible}
+          footer={null}
+          onCancel={handleModalCancel}
+        >
+          <div className=" gap-2 flex justify-center items-center flex-col h-[250px]">
+            <DeleteOutlined
+              className=" flex justify-center items-center text-[#ffffff] w-[85px] h-[85px] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[50px]"
+              type="link"
+              danger
+            />
+
+            <h1 className="font-bold text-[22px]">Subscription Delete</h1>
+            <p className="text-black text-[16px]">
+              Are you sure you want to delete this Subscription?
+            </p>
+            <Button
+              className="bg-[#F24044] !text-white rounded-l-[20px] w-[150px] rounded-r-[20px] h-[40px]"
+              onClick={onDeleteConfirmed}
+            >
+              Delete
+            </Button>
+            <Button
+              className="!text-[#F24044] rounded-l-[20px] rounded-r-[20px] w-[150px] h-[40px]"
+              onClick={() => {
+                handleCancel();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </Modal>
       </div>
     </div>

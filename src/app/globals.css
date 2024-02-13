@@ -140,15 +140,16 @@ flex-direction: column; */
 .ant-table-cell {
   width: 13% !important;
 }
-.ant-modal-content {
+/* .ant-modal-content {
+  
   background-image: url("/assets/images/modal.png");
-  background-size: "contain";
+  background-size: "cover";
   background-repeat: no-repeat;
   width: 534px !important;
 
   height: auto !important;
   background-color: inherit !important;
-}
+} */
 
 .ant-modal-close {
   background-color: #f24044 !important;
@@ -237,4 +238,16 @@ flex-direction: column; */
   font-weight: 700;
   text-align: center;
   margin-left: 10px;
+}
+
+
+.Receipt{
+
+  margin-right: 40px;
+      display: flex;
+      justify-content: end;
+      margin-top: 84px;
+      font-size: 16px;  
+ color: #ffffff;
+ opacity: 0.8;
 }

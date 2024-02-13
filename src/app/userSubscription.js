@@ -1,5 +1,7 @@
 "use client";
 import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
@@ -20,16 +22,19 @@ import React, { useEffect, useState } from "react";
 
 import Cookies from "js-cookie";
 import UserSubView from "./userSubView";
+import axios from "axios";
 const UserSubscription = () => {
   const [userSubs, setUserSubs] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isViewModalVisible, setIsViewModalVisible] = useState(false);
+
   const [isModalVisibles, setIsModalVisibles] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
   console.log(userSubs);
   const showModal = () => {
     setIsModalVisibles(true);
@@ -81,46 +86,72 @@ const UserSubscription = () => {
     },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
 
-        const token = Cookies.get("apiToken");
-        const response = await fetch(
-          "https://mksm.blownclouds.com/api/users/subscription",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  //       const token = Cookies.get("apiToken");
+  //       const response = await fetch(
+  //         "https://mksm.blownclouds.com/api/users/subscription",
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
 
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Doctors fetched successfully:", responseData);
+  //       if (response.ok) {
+  //         const responseData = await response.json();
+  //         console.log("Doctors fetched successfully:", responseData);
 
-          if (Array.isArray(responseData?.all_subscription_users?.data)) {
-            setUserSubs(responseData.all_subscription_users.data);
-          } else {
-            console.error(
-              "API response does not contain an array for 'doctor'"
-            );
-          }
+  //         if (Array.isArray(responseData?.all_subscription_users?.data)) {
+  //           setUserSubs(responseData.all_subscription_users.data);
+  //         } else {
+  //           console.error(
+  //             "API response does not contain an array for 'doctor'"
+  //           );
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  const fetchItems = async (page) => {
+    setLoading(true);
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await axios.get(
+        `https://mksm.blownclouds.com/api/users/subscription?page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
-    fetchData();
-  }, []);
+      setItems(response?.data?.all_subscription_users?.data || []);
+      setCurrentPage(page);
+      setTotalPages(Math.ceil(response?.all_subscription_users?.data / response.data.per_page));
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchItems(currentPage);
+  }, [currentPage]);
 
-  const dataSource = (userSubs || []).map((userSubs, index) => ({
-    key: index.toString(),
+  const dataSource = (items || []).map((userSubs, index) => ({
+    key: (index + 1).toString(), 
     name: userSubs.userName,
     subscriptionDetails: userSubs.subscriptionDetails,
     email: userSubs.userEmail,
@@ -169,7 +200,35 @@ const UserSubscription = () => {
             columns={columns}
             dataSource={filteredData}
             loading={loading}
+            pagination={false}
           />
+          <div className="flex justify-end mb-[50px] mt-[20px] mr-[10px]">
+            <ul>
+              {items.map((item) => (
+                <li key={item.id}>{item.name}</li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ArrowLeftOutlined
+                className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                type="link"
+              />
+            </button>
+            <span className="count">{currentPage}</span>
+            <button
+              onClick={() => setCurrentPage((p) => p + 1)}
+              disabled={currentPage === totalPages}
+            >
+              <ArrowRightOutlined
+                className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                type="link"
+              />
+            </button>
+          </div>
 
           <Modal
             style={{

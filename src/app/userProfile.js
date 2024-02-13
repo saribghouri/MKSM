@@ -71,7 +71,7 @@ const UserProfile = ({ user, onCancel ,userData }) => {
                   <div className="flex flex-col w-full">
                     <img
                       alt=""
-                      className="w-[227px] h-[227px] rounded-[50%] top-[-100px]  "
+                      className=" max-w-xs   w-[227px] h-[227px] rounded-[50%] top-[-100px]  "
                       src={user.profileImage || null}
                       // src="assets/images/download.jfif"
                     />
@@ -129,20 +129,20 @@ const UserProfile = ({ user, onCancel ,userData }) => {
                         </div>
 
                         <div className="flex flex-col">
-                          <label className="text-[#727272]">Gender</label>
+                          <label className="text-[#727272]">email</label>
                           <Form.Item
                             className="!w-[250px]"
-                            name="gender"
+                            name="address"
                             rules={[
                               {
                                 required: true,
-                                message: "Please input your gender!",
+                                message: "Please input your address!",
                               },
                             ]}
                           >
                             <Input
                               className="rounded-r-[20px] rounded-l-[20px] w-[300px] "
-                              placeholder="Gender"
+                              placeholder="address"
                             />
                           </Form.Item>
                         </div>
@@ -237,20 +237,20 @@ const UserProfile = ({ user, onCancel ,userData }) => {
 
                       <div className=" flex  gap-[80px]">
                         <div className="flex flex-col">
-                          <label className="text-[#727272]">Collage</label>
+                          <label className="text-[#727272]">gender</label>
                           <Form.Item
                             className="!w-[250px]"
-                            name="collage"
+                            name="gender"
                             rules={[
                               {
                                 required: true,
-                                message: "Please input your Collage!",
+                                message: "Please input your gender!",
                               },
                             ]}
                           >
                             <Input
                               className="rounded-r-[20px] rounded-l-[20px] !w-[300px]"
-                              placeholder="Collage"
+                              placeholder="gender"
                             />
                           </Form.Item>
                         </div>
@@ -272,7 +272,26 @@ const UserProfile = ({ user, onCancel ,userData }) => {
                             />
                           </Form.Item>
                         </div>
+                    
                       </div>
+                      <div className="flex flex-col">
+                          <label className="text-[#727272]">Collage</label>
+                          <Form.Item
+                            className="!w-[630px]"
+                            name="collage"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input your collage!",
+                              },
+                            ]}
+                          >
+                            <Input
+                              className="rounded-r-[20px] rounded-l-[20px] w-[630px] "
+                              placeholder="collage"
+                            />
+                          </Form.Item>
+                        </div>
                       <label className="text-[#727272]">About</label>
                       <div className="flex gap-4 ">
                         <Form.Item
