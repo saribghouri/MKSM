@@ -11,7 +11,7 @@ const Page = () => {
   const router = useRouter();
   const { user } = useUser();
   console.log("user", user);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { login } = useUser();
 
   const onFinish = async (values) => {
@@ -58,131 +58,100 @@ const Page = () => {
   };
 
   return (
-    <div className="flex justify-between">
-      <div className="flex min-h-screen flex-col items-center">
-        <div className=" bg-cover w-[100%]  absolute top-0 left-0" style={{}}>
-          <div
-            className=" min-h-screen w-[50%]    relative"
-            style={{
-              backgroundImage: `url("/assets/images/Rectangle.jpg")`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          ></div>
-        </div>
-        <h1 className="text-white text-center flex justify-center items-center min-h-screen">
+    <div
+      className="flex min-h-screen flex-col justify-center items-center  "
+      style={{
+        backgroundImage: `url("/assets/images/loginBg.jpg")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="text-[22px]">
+        <h1 className="text-white text-center">
           <Image
-            width={400}
-            height={400}
+            width={237}
+            height={227}
             alt=""
-            className="absolute top-[45%] left-1/4 transform -translate-x-1/2 -translate-y-1/2"
-            src="/assets/images/logo.png"
+            className=""
+            quality={70}
+            src="/assets/images/white_logo.png"
           />
         </h1>
       </div>
-      <div className="flex min-h-screen flex-col items-center  ">
-        <div className=" bg-cover w-[50%]  absolute top-0 right-0" style={{}}>
-          <div
-            className=" min-h-screen w-[100%] relative"
-            style={{
-              backgroundImage: `url("/assets/images/login.png")`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          ></div>
-        </div>
-        <h1 className="text-white  flex justify-center  min-h-screen">
-          <Form
-            className="absolute top-[50%] left-[81%] transform -translate-x-1/2 -translate-y-1/2"
-            name="basic"
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            style={{
-              maxWidth: 445,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <Form.Item
-              className="w-[450px]"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: (
-                    <span style={{ color: "white" }}>
-                      Please input your email!
-                    </span>
-                  ),
-                },
-              ]}
-            >
-              <Input
-                placeholder="Email address"
-                className="rounded-l-[20px] rounded-r-[20px]"
-              />
-            </Form.Item>
-
-            <Form.Item
-              className="w-[450px] "
-
-              
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: (
-                    <span style={{ color: "white" }}>
-                Please input your password!
-                    </span>
-                  ),
-                 
-                },
-              ]}
-            >
-              <Input.Password
-                placeholder="Password"
-                className="rounded-l-[20px] rounded-r-[20px]"
-              />
-            </Form.Item>
-
-            <Form.Item
-              className="fex justify-start w-full mt-[-15px] tex"
-              name="rem ember"
-              valuePropName="checked"
-              // wrapperCol={{
-              //   offset: 8,
-              //   span: 16,
-              // }}
-            >
-              <Checkbox className="text-white">Remember me</Checkbox>
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{
-                offset: 4,
-                span: 14,
-              }}
-            >
-              <Button
-                type="enter"
-                className="bg-[#F3585E] !text-white border-none rounded-l-[20px] rounded-r-[20px] w-[150px]"
-                htmlType="submit"
-              >
-                Login
-              </Button>
-            </Form.Item>
-          </Form>
+      <Form
+        className=" flex justify-center flex-col item  "
+        name="basic"
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <h1 className="w-[100%] mb-[20px]  text-white text-[40px] flex justify-center text-center">
+          Login
         </h1>
-      </div>
+        <Form.Item
+          className=""
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: (
+                <span style={{ color: "white" }}>Please input your email!</span>
+              ),
+            },
+          ]}
+        >
+          <Input
+            placeholder="Email address"
+            className="rounded-l-[20px] rounded-r-[20px] "
+          />
+        </Form.Item>
+
+        <Form.Item
+          className=" "
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: (
+                <span style={{ color: "white" }}>
+                  Please input your password!
+                </span>
+              ),
+            },
+          ]}
+        >
+          <Input.Password
+            placeholder="Password"
+            className="rounded-l-[20px] rounded-r-[20px]"
+          />
+        </Form.Item>
+
+        <Form.Item
+          className="fex justify-start w-full mt-[-15px] tex"
+          name="rem ember"
+          valuePropName="checked"
+          // wrapperCol={{
+          //   offset: 8,
+          //   span: 16,
+          // }}
+        >
+          <Checkbox className="text-white">Remember me</Checkbox>
+        </Form.Item>
+
+        <Form.Item className="w-[100%] flex justify-center">
+          <Button
+            type="enter"
+            className="bg-[#3A893A] !text-white border-none flex justify-center rounded-l-[20px] rounded-r-[20px] w-[150px]"
+            htmlType="submit"
+            loading={loading}
+          >
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

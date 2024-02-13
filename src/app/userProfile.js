@@ -68,7 +68,7 @@ const UserProfile = ({ user, onCancel ,userData }) => {
                   </Button>
                 </div>
                 <div className="flex gap-8 ml-[50px]">
-                  <div className="flex flex-col w-full">
+                  <div className="flex flex-col ">
                     <img
                       alt=""
                       className=" max-w-xs   w-[227px] h-[227px] rounded-[50%] top-[-100px]  "

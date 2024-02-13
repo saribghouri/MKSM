@@ -181,7 +181,7 @@ const PaymentCard = () => {
             />
 
             <div className="text-center">
-              <span className="text-lg text-white  text-[25px] font-semibold  mb-4 inline-block">
+              <span className=" text-white  text-[24px] font-semibold  mb-4 inline-block">
                 {subscription.Name}
               </span>
             </div>

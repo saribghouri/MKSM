@@ -25,6 +25,7 @@ import TextArea from "antd/es/input/TextArea";
 import UserProfile from "./userProfile";
 import Cookies from "js-cookie";
 import AllUsers from "./allUsers";
+import dayjs from "dayjs";
 
 const UserEdit = ({ user }) => {
   console.log("user", user);
@@ -43,7 +44,7 @@ const UserEdit = ({ user }) => {
       const formData = new FormData();
       formData.append("userName", values.name);
       formData.append("contact", values.contact);
-      formData.append("dob", values.dob);
+      formData.append("dob", dayjs(values.dob).format("D/M/YYYY"));
       formData.append("gender", values.gender);
       formData.append("about", values.about);
       formData.append("company", values.company);
@@ -185,14 +186,14 @@ const UserEdit = ({ user }) => {
                     wrapperCol={{
                       span: 16,
                     }}
-                     style={{
-                    maxWidth: 1280,
-                  }}
+                    style={{
+                      maxWidth: 1280,
+                    }}
                     initialValues={{
                       name: user.name,
                       gender: user.gender,
                       address: user.address,
-                      dob: user.dob,
+                      dob: dayjs(user.dob, "D/M/YYYY"),
                       company: user.company,
                       collage: user.collage,
                       contact: user.contact,
@@ -288,17 +289,18 @@ const UserEdit = ({ user }) => {
                           </label>
                           <Form.Item
                             className="!w-[250px]"
+                            // label="Appointment Time"
                             name="dob"
                             rules={[
                               {
                                 required: true,
-                                message: "Please input your Date of Birth!",
+                                message: "Please select dob!",
                               },
                             ]}
                           >
-                            <Input
-                              className="rounded-r-[20px] rounded-l-[20px] w-[300px]"
-                              placeholder="Name"
+                            <DatePicker
+                              className="w-[300px] rounded-r-[20px] rounded-l-[20px] "
+                              format="D/M/YYYY"
                             />
                           </Form.Item>
                         </div>
@@ -422,7 +424,6 @@ const UserEdit = ({ user }) => {
                           <TextArea
                             placeholder="About"
                             className="rounded-r-[20px] rounded-l-[20px] w-[630px]"
-                         
                           />
                         </Form.Item>
                       </div>

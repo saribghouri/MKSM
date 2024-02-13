@@ -147,16 +147,19 @@ const UserSubView = ({ user, onCancel, userData }) => {
 
                           <Form.Item
                             className="!w-[250px]"
-                            label="DatePicker"
+                          
                             name="dob"
                             rules={[
                               {
                                 required: true,
-                                message: "Please input!",
+                                message: "Please input Date of Birth!",
                               },
                             ]}
                           >
-                            <DatePicker className="rounded-r-[20px] rounded-l-[20px]" />
+                          <Input
+                              className="rounded-r-[20px] rounded-l-[20px] w-[300px] "
+                              placeholder="N ame"
+                            />
                           </Form.Item>
                         </div>
                         <div className="flex flex-col">
