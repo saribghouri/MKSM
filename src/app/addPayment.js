@@ -62,8 +62,8 @@ const AddPayment = ({handlePaymentCard}) => {
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-      <div className="flex min-h-screen flex-col items-center justify-between p-24 ">
-        <div className=" w-[662px] h-[472px]  rounded-[10px]">
+      <div className="flex  flex-col items-center justify-between ">
+        <div className=" w-[662px]   rounded-[10px]">
           <Form
             form={form}
             name="changePasswordForm"

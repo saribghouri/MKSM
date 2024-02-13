@@ -73,13 +73,13 @@ const Page = () => {
             height={227}
             alt=""
             className=""
-            quality={70}
-            src="/assets/images/white_logo.png"
+            quality={50}
+            src="/assets/images/clearlogo.png"
           />
         </h1>
       </div>
       <Form
-        className=" flex justify-center flex-col item  "
+        className=" flex justify-center flex-col item !w-[30%] "
         name="basic"
         initialValues={{
           remember: true,
