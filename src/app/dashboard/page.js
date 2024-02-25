@@ -149,6 +149,7 @@ const App = () => {
   };
   const handleShowDoctorData = () => {
     setShowUser(true);
+    localStorage.setItem('dashboardStates', JSON.stringify({ showUser: true, paymentCard: false }));
 
     setUserSubscription(false);
     setActiveUser(false);
@@ -171,6 +172,7 @@ const App = () => {
     setProfileView(false);
     setCard(false);
     setProfileEdit(false);
+    localStorage.setItem('dashboardStates', JSON.stringify({ activeUser: true, showUser: false }));
   };
   const handleInactiveUser = () => {
     setActiveUser(false);
@@ -179,6 +181,7 @@ const App = () => {
     setShowUser(false);
     setUserSubscription(false);
     setAddPayment(false);
+    localStorage.setItem('dashboardStates', JSON.stringify({ inActiveUser: true, showUser: false }));
 
     setProfileView(false);
     setProfileEdit(false);
@@ -191,6 +194,7 @@ const App = () => {
     setInactiveUser(false);
     setShowUser(false);
     setUserSubscription(false);
+    localStorage.setItem('dashboardStates', JSON.stringify({ addPayment: true, showUser: false }));
 
     setProfileView(false);
     setProfileEdit(false);
@@ -203,6 +207,7 @@ const App = () => {
     setInactiveUser(false);
     setShowUser(false);
     setUserSubscription(false);
+    localStorage.setItem('dashboardStates', JSON.stringify({ paymentCard: true, showUser: false }));
 
     setProfileView(false);
     setProfileEdit(false);
@@ -211,6 +216,7 @@ const App = () => {
 
   const handleSubscription = () => {
     setUserSubscription(true);
+    localStorage.setItem('dashboardStates', JSON.stringify({ userSubscription: true, showUser: false }));
 
     setAddPayment(false);
     setPaymentCard(false);
@@ -225,6 +231,7 @@ const App = () => {
   const handleCard = () => {
     setCard(true);
     setUserSubscription(false);
+    localStorage.setItem('dashboardStates', JSON.stringify({ card: true, showUser: false }));
 
     setAddPayment(false);
     setPaymentCard(false);
@@ -238,6 +245,7 @@ const App = () => {
 
   const handleProfile = () => {
     setProfileView(true);
+    localStorage.setItem('dashboardStates', JSON.stringify({ profileView: true, showUser: false }));
 
     setAddPayment(false);
     setCard(false);
@@ -247,7 +255,6 @@ const App = () => {
     setShowUser(false);
     setUserSubscription(false);
   };
-
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -445,6 +452,30 @@ const App = () => {
       router.push("/");
     }
   }, [router]);
+
+
+
+  useEffect(() => {
+    // Correctly use useEffect to restore state from localStorage
+    const savedStates = localStorage.getItem('dashboardStates');
+    if (savedStates) {
+      const states = JSON.parse(savedStates);
+      setShowUser(states.showUser || false);
+      setActiveUser(states.activeUser || false);
+      setUserSubscription(states.userSubscription || false);
+      setShowUser(states.showUser || false);
+      setAddPayment(states.addPayment || false);
+      setCard(states.card || false);
+      setProfileView(states.profileView || false);
+      // Continue setting the rest of your states...
+    }
+  }, []);
+  
+
+  // Modify your state change functions to also update localStorage
+
+
+  
   return (
     <div
       className="!bg-[#fff] flex"
@@ -623,6 +654,7 @@ const App = () => {
           </div>
         </Header>
         <div>
+          
           {showUser && <AllUsers />}
           {activeUser && <ActiveUsers />}
           {inActiveUser && <InActiveUsers />}
