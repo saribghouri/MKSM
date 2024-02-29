@@ -38,6 +38,7 @@
   background-color: #ffffff !important;
   font-family: sans-serif;
   margin-left: -1px !important;
+  margin-top: 30px !important;
   border-bottom-left-radius: 0px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 20px !important;
@@ -49,6 +50,8 @@
   background-color: #f3585e !important;
   border-bottom-left-radius: 0px !important;
   border-top-left-radius: 0px !important;
+  margin-top: 30px !important;
+  padding-inline-end: 0px!important;
   border-top-right-radius: 20px !important;
   border-bottom-right-radius: 20px !important;
 }
@@ -253,4 +256,16 @@ flex-direction: column; */
 }
 .ant-form-item-explain-error{
   color: #ffffff !important;
+}
+.overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ant-menu-title-content-collapsed {
+  /* display: flex !important; */
+  color: #054fb9 !important;
+  align-items: flex-start !important;
+  margin-left: 20px !important;
+  font-size: 18px !important;
 }

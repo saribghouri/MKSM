@@ -472,7 +472,6 @@ const App = () => {
   }, []);
   
 
-  // Modify your state change functions to also update localStorage
 
 
   
@@ -482,15 +481,18 @@ const App = () => {
       style={{
         minHeight: "100vh",
         width: "auto",
+        
       }}
     >
       <Sider
         className="!bg-[#F24044] min-w-[900px]"
         collapsible
+        width="300px"
+             collapsedWidth="110px"
         collapsed={collapsed}
         onCollapse={handleCollapse}
       >
-        <div className="p-[30px] text-[22px]">
+        <div className="p-[20px] text-[22px]">
           <h1 className="text-white text-center">
             <Image
               width={1000}
@@ -634,12 +636,13 @@ const App = () => {
                     }}
                     trigger={["click"]}
                   >
+                
                     <a onClick={(e) => e.preventDefault()}>
-                      <Space className="text-[#fff] flex justify-between">
+                      <div className="text-[#ffffff] font-semibold flex  overflow-ellipsis justify-between">
                         {/* {userDetails?.userName} */}
-                        <p className="">{userDetails.userName}</p>
+                        <p  className=" overflow-ellipsis">{userDetails.userName}</p>
                         <DownOutlined  className="" />
-                      </Space>
+                      </div>
                     </a>
                   </Dropdown>
                 </div>

@@ -4,7 +4,7 @@ import TextArea from "antd/es/input/TextArea";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
 
-const AddPayment = ({handlePaymentCard}) => {
+const AddPayment = ({ handlePaymentCard }) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -38,9 +38,9 @@ const AddPayment = ({handlePaymentCard}) => {
       if (response.ok) {
         message.success("Payment added successfully");
         setLoading(false);
-        handlePaymentCard()
+        handlePaymentCard();
       } else {
-        const errorResponse = await response.json(); // To get more details from the server
+        const errorResponse = await response.json();
         console.error("Error Response:", errorResponse);
         message.error("Failed to add payment");
         setLoading(false);
@@ -84,16 +84,22 @@ const AddPayment = ({handlePaymentCard}) => {
               <Form.Item
                 className="mt-[10px]"
                 name="name"
+                type="text"
                 rules={[
                   {
                     required: true,
                     message: "Please enter name",
                   },
+                  {
+                    pattern: /^[a-zA-Z][a-zA-Z0-9\s]*$/,
+                    message: "Name should start with alphabet only",
+                  },
                 ]}
               >
                 <Input
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
-                  placeholder="Name"
+                  placeholder="Enter Name"
+                 type="text"
                 />
               </Form.Item>
               <Form.Item
@@ -104,11 +110,16 @@ const AddPayment = ({handlePaymentCard}) => {
                     required: true,
                     message: "Please enter price",
                   },
+                  {
+                    pattern: /^(?!0+(\.0+)?$)(\d+(\.\d{1,})?|\.\d{1,})$/,
+                    message: "Please enter a valid amount",
+                  },
                 ]}
               >
                 <Input
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
-                  placeholder="Enter price"
+                  placeholder="Enter Price"
+                  type="number"
                 />
               </Form.Item>
 
@@ -118,13 +129,18 @@ const AddPayment = ({handlePaymentCard}) => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter the number of months",
+                    message: "Please enter the number of days",
+                  },
+                  {
+                    pattern: /^(?=.*[1-9])\d+$/,
+                    message: "Please enter a valid number for days",
                   },
                 ]}
               >
                 <Input
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
-                  placeholder="Enter Month"
+                  placeholder="Enter Days Greater Than 0"
+                  type="number"
                 />
               </Form.Item>
               <Form.Item
@@ -138,7 +154,7 @@ const AddPayment = ({handlePaymentCard}) => {
                 ]}
               >
                 <TextArea
-                  placeholder="Enter Subscription"
+                  placeholder="Enter Subscription Details"
                   className="!w-[320px]  rounded-r-[20px] rounded-l-[20px]"
                   rows={4}
                 />

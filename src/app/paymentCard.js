@@ -171,7 +171,7 @@ const PaymentCard = () => {
         {subscriptions.map((subscription, index) => (
           <Card
             key={index}
-            className="max-w-xs overflow-hidden  justify-center  m-2 rounded-[20px] bg-[#F24044]"
+            className="max-w-xs overflow-hidden justify-center m-2 rounded-[20px] bg-[#F24044]"
             bordered={false}
           >
             <img
@@ -181,7 +181,7 @@ const PaymentCard = () => {
             />
 
             <div className="text-center">
-              <span className=" text-white  text-[24px] font-semibold  mb-4 inline-block">
+              <span className="text-white text-[24px] font-semibold mb-4 inline-block">
                 {subscription.Name}
               </span>
             </div>
@@ -190,43 +190,39 @@ const PaymentCard = () => {
                 <p className="text-[#ffffff] font-bold text-[26px] break-words">
                   ${subscription.price}
                 </p>
-              </div>    
+              </div>
               <div>
                 <Divider
-                  className="bg-white h-[36px]  mt-[10px] mb-[1   0px]"
+                  className="bg-white h-[36px] mt-[10px] mb-[10px]"
                   type="vertical"
                 />
               </div>
               <div className="w-[100%] text-center">
-                <p className="text-[#ffffff]  font-bold text-[26px] break-words">
+                <p className="text-[#ffffff] font-bold text-[26px] break-words">
                   {subscription.months}
                 </p>
               </div>
             </div>
-            <Divider className="!w-[100%] h-[3px] text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] min-w-2" />
+            <Divider className="w-[100%] h-[3px] text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] min-w-2" />
 
-            <p className="text-white  text-start">
-              {subscription.details.length > 100 ? (
-                <>
-                  {subscription.details.slice(4, 100)}...
-                  <br />
-                  {subscription.details.slice(100)}
-                </>
-              ) : (
-                subscription.details
-              )}
-            </p>
-
+            <div className="w-[100%]">
+              <p className="text-white text-start">
+                {subscription.details.length > 100
+                  ? `${subscription.details.slice(0, 100)}...`
+                  : subscription.details}
+                  {/* {subscription.details} */}
+              </p>
+            </div>
             <div className="flex justify-center space-x-4 mt-4 gap-6">
               <Button
-                className="!text-white w-[109px] bg-[#F3585E] border-none text-center items-center  font-bold  rounded-full"
+                className="text-white w-[109px] bg-[#F3585E] border-none text-center items-center font-bold rounded-full"
                 onClick={() => handleEditButtonClick(subscription.id)}
               >
                 Edit
               </Button>
               <Button
                 onClick={() => handleDelete(subscription.id)}
-                className="!text-white bg-[#F3585E]  w-[109px] border-none font-bold rounded-full"
+                className="text-white bg-[#F3585E] w-[109px] border-none font-bold rounded-full"
               >
                 Delete
               </Button>
@@ -266,7 +262,15 @@ const PaymentCard = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter userName",
+                    message: "Please enter name",
+                  },
+                  {
+                    pattern: /^[a-zA-Z][a-zA-Z0-9\s]*$/,
+                    message: (
+                      <p className="text-[#F3585E]">
+                        Name should start with alphabet only
+                      </p>
+                    ),
                   },
                 ]}
               >
@@ -283,27 +287,45 @@ const PaymentCard = () => {
                     required: true,
                     message: "Please enter price",
                   },
+                  {
+                    pattern: /^(?!0+(\.0+)?$)(\d+(\.\d{1,})?|\.\d{1,})$/,
+                    message: (
+                      <p className="text-[#F3585E]">
+                        Please enter a valid amount
+                      </p>
+                    ),
+                  },
                 ]}
               >
                 <Input
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
                   placeholder="Enter price"
+                  type="number"
                 />
               </Form.Item>
 
               <Form.Item
-                className="mt-[10px]"
+                className="mt-[10px] "
                 name="months"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter month",
+                    message: "Please enter the number of days",
+                  },
+                  {
+                    pattern: /^(?=.*[1-9])\d+$/,
+                    message: (
+                      <p className="text-[#F3585E]">
+                        Please enter a valid number for days
+                      </p>
+                    ),
                   },
                 ]}
               >
                 <Input
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
                   placeholder="Enter Month"
+                  type="number"
                 />
               </Form.Item>
               <Form.Item
