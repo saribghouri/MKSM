@@ -166,16 +166,16 @@ const PaymentCard = () => {
       </div>
       <Divider className="!w-[95%] text-[#F24044] flex justify-center mx-auto bg-[#F24044] min-w-0" />
 
-      <div className=" flex relative flex-wrap W-[100%]  justify-center mt-8">
+      <div className=" flex relative flex-wrap w-[100%]  justify-center lg:justify-start mt-8">
         {" "}
         {subscriptions.map((subscription, index) => (
           <Card
             key={index}
-            className="max-w-xs overflow-hidden justify-center m-2 rounded-[20px] bg-[#F24044]"
+            className="w-[326px] 2xl:w-[425px] 2xl:mx-12 2xl:min-h-[270px] 2xl:max-h-full   overflow-hidden justify-center m-2 rounded-[20px] bg-[#F24044]"
             bordered={false}
           >
             <img
-              className="absolute w-[40%]"
+              className="absolute w-[30%] left-1 top-1"
               src="/assets/images/Group 20 (1).png"
               alt="Modal Image"
             />
@@ -206,23 +206,23 @@ const PaymentCard = () => {
             <Divider className="w-[100%] h-[3px] text-[#e3e1e1] flex justify-center mx-auto bg-[#dddbdb] min-w-2" />
 
             <div className="w-[100%]">
-              <p className="text-white text-start">
-                {subscription.details.length > 100
+              <p className="text-white text-start h-[50px] overflow-y-auto example">
+                {/* {subscription.details.length > 100
                   ? `${subscription.details.slice(0, 100)}...`
-                  : subscription.details}
-                  {/* {subscription.details} */}
+                  : subscription.details} */}
+                  {subscription.details}
               </p>
             </div>
             <div className="flex justify-center space-x-4 mt-4 gap-6">
               <Button
-                className="text-white w-[109px] bg-[#F3585E] border-none text-center items-center font-bold rounded-full"
+                className="!text-white w-[109px] bg-[#F3585E] border-none shadow text-center items-center font-bold rounded-full"
                 onClick={() => handleEditButtonClick(subscription.id)}
               >
                 Edit
               </Button>
               <Button
                 onClick={() => handleDelete(subscription.id)}
-                className="text-white bg-[#F3585E] w-[109px] border-none font-bold rounded-full"
+                className="!text-white bg-[#F3585E] w-[109px] shadow border-none font-bold rounded-full"
               >
                 Delete
               </Button>
@@ -342,6 +342,7 @@ const PaymentCard = () => {
                   placeholder="Enter Subscription"
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
                   rows={4}
+                  maxLength={150}
                 />
               </Form.Item>
               <Form.Item>

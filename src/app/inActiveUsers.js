@@ -2,22 +2,10 @@
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
-  DeleteOutlined,
-  EditOutlined,
   EyeOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import {
-  Input,
-  Table,
-  Modal,
-  Form,
-  Button,
-  message,
-  Popconfirm,
-  Divider,
-  Switch,
-} from "antd";
+import { Input, Table, message, Divider, Switch } from "antd";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import UserProfile from "./userProfile";
@@ -31,10 +19,11 @@ const InActiveUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [items, setItems] = useState([]);
+  const [userData, setUserData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
+console.log(selectedUserId)
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
     { title: "Name", dataIndex: "name", key: "userName" },
@@ -44,9 +33,10 @@ const InActiveUsers = () => {
       title: "Status",
       dataIndex: "isActives",
       key: "isActives",
-      render: (_, record) => (
+      render: (isActives, record) => (
         <Switch
-          defaultunChecked={record.isActives === "1"}
+          checked={isActives == 1 } 
+          
           onChange={(checked) => onChange(checked, record.id)}
         />
       ),
@@ -116,7 +106,7 @@ const InActiveUsers = () => {
   // }, []);
 
   const dataSource = (items || []).map((inActiveUser, index) => ({
-    key: index.toString(),
+    key: (index + 1).toString(),
 
     name: inActiveUser.userName,
     contact: inActiveUser.contact,
@@ -129,6 +119,7 @@ const InActiveUsers = () => {
     location: inActiveUser.location,
     job: inActiveUser.job,
     id: inActiveUser.id,
+    isActives:inActiveUser.isActives,
     profileImage: inActiveUser.profileImage,
   }));
   const filteredData = dataSource.filter(
@@ -136,6 +127,71 @@ const InActiveUsers = () => {
       doctor.name.toLowerCase().includes(searchText.toLowerCase()) ||
       doctor.address.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  // const onChange = async (checked, userId) => {
+  //   console.log("userId", userId);
+  //   try {
+  //     const token = Cookies.get("apiToken");
+  //     const response = await fetch(
+  //       `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       // Remove the user from the list
+  //       const updatedUsers = inActiveUser.filter((user) => user.id !== userId);
+  //       setInActiveUser(updatedUsers);
+  //       message.success(`User set to 'active' successfully`);
+  //     } else {
+  //       message.error("Failed to update user status");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating user status: ", error);
+  //     message.error("An error occurred while updating user status");
+  //   }
+  // };
+
+
+
+
+
+  // const onChange = async (checked, userId) => {
+  //   console.log("userId", userId);
+  //   if (checked) {
+  //     try {
+  //       const token = Cookies.get("apiToken");
+  //       const response = await fetch(
+  //         `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`,
+  //         {
+  //           method: "GET", 
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  
+  //       if (response.ok) {
+  //         // Update the user's active status in your data
+  //         const updatedItems = items.map(item => item.id === userId ? {...item, isActives: 1} : item);
+  //         setItems(updatedItems);
+  
+  //         message.success("User activated successfully");
+  //       } else {
+  //         message.error("Failed to activate user");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error activating user: ", error);
+  //       message.error("An error occurred while activating user");
+  //     }
+  //   }
+  // };
   const onChange = async (checked, userId) => {
     console.log("userId", userId);
     try {
@@ -143,27 +199,35 @@ const InActiveUsers = () => {
       const response = await fetch(
         `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`,
         {
-          method: "GET",
+          method: "GET", 
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
+  
       if (response.ok) {
-        // Remove the user from the list
-        const updatedUsers = inActiveUser.filter((user) => user.id !== userId);
-        setInActiveUser(updatedUsers);
-        message.success(`User set to 'active' successfully`);
+        
+        const updatedItems = items.filter(item => item.id !== userId);
+        setItems(updatedItems);
+        setSelectedUserId(updatedItems)
+        message.success("User activated successfully");
       } else {
-        message.error("Failed to update user status");
+        message.error("Failed to activate user");
       }
     } catch (error) {
-      console.error("Error updating user status: ", error);
-      message.error("An error occurred while updating user status");
+      console.error("Error activating user: ", error);
+      message.error("An error occurred while activating user");
     }
   };
+
+
+
+
+
+
+
   const fetchItems = async (page) => {
     setIsLoading(true);
     try {
@@ -176,9 +240,11 @@ const InActiveUsers = () => {
           },
         }
       );
-
+      
       setItems(response.data.active_users.data);
+      
       setCurrentPage(page);
+      setUserData(response.data.active_users)
       setTotalPages(Math.ceil(response.data.total / response.data.per_page));
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -235,7 +301,7 @@ const InActiveUsers = () => {
             <span className="count">{currentPage}</span>
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
-              disabled={currentPage === totalPages}
+              disabled={userData.next_page_url === null}
             >
               <ArrowRightOutlined
                 className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"

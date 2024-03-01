@@ -77,14 +77,14 @@ const Cards = () => {
   }, []);
 
   return (
-    <div className="flex flex-wrap justify-center w-[100%] mt-[20px]">
+    <div className="flex flex-wrap  justify-center lg:justify-start w-[100%] mt-[20px]">
       {cardData.map((card, index) => {
         let backgroundImage;
         switch (card.type) {
-          case "standard":
+          case "Standard":
             backgroundImage = "/assets/images/red.png";
             break;
-          case "premium":
+          case "Premium":
             backgroundImage = "/assets/images/gray.png";
             break;
           default:
@@ -94,18 +94,19 @@ const Cards = () => {
         return (
           <div
             key={index}
-            className="max-w-xs overflow-hidden m-2 w-[30%] rounded-[20px]"
+            className="w-[326px] 2xl:w-[425px] 2xl:mx-12 2xl:min-h-[230px] 2xl:max-h-full  overflow-hidden m-2  rounded-[20px]"
             style={{
-              width: "62%",
+              borderBottomRightRadius: "30px",
+              borderBottomLeftRadius: "30px",
               height: "234px",
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
           >
-            <div className="ml-[40px] mt-[25px]">
+            <div className="ml-[50px] mt-[30px]">
               <p
-                className={`text-${card.textColor} text-white pgh font-bold text-[24px]`}
+                className={`text-${card.textColor} text-white pgh font-bold text-[24px] `}
               >
                 {card.type}
               </p>

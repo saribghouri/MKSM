@@ -52,9 +52,9 @@ const UserSubscription = () => {
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
     { title: "Name", dataIndex: "name", key: "userName" },
     { title: "Email", dataIndex: "email", key: "emailAddress" },
-    { title: "subscription", dataIndex: "subscriptionDetails", key: "Phone" },
+    { title: "Subscription", dataIndex: "subscriptionDetails", key: "Phone" },
     {
-      title: "subscriptionPrice",
+      title: "Subscription Price",
       dataIndex: "subscriptionPrice",
       key: "Phone",
     },

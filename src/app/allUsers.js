@@ -22,6 +22,7 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [allUserData, setAllUserData] = useState(1);
   const [totalPages, setTotalPages] = useState(true);
   const [afterPages, setAfterPages] = useState(true);
   console.log(totalPages);
@@ -163,6 +164,7 @@ const AllUsers = () => {
 
       setItems(response.data.all_users.data);
       setCurrentPage(page);
+      setAllUserData(response.data.all_users)
       setTotalPages(
         Math.ceil(response.data.all_users.total / response.data.per_page)
       );
@@ -289,7 +291,7 @@ const AllUsers = () => {
             {items ? (
               <button
                 onClick={() => setCurrentPage((p) => p + 1)}
-                disabled={currentPage === totalPages}
+                disabled={allUserData.next_page_url === null}
               >
                 <ArrowRightOutlined
                   className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"

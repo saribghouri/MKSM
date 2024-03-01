@@ -465,6 +465,7 @@ const App = () => {
       setUserSubscription(states.userSubscription || false);
       setShowUser(states.showUser || false);
       setAddPayment(states.addPayment || false);
+      setPaymentCard(states.paymentCard || false);
       setCard(states.card || false);
       setProfileView(states.profileView || false);
       // Continue setting the rest of your states...
@@ -495,8 +496,8 @@ const App = () => {
         <div className="p-[20px] text-[22px]">
           <h1 className="text-white text-center">
             <Image
-              width={1000}
-              height={1000}
+              width={800}
+              height={800}
               alt=""
               className=""
               src="/assets/images/white_logo.png"

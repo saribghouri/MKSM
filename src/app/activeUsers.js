@@ -18,10 +18,14 @@ const ActiveUsers = () => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [items, setItems] = useState([]);
+  const [userData, setUserData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [switchAnimationCompleted, setSwitchAnimationCompleted] = useState(
+    true
+  );
+console.log(selectedUserId, "============sdbnesd=================")
   const columns = [
     { title: "Sr", dataIndex: "key", key: "serialNumber" },
 
@@ -34,12 +38,13 @@ const ActiveUsers = () => {
       key: "isActives",
       render: (_, record) => (
         <Switch
-          defaultChecked={record.isActives !== selectedUserId}
+          checked={record.isActives === "1"}
+          defaultChecked={record.isActives == selectedUserId}
           onChange={(checked) => onChange(checked, record.id)}
+          // onAnimationEnd={() => setSwitchAnimationCompleted(true)}
         />
       ),
     },
-
     {
       title: "Action",
       dataIndex: "id",
@@ -116,6 +121,7 @@ const ActiveUsers = () => {
 
       setItems(response.data.active_users.data);
       setCurrentPage(page);
+      setUserData(response.data.active_users)
       setTotalPages(Math.ceil(response.data.total / response.data.per_page));
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -128,7 +134,7 @@ const ActiveUsers = () => {
   }, [currentPage]);
 
   const dataSource = (items || []).map((user, index) => ({
-    key: index.toString(),
+    key: (index + 1).toString(),
 
     name: user.userName,
     contact: user.contact,
@@ -141,6 +147,7 @@ const ActiveUsers = () => {
     location: user.location,
     job: user.job,
     id: user.id,
+    isActives:user.isActives,
     profileImage: user.profileImage,
   }));
   const filteredData = dataSource.filter(
@@ -157,7 +164,7 @@ const ActiveUsers = () => {
         const response = await fetch(
           `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=inactive`,
           {
-            method: "GET",
+            method: "GET", 
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
@@ -166,13 +173,17 @@ const ActiveUsers = () => {
         );
 
         if (response.ok) {
-          const updatedUsers = activeUser.filter((user) => user.id !== userId);
-          setActiveUser(updatedUsers);
+          // Remove the user from the list
+          const updatedUsers = items.filter((user) => user.id !== userId);
+          console.log(updatedUsers, "++++++++++++++", userId);
+          setItems(updatedUsers);
 
+          // Save the selected user id to the state
           setSelectedUserId(userId);
           message.success("User set to inactive successfully");
           console.log("Failed to reject pharmacy. Status:", updatedUsers);
         } else {
+          // Handle errors
           message.error("Failed to update user status");
         }
       } catch (error) {
@@ -227,7 +238,7 @@ const ActiveUsers = () => {
             <span className="count">{currentPage}</span>
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
-              disabled={currentPage === totalPages}
+              disabled={userData.next_page_url === null}
             >
               <ArrowRightOutlined
                 className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"

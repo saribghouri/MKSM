@@ -99,7 +99,7 @@ const AddPayment = ({ handlePaymentCard }) => {
                 <Input
                   className="w-[320px]  rounded-r-[20px] rounded-l-[20px]"
                   placeholder="Enter Name"
-                 type="text"
+                  type="text"
                 />
               </Form.Item>
               <Form.Item
@@ -155,8 +155,9 @@ const AddPayment = ({ handlePaymentCard }) => {
               >
                 <TextArea
                   placeholder="Enter Subscription Details"
-                  className="!w-[320px]  rounded-r-[20px] rounded-l-[20px]"
+                  className="!w-[320px] rounded-r-[20px] rounded-l-[20px]"
                   rows={4}
+                  maxLength={100} // Add this line to limit input to 100 characters
                 />
               </Form.Item>
               <Form.Item>
