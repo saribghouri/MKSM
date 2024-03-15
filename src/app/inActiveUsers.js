@@ -23,9 +23,9 @@ const InActiveUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-console.log(selectedUserId)
+  console.log(userData);
   const columns = [
-    { title: "Sr", dataIndex: "key", key: "serialNumber" },
+    { title: "Sr", dataIndex: "serialNumber", key: "serialNumber" },
     { title: "Name", dataIndex: "name", key: "userName" },
     { title: "Email", dataIndex: "address", key: "emailAddress" },
     { title: "Phone No:", dataIndex: "contact", key: "Phone" },
@@ -35,8 +35,7 @@ console.log(selectedUserId)
       key: "isActives",
       render: (isActives, record) => (
         <Switch
-          checked={isActives == 1 } 
-          
+          checked={isActives == 1}
           onChange={(checked) => onChange(checked, record.id)}
         />
       ),
@@ -105,8 +104,49 @@ console.log(selectedUserId)
   //   fetchData();
   // }, []);
 
-  const dataSource = (items || []).map((inActiveUser, index) => ({
-    key: (index + 1).toString(),
+  // const dataSource = (items || []).map((doctor, index) => ({
+  //   key: doctor.id,
+  //   serialNumber: calculateSerialNumber(index),
+  //   name: doctor.userName,
+  //   email: doctor.emailAddress,
+  //   phone: doctor.contact,
+  //   isActive: doctor.isActives,
+  //   id: doctor.id,
+  // }));
+  const fetchItems = async (page) => {
+    setIsLoading(true);
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await axios.get(
+        `https://mksm.blownclouds.com/api/inactive/users?page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setItems(response.data.active_users.data);
+
+      setCurrentPage(page);
+      setUserData(response.data.active_users);
+      setTotalPages(Math.ceil(response.data.total / response.data.per_page));
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchItems(currentPage);
+  }, [currentPage]);
+  const calculateSerialNumber  =  (index) => {
+    return (currentPage - 1)  * userData.per_page + index + 1;
+  };
+
+  const dataSource =  (items || []).map((inActiveUser, index)  => ({
+    key: inActiveUser.id,
+    serialNumber: calculateSerialNumber  (index),
 
     name: inActiveUser.userName,
     contact: inActiveUser.contact,
@@ -119,7 +159,7 @@ console.log(selectedUserId)
     location: inActiveUser.location,
     job: inActiveUser.job,
     id: inActiveUser.id,
-    isActives:inActiveUser.isActives,
+    isActives: inActiveUser.isActives,
     profileImage: inActiveUser.profileImage,
   }));
   const filteredData = dataSource.filter(
@@ -157,10 +197,6 @@ console.log(selectedUserId)
   //   }
   // };
 
-
-
-
-
   // const onChange = async (checked, userId) => {
   //   console.log("userId", userId);
   //   if (checked) {
@@ -169,19 +205,19 @@ console.log(selectedUserId)
   //       const response = await fetch(
   //         `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`,
   //         {
-  //           method: "GET", 
+  //           method: "GET",
   //           headers: {
   //             "Content-Type": "application/json",
   //             Authorization: `Bearer ${token}`,
   //           },
   //         }
   //       );
-  
+
   //       if (response.ok) {
   //         // Update the user's active status in your data
   //         const updatedItems = items.map(item => item.id === userId ? {...item, isActives: 1} : item);
   //         setItems(updatedItems);
-  
+
   //         message.success("User activated successfully");
   //       } else {
   //         message.error("Failed to activate user");
@@ -199,19 +235,18 @@ console.log(selectedUserId)
       const response = await fetch(
         `https://mksm.blownclouds.com/api/all/user?userId=${userId}&isActives=active`,
         {
-          method: "GET", 
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
-  
+
       if (response.ok) {
-        
-        const updatedItems = items.filter(item => item.id !== userId);
+        const updatedItems = items.filter((item) => item.id !== userId);
         setItems(updatedItems);
-        setSelectedUserId(updatedItems)
+        setSelectedUserId(updatedItems);
         message.success("User activated successfully");
       } else {
         message.error("Failed to activate user");
@@ -222,39 +257,6 @@ console.log(selectedUserId)
     }
   };
 
-
-
-
-
-
-
-  const fetchItems = async (page) => {
-    setIsLoading(true);
-    try {
-      const token = Cookies.get("apiToken");
-      const response = await axios.get(
-        `https://mksm.blownclouds.com/api/inactive/users?page=${page}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      
-      setItems(response.data.active_users.data);
-      
-      setCurrentPage(page);
-      setUserData(response.data.active_users)
-      setTotalPages(Math.ceil(response.data.total / response.data.per_page));
-    } catch (error) {
-      console.error("Error fetching items:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchItems(currentPage);
-  }, [currentPage]);
   return (
     <div>
       {isEditing ? (

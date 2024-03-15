@@ -1,4 +1,6 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import { Button, Divider, Input, Modal, Switch, Table, message } from "antd";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -6,146 +8,59 @@ import {
   EyeOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Divider, Input, Modal, Switch, Table, message } from "antd";
-import React, { useEffect, useState } from "react";
-import UserProfile from "./userProfile";
+import axios from "axios";
 import Cookies from "js-cookie";
+import UserProfile from "./userProfile";
 import { useUser } from "./UserContext";
 
-import axios from "axios";
 const AllUsers = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isModalVisibles, setIsModalVisibles] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedUser, setSelectedUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [allUserData, setAllUserData] = useState(1);
-  const [totalPages, setTotalPages] = useState(true);
-  const [afterPages, setAfterPages] = useState(true);
-  console.log(totalPages);
+  const [allUserData, setAllUserData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
+  console.log(selectedUser);
   const { userData } = useUser();
-  console.log("UserData", items);
+
   const showModal = () => {
-    setIsModalVisibles(true);
+    setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    setIsModalVisibles(false);
+    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisibles(false);
+    setIsModalVisible(false);
   };
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
-  };
-  // const fetchData = async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     const token = Cookies.get("apiToken");
-  //     const response = await fetch(
-  //       "https://mksm.blownclouds.com/api/all/user",
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const responseData = await response.json();
-  //       console.log("Doctors fetched successfully:", responseData);
-
-  //       if (Array.isArray(responseData?.all_users?.data)) {
-  //         setDoctors(responseData.all_users.data);
-  //         userData(responseData.all_users.data);
-  //       } else {
-  //         console.error("API response does not contain an array for 'doctor'");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data: ", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-  //   useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-
-  //       const token = Cookies.get("apiToken");
-  //       const response = await fetch(
-  //         "https://mksm.blownclouds.com/api/all/user",
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       if (response.ok) {
-  //         const responseData = await response.json();
-  //         console.log("Doctors fetched successfully:", responseData);
-
-  //         if (Array.isArray(responseData?.all_users?.data)) {
-  //           setDoctors(responseData.all_users.data);
-  //           userData(responseData.all_users.data)
-  //         } else {
-  //           console.error(
-  //             "API response does not contain an array for 'doctor'"
-  //           );
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data: ", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   const handleDelete = async () => {
     try {
+      if (!selectedUser) {
+        console.error("No user selected for deletion");
+        return;
+      }
+  
       const token = Cookies.get("apiToken");
-      const userIdToDelete = selectedUser.id;
-
-      const response = await fetch(
-        `https://mksm.blownclouds.com/api/delete-user/${userIdToDelete}`,
+      await axios.delete(
+        `https://mksm.blownclouds.com/api/delete-user/${selectedUser.id}`,
         {
-          method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      if (response.ok) {
-        message.success("User deleted successfully");
-        setDoctors((prevDoctors) =>
-          prevDoctors.filter((doctor) => doctor.id !== selectedUser.id)
-        );
-        handleCancel();
-      } else {
-        message.error("Failed to delete user");
-      }
+  
+      // Filter out the deleted user from items
+      setItems(items.filter((user) => user.id !== selectedUser.id));
+      handleCancel();
     } catch (error) {
-      console.error("Error deleting user: ", error);
-      message.error("Error deleting user");
+      console.error("Error deleting user:", error);
     }
   };
 
@@ -163,42 +78,44 @@ const AllUsers = () => {
       );
 
       setItems(response.data.all_users.data);
+      setAllUserData(response.data.all_users);
       setCurrentPage(page);
-      setAllUserData(response.data.all_users)
-      setTotalPages(
-        Math.ceil(response.data.all_users.total / response.data.per_page)
-      );
     } catch (error) {
       console.error("Error fetching items:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchItems(currentPage);
   }, [currentPage]);
 
+  const calculateSerialNumber = (index) => {
+    return (currentPage - 1) * allUserData.per_page + index + 1;
+  };
+
   const columns = [
-    { title: "Sr", dataIndex: "key", key: "serialNumber" },
-    { title: "Name", dataIndex: "name", key: "userName" },
-    { title: "Email", dataIndex: "address", key: "emailAddress" },
-    { title: "Phone No:", dataIndex: "contact", key: "Phone" },
+    { title: "Sr", dataIndex: "serialNumber", key: "serialNumber" },
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Email", dataIndex: "email", key: "email" },
+    { title: "Phone No:", dataIndex: "phone", key: "phone" },
     {
       title: "Status",
-      dataIndex: "isActives",
-      key: "isActives",
-      render: (isActives, record) => (
+      dataIndex: "isActive",
+      key: "isActive",
+      render: (isActive, record) => (
         <Switch
-          checked={isActives === "1"}
-          onChange={(checked) => handleChangeStatus(record, checked)}
+          checked={isActive === "1"}
+          // onChange={(checked) => handleChangeStatus(record, checked)}
         />
       ),
     },
     {
       title: "Action",
-      dataIndex: "id",
+      dataIndex: "action",
       key: "action",
-      render: (id, record) => (
+      render: (_, record) => (
         <div>
           <DeleteOutlined
             className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
@@ -224,25 +141,19 @@ const AllUsers = () => {
   ];
 
   const dataSource = (items || []).map((doctor, index) => ({
-    key: (index + 1).toString(),
+    key: doctor.id,
+    serialNumber: calculateSerialNumber(index),
     name: doctor.userName,
-    contact: doctor.contact,
-    address: doctor.emailAddress,
-    about: doctor.about,
-    dob: doctor.dob,
-    company: doctor.company,
-    gender: doctor.gender,
-    collage: doctor.collage,
-    location: doctor.location,
-    job: doctor.job,
+    email: doctor.emailAddress,
+    phone: doctor.contact,
+    isActive: doctor.isActives,
     id: doctor.id,
-    profileImage: doctor.profileImage,
-    isActives: doctor.isActives,
   }));
+
   const filteredData = dataSource.filter(
     (doctor) =>
       doctor.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      doctor.address.toLowerCase().includes(searchText.toLowerCase())
+      doctor.email.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -272,12 +183,8 @@ const AllUsers = () => {
             loading={isLoading}
             pagination={false}
           />
+
           <div className="flex justify-end mb-[50px] mt-[20px] mr-[10px]">
-            <ul>
-              {items.map((item) => (
-                <li key={item.id}>{item.name}</li>
-              ))}
-            </ul>
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
@@ -288,29 +195,24 @@ const AllUsers = () => {
               />
             </button>
             <span className="count">{currentPage}</span>
-            {items ? (
-              <button
-                onClick={() => setCurrentPage((p) => p + 1)}
-                disabled={allUserData.next_page_url === null}
-              >
-                <ArrowRightOutlined
-                  className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
-                  type="link"
-                />
-              </button>
-            ) : null}
+            <button
+              onClick={() => setCurrentPage((p) => p + 1)}
+              disabled={!allUserData.next_page_url}
+            >
+              <ArrowRightOutlined
+                className="text-[#ffffff] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[18px]"
+                type="link"
+              />
+            </button>
           </div>
           <Modal
-            style={{
-              width: "534px",
-              height: " 369px",
-            }}
-            open={isModalVisibles}
+            style={{ width: "534px", height: " 369px" }}
+            visible={isModalVisible}
             onOk={handleOk}
-            footer={null}
             onCancel={handleCancel}
+            footer={null}
           >
-            <div className=" gap-2 flex justify-center items-center flex-col h-[250px]">
+            <div className="gap-2 flex justify-center items-center flex-col h-[250px]">
               <DeleteOutlined
                 className=" flex justify-center items-center text-[#ffffff] w-[85px] h-[85px] bg-[#F3585E] p-[5px] rounded-[50%] ml-[10px] text-[50px]"
                 type="link"
@@ -330,9 +232,7 @@ const AllUsers = () => {
               </Button>
               <Button
                 className="!text-[#F24044] rounded-l-[20px] rounded-r-[20px] w-[150px] h-[40px]"
-                onClick={() => {
-                  handleCancel();
-                }}
+                onClick={handleCancel}
               >
                 Cancel
               </Button>

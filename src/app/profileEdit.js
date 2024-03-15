@@ -258,13 +258,13 @@ console.log("values",dayjs(values.dob).format("D/M/YYY"))
                         {imageUrl && typeof imageUrl === "string" ? (
                           <img
                             alt=""
-                            className="!w-[139px] !h-[139px] rounded-[50%]"
+                            className="!w-[149px] !h-[139px] rounded-[50%]"
                             src={imageUrl}
                           />
                         ) : userData.profileImage ? (
                           <img
                             alt=""
-                            className="w-[70px] h-[70px] rounded-[50%]"
+                            className="w-[80px] h-[70px] rounded-[50%]"
                             src={userData.profileImage}
                           />
                         ) : (
@@ -379,22 +379,11 @@ console.log("values",dayjs(values.dob).format("D/M/YYY"))
                             },
                           ]}
                         >
-                          <Select
-                            placeholder="location"
-                            className=" rounded-r-[20px] rounded-l-[20px] !w-[276px]"
-                          >
-                            <Select.Option type="admin" value={1}>
-                              Admin
-                            </Select.Option>
-
-                            <Select.Option type="Doctor" value={3}>
-                              Doctor
-                            </Select.Option>
-                          </Select>
-                          {/* <Input
+                       
+                          <Input
                           className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
-                          placeholder="Collage"
-                        /> */}
+                          placeholder="location"
+                        />
                         </Form.Item>
                       </div>
                     </div>
@@ -402,7 +391,7 @@ console.log("values",dayjs(values.dob).format("D/M/YYY"))
                       <div className="flex flex-col">
                         <label className="text-[#7f7e7e]">Date of Birth</label>
                         <Form.Item className=""
-                          // label="Appointment Time"
+            
                           name="dob"
                           rules={[
                             {
@@ -431,18 +420,10 @@ console.log("values",dayjs(values.dob).format("D/M/YYY"))
                             },
                           ]}
                         >
-                          <Select
-                            placeholder="job"
-                            className=" rounded-r-[20px] rounded-l-[20px] !w-[276px]"
-                          >
-                            <Select.Option type="admin" value={1}>
-                              Admin
-                            </Select.Option>
-
-                            <Select.Option type="Doctor" value={3}>
-                              Doctor
-                            </Select.Option>
-                          </Select>
+                           <Input
+                          className="rounded-r-[20px] rounded-l-[20px] w-[276px]"
+                          placeholder="job"
+                        />
                         </Form.Item>
                       </div>
                     </div>
@@ -463,6 +444,7 @@ console.log("values",dayjs(values.dob).format("D/M/YYY"))
                             placeholder=" About"
                             className="rounded-r-[20px] rounded-l-[20px] !w-[1000px]"
                             rows={4}
+                            maxLength={150}
                           />
                         </Form.Item>
                       </div>
@@ -472,7 +454,7 @@ console.log("values",dayjs(values.dob).format("D/M/YYY"))
                   <div className="bg-[#F24044] contents  relative">
                     <Button
                       htmlType="submit"
-                      className=" !text-[#ffffff] block bottom-[490px] right-0 absolute bg-[#F24044] text-center  items-center !border-none rounded-r-[20px] rounded-l-[20px] "
+                      className=" !text-[#ffffff]  bg-[#F24044] text-center right-10 top-5 absolute  items-center !border-none rounded-r-[20px] rounded-l-[20px] "
                     >
                       Save Changes <EditFilled />
                     </Button>

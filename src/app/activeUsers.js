@@ -27,7 +27,7 @@ const ActiveUsers = () => {
   );
 console.log(selectedUserId, "============sdbnesd=================")
   const columns = [
-    { title: "Sr", dataIndex: "key", key: "serialNumber" },
+    { title: "Sr", dataIndex: "serialNumber", key: "serialNumber" },
 
     { title: "Name", dataIndex: "name", key: "userName" },
     { title: "Email", dataIndex: "address", key: "emailAddress" },
@@ -120,22 +120,27 @@ console.log(selectedUserId, "============sdbnesd=================")
       );
 
       setItems(response.data.active_users.data);
+      setTotalPages(Math.ceil(response.data.total / response.data.per_page));
       setCurrentPage(page);
       setUserData(response.data.active_users)
-      setTotalPages(Math.ceil(response.data.total / response.data.per_page));
     } catch (error) {
       console.error("Error fetching items:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchItems(currentPage);
   }, [currentPage]);
 
-  const dataSource = (items || []).map((user, index) => ({
-    key: (index + 1).toString(),
+  const calculateSerialNumber = (index) => {
+    return (currentPage - 1) * userData.per_page + index + 1;
+  };
 
+  const dataSource = (items || []).map((user, index) => ({
+    serialNumber: calculateSerialNumber(index),
+    key: user.id,
     name: user.userName,
     contact: user.contact,
     address: user.emailAddress,

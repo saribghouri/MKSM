@@ -64,8 +64,8 @@ const ProfileView = () => {
               src={userDetails?.profileImage || null}
               // src="assets/images/download.jfif"
             />
-            <div className="flex justify-between ">
-              <h1 className=" mt-[50px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
+            <div className="flex justify-between items-center">
+              <h1 className=" mt-[28px] ml-[10px] text-[#F24044] font-[700] text-[24px]">
                 {userDetails.userName}
               </h1>
 

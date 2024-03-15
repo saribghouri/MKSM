@@ -190,7 +190,7 @@ flex-direction: column; */
   height: 239px !important;
 }
 .userAdmin > .ant-upload-select {
-  width: 139px !important;
+  width: 149px !important;
   height: 139px !important;
 }
 .hello > .ant-form-item-row {
@@ -281,3 +281,4 @@ flex-direction: column; */
 .example::-webkit-scrollbar {
   display: none !important;
 }
+

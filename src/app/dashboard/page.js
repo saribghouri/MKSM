@@ -456,7 +456,7 @@ const App = () => {
 
 
   useEffect(() => {
-    // Correctly use useEffect to restore state from localStorage
+   
     const savedStates = localStorage.getItem('dashboardStates');
     if (savedStates) {
       const states = JSON.parse(savedStates);

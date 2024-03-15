@@ -87,8 +87,10 @@ const Cards = () => {
           case "Premium":
             backgroundImage = "/assets/images/gray.png";
             break;
+            case "Basic":
+              backgroundImage = "/assets/images/Group.png";
           default:
-            backgroundImage = "/assets/images/Group.png";
+          
             
         }
         return (
